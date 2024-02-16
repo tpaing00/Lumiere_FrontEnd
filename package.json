@@ -12,5 +12,16 @@
     "style-loader": "^3.3.4",
     "webpack": "^5.90.2",
     "webpack-cli": "^5.1.4"
-  }
+  },
+  "name": "lumiere_frontend",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 16.x
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v2
       with:
-        node-version: 16.x
+        node-version: 20.x
         cache: 'npm'
         cache-dependency-path: package-lock.json
     - name: Install dependencies
@@ -26,5 +26,5 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-        build-dir: './build'
+        build-dir: './public'
         comment-on-commit: true

@@ -40,7 +40,11 @@ const Login = props => {
             }
         })
         .catch(error => {
-            setError(error.message);
+            if (error.response) {
+                setError(error.response.data.error);
+            } else {
+                console.error('Error:', error.message);
+            }
         });
     }
 

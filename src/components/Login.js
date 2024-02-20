@@ -32,8 +32,9 @@ const Login = props => {
         .then(response => {
             if (response.status === 200) {
                 console.log(response);
+                document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
            
-            alert('Successfully logged in');
+            // alert('Successfully logged in');
             } else {
               setError('Authentication failed');
             }

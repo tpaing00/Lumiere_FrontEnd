@@ -8172,7 +8172,9 @@ var Login = function Login(props) {
             }).then(function (response) {
               if (response.status === 200) {
                 console.log(response);
-                alert('Successfully logged in');
+                document.cookie = "token=".concat(response.data.token, "; expires=").concat(new Date(Date.now() + 86400e3).toUTCString(), "; path=/");
+
+                // alert('Successfully logged in');
               } else {
                 setError('Authentication failed');
               }

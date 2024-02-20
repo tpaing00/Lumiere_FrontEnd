@@ -22,18 +22,18 @@ const Login = props => {
         })
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
         event.preventDefault();
         
-        axios.post('http://localhost:8080/login', {
-            userName: formData.userName,
+        await axios.post('http://localhost:8080/api/v1/login', {
+            email: formData.userName,
             password: formData.password
         })
         .then(response => {
             if (response.status === 200) {
                 console.log(response);
            
-            // alert('Successfully logged in');
+            alert('Successfully logged in');
             } else {
               setError('Authentication failed');
             }
@@ -45,7 +45,7 @@ const Login = props => {
 
     return (
         <>
-        <form onSubmit={handleSubmit} action="/login">
+        <form onSubmit={handleSubmit}>
         <h1>Lumiére</h1>
         <h2>LOGIN</h2>
             <div>

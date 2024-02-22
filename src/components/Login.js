@@ -22,10 +22,11 @@ const Login = props => {
         })
     }
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         
-        await axios.post('http://localhost:8080/api/v1/login', {
+        
+        axios.post('http://localhost:8080/api/v1/login', {
             email: formData.userName,
             password: formData.password
         })
@@ -33,8 +34,8 @@ const Login = props => {
             if (response.status === 200) {
                 console.log(response);
                 document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
-           
-            // alert('Successfully logged in');
+                setError(null);
+            //  alert('Successfully logged in');
             } else {
               setError('Authentication failed');
             }

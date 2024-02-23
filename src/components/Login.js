@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 
-const Login = props => {
+const Login = ({onLogin}) => {
 
     const [formData, setFormData] = useState(
         {
@@ -35,6 +35,7 @@ const Login = props => {
                 console.log(response);
                 document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
                 setError(null);
+                onLogin();
             //  alert('Successfully logged in');
             } else {
               setError('Authentication failed');
@@ -49,8 +50,7 @@ const Login = props => {
         });
     }
 
-    return (
-        <>
+    return (<>
         <form onSubmit={handleSubmit}>
         <h1>Lumiére</h1>
         <h2>LOGIN</h2>
@@ -66,7 +66,7 @@ const Login = props => {
             <button type="submit">LOGIN</button>
             
         </form>    
-        </>
+     </>
     )
 }
 

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Quagga from 'quagga';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
-import "../style.css";
-
 function ProductPage({ barcode }) {
   return (
     <div>

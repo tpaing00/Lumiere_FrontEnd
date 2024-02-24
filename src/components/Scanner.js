@@ -67,17 +67,17 @@ function Scanner() {
   }, []);
 
   return (
-    <Router>
+    // <Router>
       <div className="App">
         <h3>Scan a product's barcode or enter it manually</h3>
         {barcode && <p> Detected Barcode: {barcode} </p>}
-        {<Link to={`/product/${barcode}`}>View Product</Link>}
+        {/* {<Link to={`/product/${barcode}`}>View Product</Link>} */}
         <div id="barcode-scanner"></div>
-        <Routes>     
+        {/* <Routes>     
           <Route path="/product/:id" render={(props) => <ProductPage {...props} barcode={barcode} />} />
-        </Routes>
+        </Routes> */}
       </div>
-    </Router>
+    // </Router>
   );
 }
 

@@ -4,7 +4,9 @@ import Login from './Login';
 import Page from './Page';
 import Footer from './Footer';
 import { useState } from 'react';
+import NavBar from './NavBar';
 import Scanner from './Scanner';
+
 
 const App = props => {
 
@@ -29,13 +31,16 @@ const App = props => {
     
     return (
         <> 
+       
+        
         <BrowserRouter>
+            {loggedIn && < NavBar/>}
             <Routes>
-                <Route exact path="/" element= {!loggedIn ? <Navigate to="/login" /> : <Page />} />  
-                <Route path="/login"  element={loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin}/>} />  
+                <Route exact path="/" element= {!loggedIn ? <Navigate to="/login" /> : <h2>Welcome to Lumière</h2> } />  
+                <Route path="/scanner"  element={loggedIn ? <Scanner />: <Navigate to="/" />} />
+                <Route path="/login"  element={loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin}/>} /> 
             </Routes>
         </BrowserRouter>
-        {/* <Scanner /> */}
         <Footer loggedIn={loggedIn} onLogout={handleLogout} />
         </>
     );

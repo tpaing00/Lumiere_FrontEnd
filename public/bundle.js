@@ -20242,7 +20242,7 @@ const App = props => {
       onLogin: handleLogin
     })
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
-    path: "/register",
+    path: "/add-product",
     element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_RegisterProduct__WEBPACK_IMPORTED_MODULE_6__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Navigate, {
       to: "/"
     })
@@ -20391,7 +20391,7 @@ const NavBar = () => {
   }, "Home")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
     to: "/scanner"
   }, "Quick Scan")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
-    to: "/register"
+    to: "/add-product"
   }, "Register"))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NavBar);
@@ -20450,17 +20450,6 @@ const RegisterProduct = () => {
     // barcodeId: "",
     // unitPrice: 0
   });
-
-  // const [totalValue, setTotalValue] = useState(0)
-
-  // const handleTotalValue = (event) => {
-  //     setTotalValue(prevTotalValue => {
-  //         return {
-  //             stockQuantity * unitPrice
-  //         }
-  //     })
-  // }
-
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const handleChange = event => {
     setFormData(prevFormData => {
@@ -20472,7 +20461,7 @@ const RegisterProduct = () => {
   };
   const handleSubmit = event => {
     event.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('http://localhost:3000/api/v1/register', {
+    axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('http://localhost:8080/add-product', {
       inventoryId: formData.inventoryId,
       categoryId: formData.categoryId
     }).then(response => {
@@ -20744,7 +20733,16 @@ video {
     width: 400px;
     height: 300px;
     border: 1px solid black;
-  }`, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;IACI,uBAAuB;IACvB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,uBAAuB;EACzB","sourcesContent":["html {\r\n    font-family: sans-serif;\r\n    line-height: 1.5;\r\n}\r\n\r\nvideo {\r\n    width: 400px;\r\n    height: 300px;\r\n    border: 1px solid black;\r\n  }"],"sourceRoot":""}]);
+  }
+
+  #form-register-product {
+    width: 50%;
+    margin: auto;
+  }
+
+  #form-register-product * {
+    width: 100%;
+  }`, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;IACI,uBAAuB;IACvB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,uBAAuB;EACzB;;EAEA;IACE,UAAU;IACV,YAAY;EACd;;EAEA;IACE,WAAW;EACb","sourcesContent":["html {\r\n    font-family: sans-serif;\r\n    line-height: 1.5;\r\n}\r\n\r\nvideo {\r\n    width: 400px;\r\n    height: 300px;\r\n    border: 1px solid black;\r\n  }\r\n\r\n  #form-register-product {\r\n    width: 50%;\r\n    margin: auto;\r\n  }\r\n\r\n  #form-register-product * {\r\n    width: 100%;\r\n  }"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

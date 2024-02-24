@@ -8,3 +8,12 @@ video {
     height: 300px;
     border: 1px solid black;
   }
+
+  #form-register-product {
+    width: 50%;
+    margin: auto;
+  }
+
+  #form-register-product * {
+    width: 100%;
+  }

@@ -16,16 +16,6 @@ const RegisterProduct = () => {
         }
     );
 
-    // const [totalValue, setTotalValue] = useState(0)
-
-    // const handleTotalValue = (event) => {
-    //     setTotalValue(prevTotalValue => {
-    //         return {
-    //             stockQuantity * unitPrice
-    //         }
-    //     })
-    // }
-
     const [error, setError] = useState(null);
 
     const handleChange = (event) => {
@@ -40,8 +30,7 @@ const RegisterProduct = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-
-        axios.post('http://localhost:3000/api/v1/register', {
+        axios.post('http://localhost:8080/add-product', {
 
             inventoryId: formData.inventoryId,
             categoryId: formData.categoryId

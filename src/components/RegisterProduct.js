@@ -7,12 +7,12 @@ const RegisterProduct = () => {
     const [formData, setFormData] = useState(
         {
             inventoryId: "",
-            categoryId: "",
-            productName: "",
-            productBrand: "",
-            stockQuantity: 0,
-            barcodeId: "",
-            unitPrice: 0
+            categoryId: ""
+            // productName: "",
+            // productBrand: "",
+            // stockQuantity: 0,
+            // barcodeId: "",
+            // unitPrice: 0
         }
     );
 
@@ -41,16 +41,15 @@ const RegisterProduct = () => {
         event.preventDefault();
 
 
-        axios.post('http://localhost:8080/api/v1/register', {
-            email: formData.userName,
-            password: formData.password
+        axios.post('http://localhost:3000/api/v1/register', {
+
+            inventoryId: formData.inventoryId,
+            categoryId: formData.categoryId
         })
             .then(response => {
                 if (response.status === 200) {
                     console.log(response);
-                    document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
                     setError(null);
-                    onLogin();
                     //  alert('Successfully logged in');
                 } else {
                     setError('Unable to register product');
@@ -67,19 +66,19 @@ const RegisterProduct = () => {
 
     return (
         <>
-            <form action='/register' id='form-register-product'>
+            <form id='form-register-product' onSubmit={handleSubmit}>
                 <div className='register-inventory'>
 
                     <label htmlFor="inventory-id">Add to Inventory</label>
                     <select onChange={handleChange} name='inventory-id' value={formData.inventoryId}>
-                        <option value='' selected disabled>Select</option>
+                        {/* <option value='' selected disabled>Select</option> */}
                         <option value='internal'>Internal Use</option>
                         <option value='sales'>Sales</option>
                     </select>
 
                     <label htmlFor="category-id">Add Product Category</label>
                     <select onChange={handleChange} name='category-id' value={formData.categoryId}>
-                        <option value='' selected disabled>Select</option>
+                        {/* <option value='' selected disabled>Select</option> */}
                         <option value='hair'>Hair Care</option>
                         <option value='skin'>Skin Care</option>
                         <option value='body'>Body Care</option>
@@ -105,17 +104,17 @@ const RegisterProduct = () => {
                     <input type="number" min="0" onChange={handleChange} name="barcode-id" value={formData.barcodeId} />
 
                     <label htmlFor="unit-price">Unit price</label>
-                    <input type="number" min="0" onChange={handleChange} name="unit-price" value={formData.unitPrice} placeholder="$"/>
+                    <input type="number" min="0" onChange={handleChange} name="unit-price" value={formData.unitPrice} placeholder="$" />
 
                     <label htmlFor="total-value">Total Value</label>
-                    <input type="number" min="0" onChange={handleChange} name="total-value" value={formData.totalValue} placeholder="$" disabled/>
+                    <input type="number" min="0" onChange={handleChange} name="total-value" value={formData.totalValue} placeholder="$" disabled />
 
                     <label htmlFor="expiry-date">Expiry Date</label>
                     <input type="date" onChange={handleChange} name="expiry-date" value={formData.expirationDate} />
 
                     <label htmlFor="pao">Period After Opening (PAO)</label>
                     <select onChange={handleChange} name='pao' value={formData.categoryId}>
-                        <option value='' selected disabled>Select</option>
+                        {/* <option value='' selected disabled>Select</option> */}
                         <option value='6'>6 Months</option>
                         <option value='12'>12 Months</option>
                     </select>
@@ -128,7 +127,7 @@ const RegisterProduct = () => {
 
                     <label htmlFor="low-stock-alert">Low Stock Alert</label>
                     <select onChange={handleChange} name='low-stock-alert' value={formData.lowStockAlert}>
-                        <option value='' selected disabled>Select</option>
+                        {/* <option value='' selected disabled>Select</option> */}
                         <option value='5'>5 days away</option>
                         <option value='10'>10 days away</option>
                         <option value='15'>15 days away</option>
@@ -136,7 +135,7 @@ const RegisterProduct = () => {
 
                     <label htmlFor="expiration-reminder">Low Stock Alert</label>
                     <select onChange={handleChange} name='expiration-reminder' value={formData.expirationReminder}>
-                        <option value='' selected disabled>Select</option>
+                        {/* <option value='' selected disabled>Select</option> */}
                         <option value='5'>5 days away</option>
                         <option value='10'>10 days away</option>
                         <option value='15'>15 days away</option>

@@ -6,6 +6,7 @@ import Footer from './Footer';
 import { useState } from 'react';
 import NavBar from './NavBar';
 import Scanner from './Scanner';
+import RegisterProduct from './RegisterProduct'
 
 
 const App = props => {
@@ -39,6 +40,7 @@ const App = props => {
                 <Route exact path="/" element= {!loggedIn ? <Navigate to="/login" /> : <h2>Welcome to Lumière</h2> } />  
                 <Route path="/scanner"  element={loggedIn ? <Scanner />: <Navigate to="/" />} />
                 <Route path="/login"  element={loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin}/>} /> 
+                <Route path="/register"  element={loggedIn ? <RegisterProduct />: <Navigate to="/" />} />
             </Routes>
         </BrowserRouter>
         <Footer loggedIn={loggedIn} onLogout={handleLogout} />

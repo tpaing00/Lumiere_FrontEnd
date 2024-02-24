@@ -3,7 +3,8 @@ html {
     line-height: 1.5;
 }
 
-.subtitle {
-    color: darkgreen;
-    font-weight: bold;
-}
+video {
+    width: 400px;
+    height: 300px;
+    border: 1px solid black;
+  }

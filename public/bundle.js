@@ -20436,72 +20436,106 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 
 
 
 const RegisterProduct = () => {
   const [formData, setFormData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    inventoryId: "",
-    categoryId: ""
-    // productName: "",
-    // productBrand: "",
-    // stockQuantity: 0,
-    // barcodeId: "",
-    // unitPrice: 0
+    inventoryId: 'Select',
+    category: 'Select',
+    productName: '',
+    brandName: '',
+    stockQuantity: 0,
+    barcodeId: '',
+    unitPrice: '',
+    totalValue: '',
+    expirationDate: '',
+    periodAfterOpening: 'Select',
+    setLowStock: false,
+    lowStockQuantity: 'Select',
+    setDayInAdvance: false,
+    dayInAdvance: 'Select'
   });
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [totalValue, setTotalValue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
   const handleChange = event => {
+    // setTotalValue(formData => {
+    //     { unitPrice, stockQuantity } = formData;
+    //     return unitPrice * stockQuantity;
+    // })
+
     setFormData(prevFormData => {
       return {
         ...prevFormData,
         [event.target.name]: event.target.value
+        // totalValue: totalValue
       };
     });
   };
   const handleSubmit = event => {
     event.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('http://localhost:8080/add-product', {
-      inventoryId: formData.inventoryId,
-      categoryId: formData.categoryId
-    }).then(response => {
-      if (response.status === 200) {
-        console.log(response);
-        setError(null);
-        //  alert('Successfully logged in');
-      } else {
-        setError('Unable to register product');
-      }
-    }).catch(error => {
-      if (error.response) {
-        setError(error.response.data.error);
-      } else {
-        console.error('Error:', error.message);
-      }
-    });
+    console.log(formData);
+
+    // axios.post('http://localhost:8080/api/v1/add-product', {
+    //     inventoryId: formData.inventoryId,
+    //     category: formData.category,
+    //     productName: formData.productName,
+    //     brandName: formData.brandName,
+    //     stockQuantity: formData.stockQuantity,
+    //     barcodeId: formData.barcodeId,
+    //     unitPrice: formData.unitPrice,
+    //     totalValue: formData.totalValue,
+    //     expirationDate: formData.expirationDate,
+    //     periodAfterOpening: formData.periodAfterOpening,
+    //     lowStockBool: formData.lowStockBool,
+    //     lowStockQuantity: formData.lowStockQuantity,
+    //     dayInAdvanceBool: formData.dayInAdvanceBool,
+    //     dayInAdvance: formData.dayInAdvance
+    // })
+    //     .then(response => {
+    //         if (response.status === 200) {
+    //             console.log(response);
+    //             setError(null);
+    //         } else {
+    //             setError('Unable to register product');
+    //         }
+    //     })
+    //     .catch(error => {
+    //         if (error.response) {
+    //             setError(error.response.data.error);
+    //         } else {
+    //             console.error('Error:', error.message);
+    //         }
+    //     });
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Register New Product"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     id: "form-register-product",
     onSubmit: handleSubmit
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "register-inventory"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "inventory-id"
+    htmlFor: "inventoryId"
   }, "Add to Inventory"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
     onChange: handleChange,
-    name: "inventory-id",
+    name: "inventoryId",
     value: formData.inventoryId
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "Select",
+    disabled: true
+  }, "Select"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "internal"
   }, "Internal Use"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "sales"
   }, "Sales")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "category-id"
+    htmlFor: "category"
   }, "Add Product Category"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
     onChange: handleChange,
-    name: "category-id",
-    value: formData.categoryId
+    name: "category",
+    value: formData.category
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "Select",
+    disabled: true
+  }, "Select"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "hair"
   }, "Hair Care"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "skin"
@@ -20512,92 +20546,115 @@ const RegisterProduct = () => {
   }, "Make Up"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "register-product-information"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Product Information"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "product-name"
+    htmlFor: "productName"
   }, "Product Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "text",
     onChange: handleChange,
-    name: "product-name",
+    name: "productName",
     value: formData.productName
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "product-brand"
+    htmlFor: "brandName"
   }, "Brand"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "text",
     onChange: handleChange,
-    name: "product-brand",
-    value: formData.productBrand
+    name: "brandName",
+    value: formData.brandName
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "stock-quantity"
+    htmlFor: "stockQuantity"
   }, "Stock"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "number",
     min: "0",
     onChange: handleChange,
-    name: "stock-quantity",
+    name: "stockQuantity",
     value: formData.stockQuantity
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "barcode-id"
+    htmlFor: "barcodeId"
   }, "Barcode Number"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
-    type: "number",
+    type: "text",
     min: "0",
     onChange: handleChange,
-    name: "barcode-id",
+    name: "barcodeId",
     value: formData.barcodeId
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "unit-price"
+    htmlFor: "unitPrice"
   }, "Unit price"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "number",
     min: "0",
     onChange: handleChange,
-    name: "unit-price",
+    name: "unitPrice",
     value: formData.unitPrice,
     placeholder: "$"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "total-value"
+    htmlFor: "totalValue"
   }, "Total Value"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "number",
     min: "0",
     onChange: handleChange,
-    name: "total-value",
+    name: "totalValue",
     value: formData.totalValue,
     placeholder: "$",
     disabled: true
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "expiry-date"
+    htmlFor: "expirationDate"
   }, "Expiry Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "date",
     onChange: handleChange,
-    name: "expiry-date",
+    name: "expirationDate",
     value: formData.expirationDate
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
     htmlFor: "pao"
   }, "Period After Opening (PAO)"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
     onChange: handleChange,
-    name: "pao",
-    value: formData.categoryId
+    name: "periodAfterOpening",
+    value: formData.periodAfterOpening
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "Select",
+    disabled: true
+  }, "Select"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "6"
   }, "6 Months"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "12"
   }, "12 Months"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "register-notification-settings"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Notification Settings"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "low-stock-alert"
-  }, "Low Stock Alert"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
+    htmlFor: "lowStockBool"
+  }, "Low Stock Alert"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+    type: "checkbox",
     onChange: handleChange,
-    name: "low-stock-alert",
-    value: formData.lowStockAlert
+    name: "lowStockBool",
+    value: formData.setLowStock
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
+    htmlFor: "lowStockQuantity"
+  }, "Notify when stock is below"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
+    onChange: handleChange,
+    name: "lowStockQuantity",
+    value: formData.lowStockQuantity
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "Select",
+    disabled: true
+  }, "Select"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "5"
-  }, "5 days away"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+  }, "5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "10"
-  }, "10 days away"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+  }, "10"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "15"
-  }, "15 days away")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
-    htmlFor: "expiration-reminder"
-  }, "Low Stock Alert"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
+  }, "15")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
+    htmlFor: "dayInAdvanceBool"
+  }, "Low Stock Alert"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+    type: "checkbox",
     onChange: handleChange,
-    name: "expiration-reminder",
-    value: formData.expirationReminder
+    name: "dayInAdvanceBool",
+    value: formData.setDayInAdvance
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", {
+    htmlFor: "dayInAdvance"
+  }, "Notify when expiry date is"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", {
+    onChange: handleChange,
+    name: "dayInAdvance",
+    value: formData.dayInAdvance
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "Select",
+    disabled: true
+  }, "Select"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "5"
   }, "5 days away"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "10"
@@ -20737,12 +20794,11 @@ video {
 
   #form-register-product {
     width: 50%;
-    margin: auto;
   }
 
   #form-register-product * {
     width: 100%;
-  }`, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;IACI,uBAAuB;IACvB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,uBAAuB;EACzB;;EAEA;IACE,UAAU;IACV,YAAY;EACd;;EAEA;IACE,WAAW;EACb","sourcesContent":["html {\r\n    font-family: sans-serif;\r\n    line-height: 1.5;\r\n}\r\n\r\nvideo {\r\n    width: 400px;\r\n    height: 300px;\r\n    border: 1px solid black;\r\n  }\r\n\r\n  #form-register-product {\r\n    width: 50%;\r\n    margin: auto;\r\n  }\r\n\r\n  #form-register-product * {\r\n    width: 100%;\r\n  }"],"sourceRoot":""}]);
+  }`, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;IACI,uBAAuB;IACvB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,uBAAuB;EACzB;;EAEA;IACE,UAAU;EACZ;;EAEA;IACE,WAAW;EACb","sourcesContent":["html {\r\n    font-family: sans-serif;\r\n    line-height: 1.5;\r\n}\r\n\r\nvideo {\r\n    width: 400px;\r\n    height: 300px;\r\n    border: 1px solid black;\r\n  }\r\n\r\n  #form-register-product {\r\n    width: 50%;\r\n  }\r\n\r\n  #form-register-product * {\r\n    width: 100%;\r\n  }"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -20492,6 +20492,7 @@ const RegisterProduct = () => {
     //     dayInAdvanceBool: formData.dayInAdvanceBool,
     //     dayInAdvance: formData.dayInAdvance
     // })
+    // ==============================================================================
     //     .then(response => {
     //         if (response.status === 200) {
     //             console.log(response);

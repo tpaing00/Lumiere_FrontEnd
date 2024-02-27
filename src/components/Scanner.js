@@ -81,12 +81,10 @@ function Scanner() {
               state: { barcode, productResults, inventoryResults },
             });
           } else {
-            //navigate("/addnewproduct")
-            alert("Navigate to add new product");
+            navigate("/add-product")           
           }
         } else {
-          //navigate("/addnewproduct")
-          alert("Navigate to add new product");
+          navigate("/add-product")
         }
       })
       .catch((error) => {

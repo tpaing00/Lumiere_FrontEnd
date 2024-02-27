@@ -20189,13 +20189,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login */ "./src/components/Login.js");
 /* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Page */ "./src/components/Page.js");
 /* harmony import */ var _Footer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Footer */ "./src/components/Footer.js");
 /* harmony import */ var _NavBar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./NavBar */ "./src/components/NavBar.js");
 /* harmony import */ var _Scanner__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Scanner */ "./src/components/Scanner.js");
+/* harmony import */ var _ScannerDetail__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ScannerDetail */ "./src/components/ScannerDetail.js");
+
 
 
 
@@ -20205,11 +20207,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const App = props => {
-  let token = document.cookie.split(';').some(cookie => cookie.trim().startsWith('token='));
+  let token = document.cookie.split(";").some(cookie => cookie.trim().startsWith("token="));
   const [loggedIn, setLoggedIn] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(token ? true : false);
   const handleLogin = () => {
     setLoggedIn(() => {
-      token = document.cookie.split(';').some(cookie => cookie.trim().startsWith('token='));
+      token = document.cookie.split(";").some(cookie => cookie.trim().startsWith("token="));
       if (token) {
         return true;
       }
@@ -20217,27 +20219,37 @@ const App = props => {
   };
   const handleLogout = () => {
     setLoggedIn(() => {
-      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       return false;
     });
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.BrowserRouter, null, loggedIn && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_NavBar__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.BrowserRouter, null, loggedIn && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_NavBar__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
     exact: true,
     path: "/",
-    element: !loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Navigate, {
+    element: !loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Navigate, {
       to: "/login"
     }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Welcome to Lumi\xE8re")
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
     path: "/scanner",
-    element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Scanner__WEBPACK_IMPORTED_MODULE_5__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Navigate, {
+    element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Scanner__WEBPACK_IMPORTED_MODULE_5__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Navigate, {
       to: "/"
     })
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
     path: "/login",
-    element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Navigate, {
+    element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Navigate, {
       to: "/"
     }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Login__WEBPACK_IMPORTED_MODULE_1__["default"], {
       onLogin: handleLogin
+    })
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+    path: "/page",
+    element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Page__WEBPACK_IMPORTED_MODULE_2__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Navigate, {
+      to: "/"
+    })
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+    path: "/scannerdetail",
+    element: loggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ScannerDetail__WEBPACK_IMPORTED_MODULE_6__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Navigate, {
+      to: "/"
     })
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Footer__WEBPACK_IMPORTED_MODULE_3__["default"], {
     loggedIn: loggedIn,
@@ -20429,36 +20441,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var quagga__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! quagga */ "./node_modules/quagga/dist/quagga.min.js");
 /* harmony import */ var quagga__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(quagga__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 
 
 
-function ProductPage(_ref) {
-  let {
-    barcode
-  } = _ref;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Product Page for Barcode: ", barcode));
-}
+
 function Scanner() {
-  const [barcode, setBarcode] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [barcode, setBarcode] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
+  const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     quagga__WEBPACK_IMPORTED_MODULE_1___default().init({
       inputStream: {
         name: "Live",
         type: "LiveStream",
-        target: document.querySelector('#barcode-scanner'),
+        target: document.querySelector("#barcode-scanner"),
         // Assuming you have a div with the id "barcode-scanner"
         constraints: {
           width: {
-            "min": 450
+            min: 450
           },
           height: {
-            "min": 300
+            min: 300
           },
           facingMode: "environment",
           // or "user" for front camera
           aspectRatio: {
-            "min": 1,
-            "max": 2
+            min: 1,
+            max: 2
           }
         }
       },
@@ -20466,15 +20477,16 @@ function Scanner() {
         readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader", "2of5_reader", "code_93_reader"]
       },
       locator: {
-        patchSize: 'medium',
+        patchSize: "medium",
         halfSample: true
       },
       numOfWorkers: 2,
       frequency: 10,
       locate: true
-    }, err => {
-      if (err) {
-        console.error('Failed to initialize Quagga:', err);
+    }, error => {
+      if (error) {
+        console.error("Failed to initialize Quagga:", error);
+        setError(error);
         return;
       }
       quagga__WEBPACK_IMPORTED_MODULE_1___default().start();
@@ -20488,18 +20500,96 @@ function Scanner() {
       quagga__WEBPACK_IMPORTED_MODULE_1___default().stop();
     };
   }, []);
-  return (
-    /*#__PURE__*/
-    // <Router>
-    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "App"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Scan a product's barcode or enter it manually"), barcode && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, " Detected Barcode: ", barcode, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      id: "barcode-scanner"
-    }))
-    // </Router>
-  );
+  const handleSearch = event => {
+    event.preventDefault();
+    if (!barcode) {
+      // Barcode not detected
+      return;
+    }
+    axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("http://52.53.91.15:8080/api/v1/barcode/".concat(barcode)).then(response => {
+      if (response.status === 200) {
+        const {
+          productResults,
+          inventoryResults
+        } = response.data;
+        if (productResults.length > 0 && inventoryResults.length > 0) {
+          navigate("/scannerdetail", {
+            state: {
+              barcode,
+              productResults,
+              inventoryResults
+            }
+          });
+        } else {
+          navigate("/add-product");
+        }
+      } else {
+        navigate("/add-product");
+      }
+    }).catch(error => {
+      if (error.response) {
+        setError(error.response.data.error);
+      } else {
+        console.error("Error:", error.message);
+      }
+    });
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Quick Scan"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "Scan a product's barcode or enter it manually"), barcode && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, " Detected Barcode: ", barcode, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    id: "barcode-scanner"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+    type: "text",
+    max: 15,
+    min: 7,
+    value: barcode,
+    onChange: e => setBarcode(e.target.value)
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: handleSearch
+  }, "Search"));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Scanner);
+
+/***/ }),
+
+/***/ "./src/components/ScannerDetail.js":
+/*!*****************************************!*\
+  !*** ./src/components/ScannerDetail.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+
+
+const ScannerDetail = () => {
+  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
+  const {
+    barcode,
+    productResults,
+    inventoryResults
+  } = location.state;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Hello Lumiere"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "The Barcode Id is ", barcode), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Product Results:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, productResults.map((product, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+    key: index
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Product ", index + 1, ":"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, Object.entries(product).map(_ref => {
+    let [key, value] = _ref;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+      key: key
+    }, key, ": ", value);
+  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Inventory Results:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, inventoryResults.map((inventory, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+    key: index
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Inventory ", index + 1, ":"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, Object.entries(inventory).map(_ref2 => {
+    let [key, value] = _ref2;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+      key: key
+    }, key, ": ", value);
+  }))))));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ScannerDetail);
 
 /***/ }),
 
@@ -20532,7 +20622,7 @@ video {
     width: 400px;
     height: 300px;
     border: 1px solid black;
-  }`, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;IACI,uBAAuB;IACvB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,uBAAuB;EACzB","sourcesContent":["html {\n    font-family: sans-serif;\n    line-height: 1.5;\n}\n\nvideo {\n    width: 400px;\n    height: 300px;\n    border: 1px solid black;\n  }"],"sourceRoot":""}]);
+  }`, "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;IACI,uBAAuB;IACvB,gBAAgB;AACpB;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,uBAAuB;EACzB","sourcesContent":["html {\r\n    font-family: sans-serif;\r\n    line-height: 1.5;\r\n}\r\n\r\nvideo {\r\n    width: 400px;\r\n    height: 300px;\r\n    border: 1px solid black;\r\n  }"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

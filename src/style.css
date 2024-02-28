@@ -8,3 +8,7 @@ video {
     height: 300px;
     border: 1px solid black;
   }
+
+.smallPhoto {
+    height: 150px;
+}

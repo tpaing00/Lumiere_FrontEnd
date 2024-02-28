@@ -78,7 +78,7 @@ function Scanner() {
           const { productResults, inventoryResults } = response.data;
           if (productResults.length > 0 && inventoryResults.length > 0) {
             navigate("/scannerdetail", {
-              state: { barcode, productResults, inventoryResults },
+              state: { productResults, inventoryResults },
             });
           } else {
             navigate("/add-product")           

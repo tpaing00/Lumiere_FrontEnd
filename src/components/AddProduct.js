@@ -50,39 +50,37 @@ const AddProduct = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        console.log(formData)
-
-        // axios.post('http://52.53.91.15:8080/api/v1/add-product', {
-        //     addToInventory: formData.addToInventory,
-        //     category: formData.category,
-        //     productName: formData.productName,
-        //     brandName: formData.brandName,
-        //     stockQuantity: formData.stockQuantity,
-        //     barcodeNumber: formData.barcodeNumber,
-        //     unitPrice: formData.unitPrice,
-        //     totalValue: totalValue,
-        //     expiryDate: formData.expiryDate,
-        //     periodAfterOpening: formData.periodAfterOpening,
-        //     isLowStockAlert: formData.isLowStockAlert,
-        //     lowStockThreshold: formData.lowStockThreshold,
-        //     isExpirationReminder: formData.isExpirationReminder,
-        //     expirationReminderTime: formData.expirationReminderTime
-        // })
-        //     .then(response => {
-        //         if (response.status === 200) {
-        //             console.log(response);
-        //             setError(null);
-        //         } else {
-        //             setError('Unable to register product');
-        //         }
-        //     })
-        //     .catch(error => {
-        //         if (error.response) {
-        //             setError(error.response.data.error);
-        //         } else {
-        //             console.error('Error:', error.message);
-        //         }
-        //     });
+        axios.post('http://52.53.91.15:8080/api/v1/add-product', {
+            addToInventory: formData.addToInventory,
+            category: formData.category,
+            productName: formData.productName,
+            brandName: formData.brandName,
+            stockQuantity: formData.stockQuantity,
+            barcodeNumber: formData.barcodeNumber,
+            unitPrice: formData.unitPrice,
+            totalValue: totalValue,
+            expiryDate: formData.expiryDate,
+            periodAfterOpening: formData.periodAfterOpening,
+            isLowStockAlert: formData.isLowStockAlert,
+            lowStockThreshold: formData.lowStockThreshold,
+            isExpirationReminder: formData.isExpirationReminder,
+            expirationReminderTime: formData.expirationReminderTime
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    console.log(response);
+                    setError(null);
+                } else {
+                    setError('Unable to register product');
+                }
+            })
+            .catch(error => {
+                if (error.response) {
+                    setError(error.response.data.error);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            });
     }
 
     return (

@@ -25,7 +25,7 @@ const AddProduct = () => {
 
     const [error, setError] = useState(null)
 
-    // Conditional enable/disable the low stock threshold based on the checked state of the checkbox
+    // Conditional enable/disable the low stock threshold based on the checked state of the checkbox isLowStockAlert
     const [isLowStockThresholdDisabled, setIsLowStockThresholdDisabled] = useState(true);
     const [isLowStockAlertChecked, setIsLowStockAlertChecked] = useState(false);
 
@@ -33,7 +33,7 @@ const AddProduct = () => {
         setIsLowStockThresholdDisabled(!isLowStockAlertChecked);
     }, [isLowStockAlertChecked]);
 
-    // Conditional enable/disable the low stock threshold based on the checked state of the checkbox
+    // Conditional enable/disable the low stock threshold based on the checked state of the checkbox isExpirationReminder
     const [isExpirationReminderTimeDisabled, setIsExpirationReminderTimeDisabled] = useState(true);
     const [isExpirationReminderChecked, setIsExpirationReminderChecked] = useState(false);
 

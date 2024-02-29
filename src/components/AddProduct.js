@@ -25,8 +25,23 @@ const AddProduct = () => {
 
     const [error, setError] = useState(null)
 
+    // Conditional enable/disable the low stock threshold based on the checked state of the checkbox
     const [isLowStockThresholdDisabled, setIsLowStockThresholdDisabled] = useState(true);
+    const [isLowStockAlertChecked, setIsLowStockAlertChecked] = useState(false);
 
+    useEffect(() => {
+        setIsLowStockThresholdDisabled(!isLowStockAlertChecked);
+    }, [isLowStockAlertChecked]);
+
+    // Conditional enable/disable the low stock threshold based on the checked state of the checkbox
+    const [isExpirationReminderTimeDisabled, setIsExpirationReminderTimeDisabled] = useState(true);
+    const [isExpirationReminderChecked, setIsExpirationReminderChecked] = useState(false);
+
+    useEffect(() => {
+        setIsExpirationReminderTimeDisabled(!isExpirationReminderChecked);
+    }, [isExpirationReminderChecked]);
+
+    // calculates the total value based on the multiplication of unit price and stock
     useEffect(() => {
         const result = Number(formData.stockQuantity) * Number(formData.unitPrice);
         setFormData(prevFormData => ({
@@ -35,10 +50,7 @@ const AddProduct = () => {
         }));
     }, [formData.stockQuantity, formData.unitPrice]);
 
-    useEffect(() => {
-        setIsLowStockThresholdDisabled(!formData.isLowStockAlert);
-        }, [formData.isLowStockAlert]);
-
+    // updates values upon change
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData(prevFormData => ({
@@ -47,8 +59,11 @@ const AddProduct = () => {
         }));
     }
 
+    // handles the submit of the form using axios to pass the data to the backend
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        console.log(formData)
 
         axios.post('http://52.53.91.15:8080/api/v1/add-product', {
             addToInventory: formData.addToInventory,
@@ -58,7 +73,7 @@ const AddProduct = () => {
             stockQuantity: formData.stockQuantity,
             barcodeNumber: formData.barcodeNumber,
             unitPrice: formData.unitPrice,
-            totalValue: totalValue,
+            totalValue: formData.totalValue,
             expiryDate: formData.expiryDate,
             periodAfterOpening: formData.periodAfterOpening,
             isLowStockAlert: formData.isLowStockAlert,
@@ -116,7 +131,7 @@ const AddProduct = () => {
                     <input type="text" onChange={handleChange} name="productName" value={formData.productName} />
 
                     <label htmlFor="brandName">Brand</label>
-                    <input type="text" onChange={handleChange} name="brandName" value={formData.brandName} disabled/>
+                    <input type="text" onChange={handleChange} name="brandName" value={formData.brandName} disabled />
 
                     <label htmlFor="stockQuantity">Stock</label>
                     <input type="number" min="0" onChange={handleChange} name="stockQuantity" value={formData.stockQuantity} />
@@ -147,9 +162,8 @@ const AddProduct = () => {
                     <h2>Notification Settings</h2>
 
                     <label htmlFor='isLowStockAlert'>Low Stock Alert</label>
-                    <input type='checkbox' onChange={handleChange} name='isLowStockAlert' value={formData.isLowStockAlert} />
+                    <input type='checkbox' onChange={(e) => { handleChange(e); setIsLowStockAlertChecked(e.target.checked) }} name='isLowStockAlert' value={formData.isLowStockAlert} />
 
-                    {/* conditional on the boolean above */}
                     <label htmlFor="lowStockThreshold">Notify when stock is below</label>
                     <select onChange={handleChange} name='lowStockThreshold' value={formData.lowStockThreshold} disabled={isLowStockThresholdDisabled}>
                         <option value='Select' disabled>Select</option>
@@ -159,11 +173,11 @@ const AddProduct = () => {
                     </select>
 
                     <label htmlFor='isExpirationReminder'>Low Stock Alert</label>
-                    <input type='checkbox' onChange={handleChange} name='isExpirationReminder' value={formData.isExpirationReminder} />
+                    <input type='checkbox' onChange={(e) => { handleChange(e); setIsExpirationReminderChecked(e.target.checked) }} name='isExpirationReminder' value={formData.isExpirationReminder} />
 
                     {/* conditional on the boolean above - useReducer */}
                     <label htmlFor="expirationReminderTime">Notify when expiry date is</label>
-                    <select onChange={handleChange} name='expirationReminderTime' value={formData.expirationReminderTime} disabled={!formData.isExpirationReminder}>
+                    <select onChange={handleChange} name='expirationReminderTime' value={formData.expirationReminderTime} disabled={isExpirationReminderTimeDisabled}>
                         <option value='Select' disabled>Select</option>
                         <option value='5'>5 days away</option>
                         <option value='10'>10 days away</option>

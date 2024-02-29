@@ -65,6 +65,7 @@ const App = (props) => {
               loggedIn ? <ScannerDetail /> : <Navigate to="/" />
             }
           />
+          <Route path="/add-product"  element={loggedIn ? <AddProduct />: <Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
       <Footer loggedIn={loggedIn} onLogout={handleLogout} />

@@ -7,7 +7,6 @@ import { useState } from "react";
 import NavBar from "./NavBar";
 import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
-import AddProduct from "./AddProduct";
 
 const App = (props) => {
   let token = document.cookie

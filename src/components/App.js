@@ -36,37 +36,46 @@ const App = (props) => {
   return (
     <>
       <BrowserRouter>
-        {loggedIn && <NavBar />}
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              !loggedIn ? <Navigate to="/login" /> : <h2>Welcome to Lumière</h2>
-            }
-          />
-          <Route
-            path="/scanner"
-            element={loggedIn ? <Scanner /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/login"
-            element={
-              loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
-            }
-          />
-          <Route
-            path="/page"
-            element={loggedIn ? <Page /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/scannerdetail"
-            element={
-              loggedIn ? <ScannerDetail /> : <Navigate to="/" />
-            }
-          />
-          <Route path="/add-product"  element={loggedIn ? <AddProduct />: <Navigate to="/" />} />
-        </Routes>
+          {loggedIn && <NavBar />}
+          <Routes>
+              <Route
+                exact
+                path="/"
+                element={
+                  !loggedIn ? <Navigate to="/login" /> : <h2>Welcome to Lumière</h2>
+                }
+              />
+              <Route
+                path="/scanner"
+                element={
+                  loggedIn ? <Scanner /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+                }
+              />
+              <Route
+                path="/page"
+                element={
+                  loggedIn ? <Page /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/scannerdetail"
+                element={
+                  loggedIn ? <ScannerDetail /> : <Navigate to="/" />
+                }
+              />
+              <Route 
+                path="/add-product"  
+                element={
+                  loggedIn ? <AddProduct />: <Navigate to="/" />
+                } 
+              />
+          </Routes>
       </BrowserRouter>
       <Footer loggedIn={loggedIn} onLogout={handleLogout} />
     </>

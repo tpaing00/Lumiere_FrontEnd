@@ -1,0 +1,10 @@
+[
+  { "value": "", "label": "Select a notify period" },
+  { "value": "1", "label": "1 day away" },
+  { "value": "5", "label": "5 days away" },
+  { "value": "10", "label": "10 days away" },
+  { "value": "15", "label": "15 days away" },
+  { "value": "20", "label": "20 days away" },
+  { "value": "25", "label": "25 days away" },
+  { "value": "30", "label": "30 days away" }
+]

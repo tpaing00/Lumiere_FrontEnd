@@ -2,17 +2,17 @@ import React from 'react';
 import {useState, useEffect} from 'react';
 import { format, addDays } from 'date-fns';
 import axios from 'axios';
+import { useLocation } from "react-router-dom";
 
-const ProductDetail = (props) => {
+const ProductDetail = () => {
 
-    // const inventoryId = props.inventoryId;
-    const inventoryId = "65dd81f99770886d7b3e083b";
-    // const barcodeId = props.barcodeId;
-    const barcodeNumber = "0512345000107";
+    const location = useLocation();
+    const { inventoryId, barcodeNumber } = location.state;
 
     const [productResults, setProductResults] = useState("");
     const [inventoryResults, setInventoryResults] = useState("");
     const [notificationResults, setNotificationResults] = useState("");
+    const [internalUseListResults, setInternalUseListResults] = useState([]);
     const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
 
     useEffect(() => {
@@ -53,9 +53,19 @@ const ProductDetail = (props) => {
         .catch((error) => {
             console.error("Error:", error.message);
         }); 
+
+        axios.get(`http://localhost:8080/api/v1/internalUseList/${inventoryId}`)
+        .then((result) => {
+            if (result.status === 200) {
+                setInternalUseListResults(result.data.InternalUseListResults);
+                // console.log(result.data.InternalUseListResults);
+            } 
+        })
+        .catch((error) => {
+            console.error("Error:", error.message);
+        }); 
         
     },[]);
-    console.log(formattedExpiryDate);
 
   return (
     <>
@@ -85,7 +95,7 @@ const ProductDetail = (props) => {
             </div>
             <div>
                 <p>Total Value</p>
-                <p>${(productResults.unitPrice * inventoryResults.stockQuantity).toFixed(2)}</p>
+                <p>{inventoryResults.totalValue}</p>
             </div>
         </div>
         <div>
@@ -104,6 +114,33 @@ const ProductDetail = (props) => {
             
         </div>
 
+    </div>
+    <div>
+        <h3>Activity History</h3>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>User Name</th>
+                    <th>Activity</th>
+                    <th>Quantity Change</th>
+                    <th>Date of Open</th>
+                </tr>
+                </thead>
+                <tbody>
+                {internalUseListResults.map((list, index) => (
+                    <tr key={index}>
+                        <td>{formattedDateTime}</td>
+                        <td>{list.userId}</td>
+                        <td>{list.reason}</td>
+                        <td>-{list.quantity}</td>
+                        <td>-{list.openingDate}</td>
+                    </tr>      
+                ))}
+                </tbody>
+        </table>
+        </div>
     </div>
     </>
   );

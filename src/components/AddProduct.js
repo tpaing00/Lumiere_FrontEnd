@@ -65,7 +65,7 @@ const AddProduct = () => {
 
         console.log(formData)
 
-        axios.post('http://52.53.91.15:8080/api/v1/add-product', {
+        axios.post('https://api.lumiereapp.ca/api/v1/add-product', {
             addToInventory: formData.addToInventory,
             category: formData.category,
             productName: formData.productName,

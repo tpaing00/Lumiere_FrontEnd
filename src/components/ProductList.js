@@ -3,57 +3,75 @@ import axios from 'axios';
 
 const ProductList = () => {
 
-    const [tableData, setTableData] = useState([]); // Change this line
+    const [inventoryData, setInventoryData] = useState([]);
+    const [productData, setProductData] = useState([]);
 
     useEffect(() => {
-        // Replace the URL with your own API endpoint
-        axios.get('http://52.53.91.15:8080/api/v1/inventory')
-            .then(response => {
-                const data = response.data; // Change this line
-                console.log(data);
-                setTableData(data); // Change this line
+        Promise.all([
+            axios.get('http://52.53.91.15:8080/api/v1/inventory'),
+            axios.get('http://52.53.91.15:8080/api/v1/products')
+        ])
+            .then(responses => {
+                const inventoryResponse = responses[0].data;
+                const productsResponse = responses[1].data;
+                setInventoryData(inventoryResponse);
+                setProductData(productsResponse);
+
+
             })
             .catch(error => {
                 console.error(error);
             });
     }, []);
 
-    useEffect(() => {
-        console.log(tableData); // Add this line
-    }, [tableData]); // Add this line
+    console.log(inventoryData)
+    console.log(productData)
 
-    console.log(tableData)
+    const renderTableHeader = () => {
+        // Define the keys that you want to display in the table
+        let header = ["productName", "brandName", "addToCategory", "dateAdded", "expiryDate", "addToInventory"];
+        return header.map((key, index) => {
+            return <th key={index}>{key}</th>
+        });
+    };
 
-    // const renderTableHeader = () => {
-    //     // Assuming the first object has all the keys
-    //     let header = Object.keys(tableData[0]);
-    //     return header.map((key, index) => {
-    //         return <th key={index}>{key.toUpperCase()}</th>
-    //     });
-    // };
 
-    // const renderTableData = () => {
-    //     return tableData.map((row, index) => {
-    //         let col = Object.keys(row);
-    //         return (
-    //             <tr key={index}>
-    //                 {col.map((val, index) => {
-    //                     return <td key={index}>{row[col[index]]}</td>
-    //                 })}
-    //             </tr>
-    //         );
-    //     });
-    // };
+    const renderTableData = () => {
+        // Combine the data from both arrays
+        const combinedData = inventoryData.map(row => {
+            // Find the matching object from the other array based on the inventoryId
+            const match = productData.find(product => product.barcodeNumber === row.barcodeNumber);
+            // Merge the matching objects into a new object
+            const combined = Object.assign({}, row, match);
+            // Return the new object
+            return combined;
+        });
+        return combinedData.map((row, index) => {
+            // Get the values of the keys that you want to display in the table
+            let col = [ "productName", "brandName", "addToCategory", "dateAdded", "expiryDate", "addToInventory"].map(key => row[key]);
+            return (
+                <tr key={index}>
+                    {col.map((val, index) => {
+                        return <td key={index}>{val}</td>
+                    })}
+                </tr>
+            );
+        });
+    };
+
+
 
     return (
         <div>
             <h1>Dynamic Table</h1>
             <table>
                 <thead>
-                    {/* <tr>{renderTableHeader()}</tr> */}
+                    <tr>
+                        {renderTableHeader()}
+                    </tr>
                 </thead>
                 <tbody>
-                    {/* {renderTableData()} */}
+                    {renderTableData()}
                 </tbody>
             </table>
         </div>

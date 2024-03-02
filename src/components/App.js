@@ -9,6 +9,7 @@ import AddProduct from "./AddProduct";
 // import Inventory from "./Inventory"
 import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
+import ProductDetail from "./ProductDetail";
 
 const App = (props) => {
   let token = document.cookie
@@ -75,6 +76,12 @@ const App = (props) => {
                 path="/add-product"  
                 element={
                   loggedIn ? <AddProduct />: <Navigate to="/" />
+                } 
+              />
+                <Route
+                path="/productdetail"
+                element={
+                  loggedIn ? <ProductDetail />: <Navigate to="/" />
                 } 
               />
               {/* <Route

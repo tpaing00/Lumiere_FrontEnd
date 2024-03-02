@@ -1,9 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
 
+    const navigate = useNavigate();
     const [formData, setFormData] = useState(
         {
             addToInventory: 'Select',
@@ -63,7 +65,7 @@ const AddProduct = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        console.log(formData)
+        // console.log(formData)
 
         axios.post('https://api.lumiereapp.ca/api/v1/add-product', {
             addToInventory: formData.addToInventory,
@@ -82,8 +84,15 @@ const AddProduct = () => {
             expirationReminderTime: formData.expirationReminderTime
         })
             .then(response => {
-                if (response.status === 200) {
-                    console.log(response);
+                if (response.status === 201) {
+                    // console.log(response.data);
+                    const { inventory, notification, product } = response.data;
+                        let inventoryId = inventory._id;
+                        let barcodeNumber = formData.barcodeNumber
+                        // console.log(inventoryId);
+                        navigate("/productdetail", {
+                            state: { inventoryId, barcodeNumber },
+                        });
                     setError(null);
                 } else {
                     setError('Unable to register product');
@@ -131,7 +140,7 @@ const AddProduct = () => {
                     <input type="text" onChange={handleChange} name="productName" value={formData.productName} />
 
                     <label htmlFor="brandName">Brand</label>
-                    <input type="text" onChange={handleChange} name="brandName" value={formData.brandName} disabled />
+                    <input type="text" onChange={handleChange} name="brandName" value={formData.brandName} />
 
                     <label htmlFor="stockQuantity">Stock</label>
                     <input type="number" min="0" onChange={handleChange} name="stockQuantity" value={formData.stockQuantity} />
@@ -142,8 +151,8 @@ const AddProduct = () => {
                     <label htmlFor="unitPrice">Unit price</label>
                     <input type="number" min="0" onChange={handleChange} name="unitPrice" value={formData.unitPrice} placeholder="$" />
 
-                    <label htmlFor="totalValue">Total Value</label>
-                    <input type="number" min="0" onChange={handleChange} name="totalValue" value={formData.totalValue} placeholder="$" disabled />
+                    {/* <label htmlFor="totalValue">Total Value</label>
+                    <input type="number" min="0" onChange={handleChange} name="totalValue" value={formData.totalValue} placeholder="$" disabled /> */}
 
                     <label htmlFor="expiryDate">Expiry Date</label>
                     <input type="date" onChange={handleChange} name="expiryDate" value={formData.expiryDate} />

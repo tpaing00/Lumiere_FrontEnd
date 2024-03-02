@@ -15,7 +15,6 @@ const RetailCheckOutModal = ({ handleClose, productData, inventoryId, handleRelo
       soldDate: new Date().toISOString(),
       reason: "checkout for sale"
     };
-console.log(formData);
     //POST request to the API
     axios.post("https://api.lumiereapp.ca/api/v1/checkout", formData)
       .then(response => {

@@ -138,7 +138,7 @@ const ScannerDetail = () => {
           <button onClick={handleRetailCheckOut}>Retail Checkout</button>
         </div>
       )}
-      {showRetailModal && <RetailCheckOutModal handleClose={handleRetailCloseModal} productData={productResults[0]} inventoryId={internalInventory[0]._id} handleReloadRetailData={handleReloadRetailData} />}
+      {showRetailModal && <RetailCheckOutModal handleClose={handleRetailCloseModal} productData={productResults[0]} inventoryId={retailInventory[0]._id} handleReloadRetailData={handleReloadRetailData} />}
       {retailInventory.length === 0 && (
         <div>
           <h3>Retail</h3>

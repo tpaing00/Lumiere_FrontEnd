@@ -14,8 +14,8 @@ const ProductList = () => {
 
     useEffect(() => {
         Promise.all([
-            axios.get('http://52.53.91.15:8080/api/v1/inventory'),
-            axios.get('http://52.53.91.15:8080/api/v1/products')
+            axios.get('https://api.lumiereapp.ca/api/v1/inventory'),
+            axios.get('https://api.lumiereapp.ca/api/v1/products')
         ])
             .then(responses => {
                 const inventoryResponse = responses[0].data;
@@ -30,8 +30,8 @@ const ProductList = () => {
             });
     }, []);
 
-    console.log(inventoryData)
-    console.log(productData)
+    // console.log(inventoryData)
+    // console.log(productData)
 
     const renderTableHeader = () => {
         // Define the keys that you want to display in the table

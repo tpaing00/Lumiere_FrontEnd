@@ -25,12 +25,7 @@ const StaffCheckOutModal = ({ handleClose, productData, inventoryId, handleReloa
   }, []);
 
   const handleProceed = () => {
-   
-    // const periodAfterOpening = productData.periodAfterOpening;
-    // const openingDate = new Date(dateOfOpen);
-    // openingDate.setMonth(openingDate.getMonth() + periodAfterOpening);
-    // const useByDate = openingDate.toISOString(); // Use by Date calculated
-
+ 
     const periodAfterOpening = productData.periodAfterOpening;
     const [year, month, day] = dateOfOpen.split("-").map(Number);
     const afterOpenDate = new Date(year, month - 1, day);

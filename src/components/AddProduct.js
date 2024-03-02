@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AddProduct = () => {
-
+    const location = useLocation();
     const navigate = useNavigate();
+    const { barcode } = location.state ? location.state : '';
     const [formData, setFormData] = useState(
         {
             addToInventory: 'Select',
@@ -13,7 +14,7 @@ const AddProduct = () => {
             productName: '',
             brandName: '',
             stockQuantity: 0,
-            barcodeNumber: '',
+            barcodeNumber: barcode != '' ? barcode : '',
             unitPrice: '',
             totalValue: 0,
             expiryDate: '',
@@ -24,8 +25,9 @@ const AddProduct = () => {
             expirationReminderTime: 'Select'
         }
     );
+   
+    const [error, setError] = useState(null);
 
-    const [error, setError] = useState(null)
 
     // Conditional enable/disable the low stock threshold based on the checked state of the checkbox isLowStockAlert
     const [isLowStockThresholdDisabled, setIsLowStockThresholdDisabled] = useState(true);
@@ -65,8 +67,6 @@ const AddProduct = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // console.log(formData)
-
         axios.post('https://api.lumiereapp.ca/api/v1/add-product', {
             addToInventory: formData.addToInventory,
             category: formData.category,
@@ -85,11 +85,9 @@ const AddProduct = () => {
         })
             .then(response => {
                 if (response.status === 201) {
-                    // console.log(response.data);
                     const { inventory, notification, product } = response.data;
                         let inventoryId = inventory._id;
                         let barcodeNumber = formData.barcodeNumber
-                        // console.log(inventoryId);
                         navigate("/productdetail", {
                             state: { inventoryId, barcodeNumber },
                         });

@@ -5,7 +5,7 @@ import Login from "./Login";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import AddProduct from "./AddProduct";
-import Inventory from "./Inventory"
+// import Inventory from "./Inventory"
 import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 
@@ -76,12 +76,12 @@ const App = (props) => {
                   loggedIn ? <AddProduct />: <Navigate to="/" />
                 } 
               />
-              <Route
+              {/* <Route
                 path="/inventory"
                 element={
                   loggedIn ? <Inventory />: <Navigate to="/" />
                 } 
-              />
+              /> */}
           </Routes>
       </BrowserRouter>
       <Footer loggedIn={loggedIn} onLogout={handleLogout} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import StaffCheckOutModal from "./StaffCheckOut";
+import RetailCheckOutModal from "./RetailCheckOutModal";
 
 const ScannerDetail = () => {
   const location = useLocation();
@@ -9,13 +10,7 @@ const ScannerDetail = () => {
   const [retailInventory, setretailInventoryResults] = useState([]);
   const [internalInventory, setinternalInventoryResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
-  // const retailInventory = inventoryResults.filter(
-  //   (inventory) => inventory.addToInventory === "Retail"
-  // );
-  // const internalInventory = inventoryResults.filter(
-  //   (inventory) => inventory.addToInventory === "Internal Use"
-  // );
+  const [showRetailModal, setShowRetailModal] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -35,6 +30,13 @@ const ScannerDetail = () => {
     }    
   };
 
+  const handleReloadRetailData = (latestData) => {
+    if (latestData && latestData.updatedInventory){
+      const latestInventoryResults = latestData.updatedInventory[0];
+       setretailInventoryResults([latestInventoryResults]);
+    }    
+  };
+
   const handleEdit = (event) => {
     event.preventDefault();
     alert("Click On Edit");
@@ -51,7 +53,11 @@ const ScannerDetail = () => {
 
   const handleRetailCheckOut = (event) => {
     event.preventDefault();
-    alert("Click On Retail Check Out");
+    setShowRetailModal(true);
+  };
+
+  const handleRetailCloseModal = () => {
+    setShowRetailModal(false); // Close the modal
   };
 
   const handleAddRetailInventory = (event) => {
@@ -132,6 +138,7 @@ const ScannerDetail = () => {
           <button onClick={handleRetailCheckOut}>Retail Checkout</button>
         </div>
       )}
+      {showRetailModal && <RetailCheckOutModal handleClose={handleRetailCloseModal} productData={productResults[0]} inventoryId={internalInventory[0]._id} handleReloadRetailData={handleReloadRetailData} />}
       {retailInventory.length === 0 && (
         <div>
           <h3>Retail</h3>

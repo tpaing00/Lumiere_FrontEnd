@@ -54,7 +54,7 @@ const ProductDetail = () => {
             console.error("Error:", error.message);
         }); 
 
-        axios.get(`http://localhost:8080/api/v1/internalUseList/${inventoryId}`)
+        axios.get(`https://api.lumiereapp.ca/api/v1/internalUseList/${inventoryId}`)
         .then((result) => {
             if (result.status === 200) {
                 setInternalUseListResults(result.data.InternalUseListResults);

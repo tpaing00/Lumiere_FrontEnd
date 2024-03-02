@@ -26,7 +26,7 @@ const Login = ({onLogin}) => {
         event.preventDefault();
         
         
-        axios.post('http://localhost:8080/api/v1/login', {
+        axios.post('https://api.lumiereapp.ca/api/v1/login', {
             email: formData.userName,
             password: formData.password
         })

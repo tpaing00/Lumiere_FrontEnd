@@ -17,7 +17,7 @@ const ProductDetail = (props) => {
 
     useEffect(() => {
     
-        axios.get(`http://localhost:8080/api/v1/products/${barcodeNumber}`)
+        axios.get(`https://api.lumiereapp.ca/api/v1/products/${barcodeNumber}`)
         .then((response) => {
             if (response.status === 200) {
                 setProductResults(response.data[0]);
@@ -28,7 +28,7 @@ const ProductDetail = (props) => {
         }); 
         
         
-        axios.get(`http://localhost:8080/api/v1/inventory/${inventoryId}`)
+        axios.get(`https://api.lumiereapp.ca/api/v1/inventory/${inventoryId}`)
         .then((res) => {
             if (res.status === 200) {
                 setInventoryResults(res.data);
@@ -44,7 +44,7 @@ const ProductDetail = (props) => {
             console.error("Error:", error.message);
         }); 
 
-        axios.get(`http://localhost:8080/api/v1/notification/${inventoryId}`)
+        axios.get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
         .then((resObj) => {
             if (resObj.status === 200) {
                 setNotificationResults(resObj.data[0]);

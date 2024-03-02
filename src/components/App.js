@@ -4,6 +4,7 @@ import { useState } from "react";
 import Login from "./Login";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
+import Page from "./Page";
 import AddProduct from "./AddProduct";
 // import Inventory from "./Inventory"
 import Scanner from "./Scanner";

@@ -1,7 +1,6 @@
 const express = require("express");
-require('dotenv').config({ path: path.resolve(__dirname, './.env') })
-
 const path = require("path");
+require('dotenv').config({ path: path.resolve(__dirname, './.env') })
 const app = express();
 const server = app.listen(process.env.PORT || 3000, () => console.log("Listening"));
 

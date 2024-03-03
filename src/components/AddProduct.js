@@ -7,7 +7,16 @@ import axios from 'axios';
 
 
 const AddProduct = () => {
+    // Inside the useEffect hook
+    console.log("firebase config",firebaseConfig);
 
+    useEffect(() => {
+
+        initializeApp({
+            firebaseConfig
+        });
+    
+    }, []);
     const [formData, setFormData] = useState(
         {
             addToInventory: 'Select',

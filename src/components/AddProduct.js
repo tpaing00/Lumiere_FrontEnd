@@ -2,8 +2,11 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
+import firebaseApp from './firebaseConfig.js';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AddProduct = () => {
+    console.log(firebaseApp);
     const location = useLocation();
     const navigate = useNavigate();
     const { barcode } = location.state ? location.state : '';
@@ -22,9 +25,32 @@ const AddProduct = () => {
             isLowStockAlert: false,
             lowStockThreshold: 'Select',
             isExpirationReminder: false,
-            expirationReminderTime: 'Select'
+            expirationReminderTime: 'Select',
+            photo: [], 
         }
     );
+    // Handle file selection for image upload
+    const handleImageChange = (event) => {
+        const imageFiles = Array.from(event.target.files);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            photo: imageFiles, 
+        }));
+    };
+    
+        // Handle image upload to Firebase Storage
+        const uploadImagesToFirebase = async () => {
+            const storage = getStorage(firebaseApp);
+            const imageUrls = await Promise.all(formData.photo.map(async (imageFile) => {
+                
+                const storageRef = ref(storage, `photo/${imageFile.name}`);
+                await uploadBytes(storageRef, imageFile);
+                return getDownloadURL(storageRef);
+            }));
+            console.log(imageUrls);
+            return imageUrls;
+        };
+    
    
     const [error, setError] = useState(null);
 
@@ -64,9 +90,11 @@ const AddProduct = () => {
     }
 
     // handles the submit of the form using axios to pass the data to the backend
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        try {
 
+            const imageUrls = await uploadImagesToFirebase();
         axios.post('https://api.lumiereapp.ca/api/v1/add-product', {
             addToInventory: formData.addToInventory,
             category: formData.category,
@@ -81,7 +109,8 @@ const AddProduct = () => {
             isLowStockAlert: formData.isLowStockAlert,
             lowStockThreshold: formData.lowStockThreshold,
             isExpirationReminder: formData.isExpirationReminder,
-            expirationReminderTime: formData.expirationReminderTime
+            expirationReminderTime: formData.expirationReminderTime,
+            photo: imageUrls,
         })
             .then(response => {
                 if (response.status === 201) {
@@ -103,6 +132,10 @@ const AddProduct = () => {
                     console.error('Error:', error.message);
                 }
             });
+        }catch (error){
+            console.error('Error uploading images:', error);
+            setError('Error uploading images');
+        }
     }
 
     return (
@@ -193,6 +226,8 @@ const AddProduct = () => {
                     </select>
 
                 </div>
+
+                <input type="file" accept="image/*" onChange={handleImageChange} multiple />
 
                 <div className='register-buttons'>
 

@@ -85,6 +85,7 @@ const App = (props) => {
               /> */}
           </Routes>
       </BrowserRouter>
+      <AddProduct />
       <Footer loggedIn={loggedIn} onLogout={handleLogout} />
     </>
   );

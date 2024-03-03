@@ -1,4 +1,5 @@
 const path = require('path');
+const  webpack  = require('webpack');
 module.exports = {
 mode:"development",
 devtool:"source-map",
@@ -7,6 +8,18 @@ devtool:"source-map",
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   },
+  resolve: {
+    fallback: {
+      "fs" : false,
+      "os": false,
+      "path": false
+    }
+  },
+  plugins : [
+    new webpack.ProvidePlugin({
+      process: 'process/browser'
+    })
+  ],
     module: {
         rules: [
             {

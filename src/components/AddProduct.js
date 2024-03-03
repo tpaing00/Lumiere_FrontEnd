@@ -1,6 +1,10 @@
 import React from 'react';
+import firebaseConfig from './firebaseConfig.js';
 import { useState, useEffect } from 'react';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
 import axios from 'axios';
+
 
 const AddProduct = () => {
 
@@ -19,9 +23,32 @@ const AddProduct = () => {
             isLowStockAlert: false,
             lowStockThreshold: 'Select',
             isExpirationReminder: false,
-            expirationReminderTime: 'Select'
+            expirationReminderTime: 'Select',
+            photo: [], 
         }
     );
+
+    // Handle file selection for image upload
+    const handleImageChange = (event) => {
+    const imageFiles = Array.from(event.target.files);
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        photo: imageFiles, 
+    }));
+};
+
+    // Handle image upload to Firebase Storage
+    const uploadImagesToFirebase = async () => {
+        const storage = getStorage();
+        const imageUrls = await Promise.all(formData.photo.map(async (imageFile) => {
+            
+            const storageRef = ref(storage, `photo/${imageFile.name}`);
+            await uploadBytes(storageRef, imageFile);
+            return getDownloadURL(storageRef);
+        }));
+        console.log(imageUrls);
+        return imageUrls;
+    };
 
     const [error, setError] = useState(null)
 
@@ -60,42 +87,48 @@ const AddProduct = () => {
     }
 
     // handles the submit of the form using axios to pass the data to the backend
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        try {
 
-        console.log(formData)
+            const imageUrls = await uploadImagesToFirebase();
 
-        axios.post('http://52.53.91.15:8080/api/v1/add-product', {
-            addToInventory: formData.addToInventory,
-            category: formData.category,
-            productName: formData.productName,
-            brandName: formData.brandName,
-            stockQuantity: formData.stockQuantity,
-            barcodeNumber: formData.barcodeNumber,
-            unitPrice: formData.unitPrice,
-            totalValue: formData.totalValue,
-            expiryDate: formData.expiryDate,
-            periodAfterOpening: formData.periodAfterOpening,
-            isLowStockAlert: formData.isLowStockAlert,
-            lowStockThreshold: formData.lowStockThreshold,
-            isExpirationReminder: formData.isExpirationReminder,
-            expirationReminderTime: formData.expirationReminderTime
-        })
-            .then(response => {
-                if (response.status === 200) {
-                    console.log(response);
-                    setError(null);
-                } else {
-                    setError('Unable to register product');
-                }
+            axios.post('http://localhost:8080/api/v1/add-product', {
+                addToInventory: formData.addToInventory,
+                category: formData.category,
+                productName: formData.productName,
+                brandName: formData.brandName,
+                stockQuantity: formData.stockQuantity,
+                barcodeNumber: formData.barcodeNumber,
+                unitPrice: formData.unitPrice,
+                totalValue: formData.totalValue,
+                expiryDate: formData.expiryDate,
+                periodAfterOpening: formData.periodAfterOpening,
+                isLowStockAlert: formData.isLowStockAlert,
+                lowStockThreshold: formData.lowStockThreshold,
+                isExpirationReminder: formData.isExpirationReminder,
+                expirationReminderTime: formData.expirationReminderTime,
+                photo: imageUrls,
             })
-            .catch(error => {
-                if (error.response) {
-                    setError(error.response.data.error);
-                } else {
-                    console.error('Error:', error.message);
-                }
-            });
+                .then(response => {
+                    if (response.status === 200) {
+                        console.log(response);
+                        setError(null);
+                    } else {
+                        setError('Unable to register product');
+                    }
+                })
+                .catch(error => {
+                    if (error.response) {
+                        setError(error.response.data.error);
+                    } else {
+                        console.error('Error:', error.message);
+                    }
+                });
+        } catch (error){
+            console.error('Error uploading images:', error);
+            setError('Error uploading images');
+        }
     }
 
     return (
@@ -131,7 +164,7 @@ const AddProduct = () => {
                     <input type="text" onChange={handleChange} name="productName" value={formData.productName} />
 
                     <label htmlFor="brandName">Brand</label>
-                    <input type="text" onChange={handleChange} name="brandName" value={formData.brandName} disabled />
+                    <input type="text" onChange={handleChange} name="brandName" value={formData.brandName} />
 
                     <label htmlFor="stockQuantity">Stock</label>
                     <input type="number" min="0" onChange={handleChange} name="stockQuantity" value={formData.stockQuantity} />
@@ -187,6 +220,8 @@ const AddProduct = () => {
 
                 </div>
 
+                <input type="file" accept="image/*" onChange={handleImageChange} multiple />
+
                 <div className='register-buttons'>
 
                     <button type="reset">CANCEL</button>
@@ -200,4 +235,4 @@ const AddProduct = () => {
 
 }
 
-export default AddProduct
+export default AddProduct;

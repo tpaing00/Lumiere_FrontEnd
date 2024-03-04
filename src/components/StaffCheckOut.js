@@ -70,14 +70,14 @@ const StaffCheckOutModal = ({ handleClose, productData, inventoryId, handleReloa
         <label htmlFor="quantity">Quantity:</label>
         <input
           type="number"
-          id="quantity"
+          name="quantity"
           value={quantity}
           min="1"
           onChange={(e) => setQuantity(e.target.value)}
         />
         <label htmlFor="reason">Reason:</label>
         <select
-          id="reason"
+          name="reason"
           value={reason}
           className="dropdown"
           onChange={(e) => setReason(e.target.value)}
@@ -91,14 +91,14 @@ const StaffCheckOutModal = ({ handleClose, productData, inventoryId, handleReloa
         <label htmlFor="dateOfOpen">Date of Open:</label>
         <input
           type="date"
-          id="dateOfOpen"
+          name="dateOfOpen"
           value={dateOfOpen}
           onChange={(e) => setDateOfOpen(e.target.value)}
         />
         <label htmlFor="expirationReminder">Expiration Reminder:</label>
         <input
           type="checkbox"
-          id="expirationReminder"
+          name="expirationReminder"
           checked={expirationReminder}
           onChange={(e) => setExpirationReminder(e.target.checked)}
         />
@@ -106,7 +106,7 @@ const StaffCheckOutModal = ({ handleClose, productData, inventoryId, handleReloa
           Notify when the end of Period-After-Open is*:
         </label>
         <select
-          id="notifyPeriod"
+          name="notifyPeriod"
           className="dropdown"
           value={notifyPeriod}
           onChange={(e) => setNotifyPeriod(e.target.value)}

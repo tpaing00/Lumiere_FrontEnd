@@ -31,6 +31,25 @@ const AddProduct = () => {
 
   const [error, setError] = useState(null);
 
+  // Validation function
+  const validateForm = () => {
+    if (
+      formData.productName.trim() === "" ||
+      formData.brandName.trim() === "" ||
+      formData.barcodeNumber.trim() === "" ||
+      formData.stockQuantity <= 0 ||
+      formData.unitPrice <= 0 ||
+      formData.expiryDate === "" ||
+      (formData.isLowStockAlert && formData.lowStockThreshold === "Select") ||
+      (formData.isExpirationReminder &&
+        formData.expirationReminderTime === "Select")
+    ) {
+      setError("Please fill in all required fields.");
+      return false;
+    }
+    return true;
+  };
+
   // Conditional enable/disable the low stock threshold based on the checked state of the checkbox isLowStockAlert
   const [isLowStockThresholdDisabled, setIsLowStockThresholdDisabled] =
     useState(true);
@@ -78,6 +97,9 @@ const AddProduct = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
     axios
       .post("https://api.lumiereapp.ca/api/v1/add-product", {
         addToInventory: formData.addToInventory,
@@ -120,7 +142,7 @@ const AddProduct = () => {
   return (
     <>
       <h1>Register New Product</h1>
-
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form id="form-register-product" onSubmit={handleSubmit}>
         <div className="register-inventory">
           <label htmlFor="addToInventory">Add to Inventory</label>

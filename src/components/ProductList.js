@@ -6,40 +6,17 @@ import productCategoryData from "./predefined_data/productcategory.json";
 import StaffCheckOutModal from "./StaffCheckOutModal";
 
 const ProductList = () => {
-  // data from db:
   const navigate = useNavigate();
   const [inventoryData, setInventoryData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [notificationData, setNotificationData] = useState([]);
   const [showInternalModal, setShowInternalModal] = useState(false);
   const [selectedInventoryProduct, setSelectedInventoryProduct] = useState(null);
-
-  // sorting and filtering:
+  const [filterByStatus, setFilterByStatus] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [filterByInventory, setFilterByInventory] = useState("");
   const [filterByCategory, setFilterByCategory] = useState("");
   const [sortByBrand, setSortByBrand] = useState("");
-
-  const handleCloseModal = () => {
-    setShowInternalModal(false); // Close the modal
-  };
-
-  const handleReloadInternalData = (latestData) => {
-    // Reload all data from the API
-    Promise.all([
-      axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
-      axios.get("https://api.lumiereapp.ca/api/v1/products"),
-      axios.get("https://api.lumiereapp.ca/api/v1/notification"),
-    ])
-      .then((responses) => {
-        const [inventoryResponse, productsResponse, notificationsResponse] = responses;
-        setInventoryData(inventoryResponse.data);
-        setProductData(productsResponse.data);
-        setNotificationData(notificationsResponse.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
   useEffect(() => {
     Promise.all([
@@ -60,8 +37,50 @@ const ProductList = () => {
       });
   }, []);
 
+  const handleSearch = async (keywords) => {
+    try {
+      const response = await axios.get(`http://api.lumiereapp.ca/api/v1/search?keywords=${encodeURIComponent(keywords)}`);
+       //console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
+  const getSearchTerm = (value) => {
+    setSearchTerm(value); // Update the local state
+    handleSearch(value); // Call the API with the entered keywords
+  };
+
+  const handleCloseModal = () => {
+    setShowInternalModal(false); // Close the modal
+  };
+
+  const handleStaffCheckOut = (row) => {
+    setSelectedInventoryProduct(row);
+    setShowInternalModal(true);
+  };
+
+  const handleReloadInternalData = (latestData) => {
+    // Reload all data from the API
+    Promise.all([
+      axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
+      axios.get("https://api.lumiereapp.ca/api/v1/products"),
+      axios.get("https://api.lumiereapp.ca/api/v1/notification"),
+    ])
+      .then((responses) => {
+        const [inventoryResponse, productsResponse, notificationsResponse] =
+          responses;
+        setInventoryData(inventoryResponse.data);
+        setProductData(productsResponse.data);
+        setNotificationData(notificationsResponse.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const renderTableHeader = () => {
-    // Define the keys that you want to display in the table
+    // Define the keys to display in the table
     let header = [
       "productName",
       "brandName",
@@ -113,12 +132,14 @@ const ProductList = () => {
 
     // Sort the combined data based on the selected option for brandName
     let sortedData = [...combinedData];
+
     // Sort the filtered data based on the selected option for brandName
     if (sortByBrand === "asc") {
       sortedData.sort((a, b) => a.brandName.localeCompare(b.brandName)); // Sort by ascending order of brandName using string comparison
     } else if (sortByBrand === "desc") {
       sortedData.sort((a, b) => b.brandName.localeCompare(a.brandName)); // Sort by descending order of brandName using string comparison
     }
+
     // Filter the combined data based on the selected options
     const filteredData = sortedData.filter((row) => {
       // Check if the row matches the filter criteria for addToInventory and category
@@ -126,8 +147,20 @@ const ProductList = () => {
         filterByInventory === "" || row.addToInventory === filterByInventory;
       const categoryMatch =
         filterByCategory === "" || row.category === filterByCategory;
+      const statusMatch =
+        filterByStatus === "" || row.status === filterByStatus;
+
       // Return true if both criteria are met
-      return inventoryMatch && categoryMatch;
+      //return inventoryMatch && categoryMatch;
+      return (
+        inventoryMatch &&
+        categoryMatch &&
+        statusMatch &&
+        (searchTerm === "" ||
+          row.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          row.brandName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          row.category.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
     });
 
     // Render table rows
@@ -151,11 +184,6 @@ const ProductList = () => {
         state: { inventoryId, barcodeNumber },
       });
     };
-
-    const handleStaffCheckOut = (row) => {
-      setSelectedInventoryProduct(row);
-      setShowInternalModal(true);
-    };    
 
     const handleReportWasted = (row) => {
       alert(
@@ -255,7 +283,7 @@ const ProductList = () => {
     if (inventory.stockQuantity <= lowStockThreshold) return "Low Stock";
     return "In Stock";
   };
-
+  
   return (
     <div>
       <h1>Product list</h1>
@@ -302,6 +330,28 @@ const ProductList = () => {
           </select>
         </div>
       </div>
+      <div>
+        <label>Filter by Status:</label>
+        <select
+          value={filterByStatus}
+          onChange={(e) => setFilterByStatus(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="In Stock">In Stock</option>
+          <option value="Low Stock">Low Stock</option>
+          <option value="Expired">Expired</option>
+          <option value="Out of Stock">Out of Stock</option>
+        </select>
+      </div>
+      <div>
+        <label>Search:</label>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by name, brand, or category"
+        />
+      </div>
       <table>
         <thead>
           <tr>{renderTableHeader()}</tr>
@@ -311,11 +361,11 @@ const ProductList = () => {
 
       {showInternalModal && (
         <StaffCheckOutModal
-        handleClose={handleCloseModal}
-        productData={selectedInventoryProduct}
-        inventoryId={selectedInventoryProduct.inventoryId}
-        stockQuantity={selectedInventoryProduct.stockQuantity}
-        handleReloadInternalData={handleReloadInternalData}
+          handleClose={handleCloseModal}
+          productData={selectedInventoryProduct}
+          inventoryId={selectedInventoryProduct.inventoryId}
+          stockQuantity={selectedInventoryProduct.stockQuantity}
+          handleReloadInternalData={handleReloadInternalData}
         />
       )}
     </div>

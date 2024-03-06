@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import inventoryTypeData from "./predefined_data/inventorytype.json";
 import productCategoryData from "./predefined_data/productcategory.json";
+import StaffCheckOutModal from "./StaffCheckOutModal";
 
 const ProductList = () => {
   // data from db:
@@ -10,11 +11,35 @@ const ProductList = () => {
   const [inventoryData, setInventoryData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [notificationData, setNotificationData] = useState([]);
+  const [showInternalModal, setShowInternalModal] = useState(false);
+  const [selectedInventoryProduct, setSelectedInventoryProduct] = useState(null);
 
   // sorting and filtering:
   const [filterByInventory, setFilterByInventory] = useState("");
   const [filterByCategory, setFilterByCategory] = useState("");
   const [sortByBrand, setSortByBrand] = useState("");
+
+  const handleCloseModal = () => {
+    setShowInternalModal(false); // Close the modal
+  };
+
+  const handleReloadInternalData = (latestData) => {
+    // Reload all data from the API
+    Promise.all([
+      axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
+      axios.get("https://api.lumiereapp.ca/api/v1/products"),
+      axios.get("https://api.lumiereapp.ca/api/v1/notification"),
+    ])
+      .then((responses) => {
+        const [inventoryResponse, productsResponse, notificationsResponse] = responses;
+        setInventoryData(inventoryResponse.data);
+        setProductData(productsResponse.data);
+        setNotificationData(notificationsResponse.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     Promise.all([
@@ -34,9 +59,6 @@ const ProductList = () => {
         console.error(error);
       });
   }, []);
-
-  // console.log(inventoryData)
-  // console.log(productData)
 
   const renderTableHeader = () => {
     // Define the keys that you want to display in the table
@@ -78,6 +100,7 @@ const ProductList = () => {
           dateAdded: formatDate(inventoryRow.dateAdded),
           expiryDate: formatDate(inventoryRow.expiryDate),
           status: calculateStatus(inventoryRow._id),
+          inventoryId: inventoryRow._id,
         };
 
         // Remove the duplicate _id field if it exists
@@ -123,29 +146,68 @@ const ProductList = () => {
       }
     };
 
-    return filteredData.map((row, index) => {
-      let col = [
-        "productName",
-        "brandName",
-        "category",
-        "dateAdded",
-        "expiryDate",
-        "status",
-        "addToInventory",
-      ].map((key) => {
-        // Apply styling only to the status column
-        if (key === "status") {
-          return (
-            <td key={key} style={renderStatusStyle(row.status)}>
-              {row[key]}
-            </td>
-          );
-        } else {
-          return <td key={key}>{row[key]}</td>;
-        }
+    const handleViewDetail = (inventoryId, barcodeNumber) => {
+      navigate("/productdetail", {
+        state: { inventoryId, barcodeNumber },
       });
-      return <tr key={index}>{col}</tr>;
-    });
+    };
+
+    const handleStaffCheckOut = (row) => {
+      setSelectedInventoryProduct(row);
+      setShowInternalModal(true);
+    };    
+
+    const handleReportWasted = (row) => {
+      alert(
+        "handleReportWasted (barcodeNumber : " +
+          row.barcodeNumber +
+          " , inventoryId : " +
+          row.inventoryId +
+          ")"
+      );
+    };
+
+    const handleDelete = (row) => {
+      alert(
+        "handleDelete (barcodeNumber : " +
+          row.barcodeNumber +
+          " , inventoryId : " +
+          row.inventoryId +
+          ")"
+      );
+    };
+
+    return filteredData.map((row, index) => (
+      <tr key={index}>
+        <td>{row.productName}</td>
+        <td>{row.brandName}</td>
+        <td>{row.category}</td>
+        <td>{row.dateAdded}</td>
+        <td>{row.expiryDate}</td>
+        <td style={renderStatusStyle(row.status)}>{row.status}</td>
+        <td>{row.addToInventory}</td>
+        <td>
+          <button
+            onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber)}
+          >
+            View Detail
+          </button>
+          <button
+            onClick={() => handleStaffCheckOut(row)}
+            disabled={row.status === "Out of Stock" || row.status === "Expired"}
+          >
+            Staff Check Out
+          </button>
+          <button
+            onClick={() => handleReportWasted(row)}
+            disabled={row.status !== "Expired"}
+          >
+            Report Wasted
+          </button>
+          <button onClick={() => handleDelete(row)}>Delete</button>
+        </td>
+      </tr>
+    ));
   };
 
   // Handle the change of the dropdown value for addToInventory
@@ -246,6 +308,16 @@ const ProductList = () => {
         </thead>
         <tbody>{renderTableData()}</tbody>
       </table>
+
+      {showInternalModal && (
+        <StaffCheckOutModal
+        handleClose={handleCloseModal}
+        productData={selectedInventoryProduct}
+        inventoryId={selectedInventoryProduct.inventoryId}
+        stockQuantity={selectedInventoryProduct.stockQuantity}
+        handleReloadInternalData={handleReloadInternalData}
+        />
+      )}
     </div>
   );
 };

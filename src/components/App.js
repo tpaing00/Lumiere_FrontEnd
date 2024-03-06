@@ -10,6 +10,8 @@ import Inventory from "./Inventory"
 import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import theme from "./mui_customization/theme";
 
 const App = (props) => {
   let token = document.cookie
@@ -38,6 +40,8 @@ const App = (props) => {
 
   return (
     <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <BrowserRouter>
           {loggedIn && <NavBar />}
           <Routes>
@@ -93,6 +97,7 @@ const App = (props) => {
           </Routes>
       </BrowserRouter>
       <Footer loggedIn={loggedIn} onLogout={handleLogout} />
+      </ThemeProvider>
     </>
   );
 };

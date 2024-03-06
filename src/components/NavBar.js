@@ -5,7 +5,7 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import CropFreeOutlinedIcon from '@mui/icons-material/CropFreeOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
 
@@ -13,7 +13,7 @@ const NavBar = () => {
     <>
       <Box component='nav'>
         <List>
-          <ListItem component='a' href='http://lumiereapp.ca/'>
+          <ListItem component={Link} to='/'>
             <ListItemButton>
               <ListItemIcon>
                 <InboxOutlinedIcon />
@@ -22,7 +22,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/inventory'>
+          <ListItem component={Link} to='/inventory'>
             <ListItemButton>
               <ListItemIcon>
                 <Inventory2OutlinedIcon />
@@ -31,7 +31,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/analytics'>
+          <ListItem component={Link} to='/analytics'>
             <ListItemButton>
               <ListItemIcon>
                 <InsertChartOutlinedIcon />
@@ -40,7 +40,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/add-product'>
+          <ListItem component={Link} to='/add-product'>
             <ListItemButton>
               <ListItemIcon>
                 <AddBoxOutlinedIcon />
@@ -49,7 +49,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/scanner'>
+          <ListItem component={Link} to='/scanner'>
             <ListItemButton>
               <ListItemIcon>
                 <CropFreeOutlinedIcon />

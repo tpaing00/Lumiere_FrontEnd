@@ -31,6 +31,7 @@ const AddProduct = () => {
     lowStockThreshold: "Select",
     isExpirationReminder: false,
     expirationReminderTime: "Select",
+    message: "",
   });
 
   const [error, setError] = useState(null);
@@ -86,6 +87,7 @@ const AddProduct = () => {
         lowStockThreshold: "Select",
         isExpirationReminder: false,
         expirationReminderTime: "Select",
+        message: "",
       }));
     }
   }, [existingProductData, existingInventoryData]);
@@ -199,6 +201,7 @@ const AddProduct = () => {
         lowStockThreshold: formData.lowStockThreshold,
         isExpirationReminder: formData.isExpirationReminder,
         expirationReminderTime: formData.expirationReminderTime,
+        message: formData.message,
       })
       .then((response) => {
         if (response.status === 201) {
@@ -387,6 +390,14 @@ const AddProduct = () => {
               </option>
             ))}
           </select>
+        </div>
+        <div>
+          <label htmlFor="message">Message</label>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+          />
         </div>
         <div className="register-buttons">
           <button type="reset">CANCEL</button>

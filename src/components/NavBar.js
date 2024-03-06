@@ -13,7 +13,7 @@ const NavBar = () => {
     <>
       <Box component='nav'>
         <List>
-          <ListItem component='a' href='http://lumiereapp.ca/'>
+          <ListItem component='a' href='./'>
             <ListItemButton>
               <ListItemIcon>
                 <InboxOutlinedIcon />
@@ -22,7 +22,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/inventory'>
+          <ListItem component='a' href='./inventory'>
             <ListItemButton>
               <ListItemIcon>
                 <Inventory2OutlinedIcon />
@@ -31,7 +31,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/analytics'>
+          <ListItem component='a' href='./analytics'>
             <ListItemButton>
               <ListItemIcon>
                 <InsertChartOutlinedIcon />
@@ -40,7 +40,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/add-product'>
+          <ListItem component='a' href='./add-product'>
             <ListItemButton>
               <ListItemIcon>
                 <AddBoxOutlinedIcon />
@@ -49,7 +49,7 @@ const NavBar = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component='a' href='http://lumiereapp.ca/scanner'>
+          <ListItem component='a' href='./scanner'>
             <ListItemButton>
               <ListItemIcon>
                 <CropFreeOutlinedIcon />
@@ -69,6 +69,67 @@ const NavBar = () => {
     //     </ul>
     // </nav>  
   );
+
+  // return (
+  //   <>
+  //     <Box component='nav'>
+  //       <List>
+  //         <ListItem component='a' href='http://lumiereapp.ca/'>
+  //           <ListItemButton>
+  //             <ListItemIcon>
+  //               <InboxOutlinedIcon />
+  //             </ListItemIcon>
+  //             <ListItemText secondary='Home' />
+  //           </ListItemButton>
+  //         </ListItem>
+
+  //         <ListItem component='a' href='http://lumiereapp.ca/inventory'>
+  //           <ListItemButton>
+  //             <ListItemIcon>
+  //               <Inventory2OutlinedIcon />
+  //             </ListItemIcon>
+  //             <ListItemText secondary='Inventory' />
+  //           </ListItemButton>
+  //         </ListItem>
+
+  //         <ListItem component='a' href='http://lumiereapp.ca/analytics'>
+  //           <ListItemButton>
+  //             <ListItemIcon>
+  //               <InsertChartOutlinedIcon />
+  //             </ListItemIcon>
+  //             <ListItemText secondary='Analytics' />
+  //           </ListItemButton>
+  //         </ListItem>
+
+  //         <ListItem component='a' href='http://lumiereapp.ca/add-product'>
+  //           <ListItemButton>
+  //             <ListItemIcon>
+  //               <AddBoxOutlinedIcon />
+  //             </ListItemIcon>
+  //             <ListItemText secondary='Register Product' />
+  //           </ListItemButton>
+  //         </ListItem>
+
+  //         <ListItem component='a' href='http://lumiereapp.ca/scanner'>
+  //           <ListItemButton>
+  //             <ListItemIcon>
+  //               <CropFreeOutlinedIcon />
+  //             </ListItemIcon>
+  //             <ListItemText secondary='Quick Scan' />
+  //           </ListItemButton>
+  //         </ListItem>
+  //       </List>
+  //     </Box>
+  //   </>
+  //   //     <nav>
+  //   //     <ul>
+  //   //         <li><Link to="/">Home</Link></li>
+  //   //         <li><Link to="/inventory">Inventory</Link></li>
+  //   //         <li><Link to="/add-product">Register product</Link></li>
+  //   //         <li><Link to="/scanner">Quick Scan</Link></li>
+  //   //     </ul>
+  //   // </nav>  
+  // );
 };
 
 export default NavBar;

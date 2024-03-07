@@ -60,7 +60,7 @@ const ProductList = () => {
     setShowInternalModal(true);
   };
 
-  const handleReloadInternalData = (latestData) => {
+  const handleReloadInternalData = () => {
     // Reload all data from the API
     Promise.all([
       axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
@@ -174,6 +174,8 @@ const ProductList = () => {
           return { color: "red" };
         case "Out of Stock":
           return { color: "purple" };
+        case "Wasted":
+        return { color: "gray" };
         default:
           return {};
       }
@@ -185,7 +187,7 @@ const ProductList = () => {
       });
     };
 
-    const handleReportWasted = (row) => {
+    const handleReportWasted = async  (row) => {
       alert(
         "handleReportWasted (barcodeNumber : " +
           row.barcodeNumber +
@@ -193,6 +195,34 @@ const ProductList = () => {
           row.inventoryId +
           ")"
       );
+        try {
+          // const response = await axios.get(`http://api.lumiereapp.ca/api/v1/waste${row.inventoryId}`);
+          // console.log(response.data);
+          //handleReloadInternalData();
+        } catch (error) {
+          console.error('Error fetching results:', error);
+        }
+
+        const formData = {
+          inventoryId: row.inventoryId,
+          userId: "user_id",
+          barcodeNumber: row.barcodeNumber,
+          wasteQuantity: row.stockQuantity,
+          reportDate: new Date().toISOString()
+        };
+        console.log(formData);
+        //POST request to the API
+        // axios
+        //   .post("https://api.lumiereapp.ca/api/v1/waste", formData)
+        //   .then((response) => {
+        //     alert("Reported Waste successful!");
+        //     handleReloadInternalData();
+        //   })
+        //   .catch((error) => {
+        //     // Handle error
+        //     console.error("Error during report:", error);
+        //     alert("Error during report. Please try again.");
+        //   });
     };
 
     const handleDelete = (row) => {
@@ -222,13 +252,13 @@ const ProductList = () => {
           </button>
           <button
             onClick={() => handleStaffCheckOut(row)}
-            disabled={row.status === "Out of Stock" || row.status === "Expired"}
+            disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted"}
           >
             Staff Check Out
           </button>
           <button
             onClick={() => handleReportWasted(row)}
-            disabled={row.status !== "Expired"}
+            disabled={row.status !== "Expired" || row.status === "Wasted"}
           >
             Report Wasted
           </button>
@@ -341,6 +371,7 @@ const ProductList = () => {
           <option value="Low Stock">Low Stock</option>
           <option value="Expired">Expired</option>
           <option value="Out of Stock">Out of Stock</option>
+          <option value="Wasted">Wasted</option>
         </select>
       </div>
       <div>

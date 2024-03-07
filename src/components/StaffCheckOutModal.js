@@ -15,6 +15,7 @@ const StaffCheckOutModal = ({
   const [dateOfOpen, setDateOfOpen] = useState(""); // State for date of open
   const [expirationReminder, setExpirationReminder] = useState(false); // State for expiration reminder
   const [notifyPeriod, setNotifyPeriod] = useState(""); // State for notify period
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Set the default value for notifyPeriod when the component mounts
@@ -33,19 +34,19 @@ const StaffCheckOutModal = ({
   const validateForm = () => {
     // Validate quantity
     if (quantity <= 0 || quantity > stockQuantity) {
-      alert("Please enter a valid quantity within the available stock.");
+      setError("Please enter a valid quantity within the available stock.");
       return false;
     }
 
     // Validate reason
     if (!reason) {
-      alert("Please select a reason for checkout.");
+      setError("Please select a reason for checkout.");
       return false;
     }
 
     // Validate dateOfOpen
     if (!dateOfOpen) {
-      alert("Please select a date of open.");
+      setError("Please select a date of open.");
       return false;
     }
 
@@ -59,13 +60,13 @@ const StaffCheckOutModal = ({
 
 
     if (selectedDate < today) {
-      alert("Date of open cannot be earlier than today's date.");
+      setError("Date of open cannot be earlier than today's date.");
       return false;
     }   
 
     // Validate expirationReminder and notifyPeriod
-    if (expirationReminder && !notifyPeriod) {
-      alert("Please select a notify period for expiration reminder.");
+    if (!expirationReminder || !notifyPeriod) {
+      setError("Please select a notify period for expiration reminder.");
       return false;
     }
 
@@ -120,6 +121,7 @@ const StaffCheckOutModal = ({
           x
         </button>
         <h2>Staff Check Out</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <label htmlFor="quantity">Quantity:</label>
         <input
           type="number"

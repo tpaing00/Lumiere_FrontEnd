@@ -3,6 +3,9 @@ import Quagga from "quagga";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import config from "./predefined_data/scanner.json";
+import { Box } from "@mui/system";
+import { IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
 function Scanner() {
   const [barcode, setBarcode] = useState("");
@@ -61,20 +64,35 @@ function Scanner() {
   };
 
   return (
-    <div>
-      <h1>Quick Scan</h1>
-      <h4>Scan a product's barcode or enter it manually</h4>
-      {barcode && <p> Detected Barcode: {barcode} </p>}
-      <div id="barcode-scanner"></div>
-      <input
-        type="text"
-        max={15}
-        min={7}
-        value={barcode}
-        onChange={(e) => setBarcode(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-    </div>
+    <Box sx={{ mt: 3 }} >
+      <Typography component="h1" align="left" variant="h2" color="accent.main">
+        Quick Scan
+      </Typography>
+      <Box>
+        <Typography component="p">
+          Scan or enter barcode to find and checkout products.
+        </Typography>
+        {barcode && <Typography component="p"> Detected Barcode: {barcode} </Typography>}
+        <Box id="barcode-scanner"></Box>
+        <TextField
+          type="text"
+          max={15}
+          min={7}
+          value={barcode}
+          onChange={(e) => setBarcode(e.target.value)}
+          label="Barcode Number"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleSearch} >
+                  <Search />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
+    </Box>
   );
 }
 

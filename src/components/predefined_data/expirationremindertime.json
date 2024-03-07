@@ -1,5 +1,5 @@
 [
-    { "value": "", "label": "Select" },
+    { "value": "Select", "label": "Select" },
     { "value": "5", "label": "5 days away" },
     { "value": "10", "label": "10 days away" },
     { "value": "15", "label": "15 days away" },

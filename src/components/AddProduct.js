@@ -5,14 +5,32 @@ import { useNavigate, useLocation } from "react-router-dom";
 import inventoryTypeData from "./predefined_data/inventorytype.json";
 import productCategoryData from "./predefined_data/productcategory.json";
 import periodAfterOpeningData from "./predefined_data/periodafteropening.json";
-import expirationReminderTimeData from "./predefined_data/expirationremindertime.json"
-import lowStockThresholdData from "./predefined_data/lowstockthreshold.json"
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Container, FormControlLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Select, Switch, TextField, Typography } from "@mui/material";
+import expirationReminderTimeData from "./predefined_data/expirationremindertime.json";
+import lowStockThresholdData from "./predefined_data/lowstockthreshold.json";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Container,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import RemoveIcon from '@mui/icons-material/Remove';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import RemoveIcon from "@mui/icons-material/Remove";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { DocumentScannerOutlined } from "@mui/icons-material";
+import { format, addDays } from "date-fns";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -20,10 +38,12 @@ const AddProduct = () => {
   const { state } = location;
   const barcode = state && state.barcode ? state.barcode : "";
   const inventoryType = state && state.inventoryType ? state.inventoryType : "";
+  
 
   const [formData, setFormData] = useState({
     //addToInventory: "Internal Use",
-    addToInventory: inventoryType !== undefined && inventoryType !== "" ? inventoryType : "Internal Use",
+
+    addToInventory: inventoryType !== undefined && inventoryType !== ""  ? inventoryType : "Internal Use",
     category: "Select",
     productName: "",
     brandName: "",
@@ -39,7 +59,6 @@ const AddProduct = () => {
     expirationReminderTime: "Select",
     message: "",
   });
-
   const [error, setError] = useState(null);
 
   //Fetching existing data with barcodeNumber
@@ -49,19 +68,36 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchExistingData = async () => {
       try {
-        const response = await axios.get(`https://api.lumiereapp.ca/api/v1/barcode/${formData.barcodeNumber}`);
+        const response = await axios.get(
+          `https://api.lumiereapp.ca/api/v1/barcode/${formData.barcodeNumber}`
+        );
         const { inventoryResults, productResults } = response.data;
         if (productResults.length > 0 && inventoryResults.length > 0) {
-          const { productName, brandName, category, unitPrice, periodAfterOpening  } = productResults[0];
+          const {
+            productName,
+            brandName,
+            category,
+            unitPrice,
+            periodAfterOpening,
+          } = productResults[0];
           //const { addToInventory, stockQuantity, expiryDate} = inventoryResults[0];
-          const { stockQuantity, expiryDate} = inventoryResults[0];
+          const { stockQuantity, expiryDate } = inventoryResults[0];
           // Convert expiryDate to yyyy-MM-dd format
-          const formattedExpiryDate = new Date(expiryDate).toISOString().split('T')[0];
-
-          setExistingProductData({ productName, brandName, category, unitPrice, periodAfterOpening });
-          //setExistingInventoryData({ addToInventory, stockQuantity, expiryDate: formattedExpiryDate });
-          setExistingInventoryData({ stockQuantity, expiryDate: formattedExpiryDate });
-        }        
+          const formattedExpiryDate = new Date(expiryDate)
+            .toISOString()
+            .split("T")[0];
+          setExistingProductData({
+            productName,
+            brandName,
+            category,
+            unitPrice,
+            periodAfterOpening,
+          });
+          setExistingInventoryData({
+            stockQuantity,
+            expiryDate: format(formattedExpiryDate, "yyyy-MM-dd"),
+          });
+        }
       } catch (error) {
         console.error("Error fetching existing product data:", error);
         setError("Error fetching existing product data");
@@ -75,24 +111,31 @@ const AddProduct = () => {
 
   useEffect(() => {
     if (existingProductData && existingInventoryData) {
-      const { productName, brandName, category, unitPrice, periodAfterOpening  } = existingProductData;
-      const { addToInventory, stockQuantity, expiryDate} = existingInventoryData;
-      
+      const {
+        productName,
+        brandName,
+        category,
+        unitPrice,
+        periodAfterOpening,
+      } = existingProductData;
+      const { expiryDate } =
+        existingInventoryData;
+
       // Populate the form fields with existing data
-      setFormData(prevFormData => ({
+      setFormData((prevFormData) => ({
         ...prevFormData,
-        addToInventory,
+        //addToInventory,
         category,
         productName,
         brandName,
-        stockQuantity,
+        //stockQuantity,
         unitPrice,
         expiryDate,
         periodAfterOpening,
         isLowStockAlert: false,
-        lowStockThreshold: "Select",
+        lowStockThreshold: "",
         isExpirationReminder: false,
-        expirationReminderTime: "Select",
+        expirationReminderTime: "",
         message: "",
       }));
     }
@@ -113,20 +156,21 @@ const AddProduct = () => {
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
 
-
     if (selectedDate <= today) {
-      setError("Date of expiry cannot be same date or earlier than today's date.");
+      setError(
+        "Date of expiry cannot be same date or earlier than today's date."
+      );
       return false;
-    } 
+    }
 
     if (
       formData.category === "Select" ||
       formData.productName.trim() === "" ||
-      formData.brandName.trim() === "" ||      
+      formData.brandName.trim() === "" ||
       formData.stockQuantity <= 0 ||
-      formData.barcodeNumber.trim() === "" ||    
+      formData.barcodeNumber.trim() === "" ||
       formData.unitPrice <= 0 ||
-      formData.expiryDate === "" ||        
+      formData.expiryDate === "" ||
       formData.periodAfterOpening === "Select" ||
       (formData.isLowStockAlert && formData.lowStockThreshold === "Select") ||
       (formData.isExpirationReminder && formData.expirationReminderTime === "Select")
@@ -172,7 +216,7 @@ const AddProduct = () => {
     const { name, value, type, checked } = event.target;
 
     // For checkboxes, the value is either "on" or undefined
-    const newValue = type === 'checkbox' ? checked : value;
+    const newValue = type === "checkbox" ? checked : value;
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -184,7 +228,7 @@ const AddProduct = () => {
     navigate("/scanner");
   };
 
-    // handles the submit of the form using axios to pass the data to the backend
+  // handles the submit of the form using axios to pass the data to the backend
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -233,20 +277,32 @@ const AddProduct = () => {
 
   return (
     <>
-      <Container component='main' maxWidth='lg'>
+      <Container component="main" maxWidth="lg">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Typography component="h1" align="left" variant="h2" color="accent.main">
+          <Typography
+            component="h1"
+            align="left"
+            variant="h2"
+            color="accent.main"
+          >
             Register new Product
           </Typography>
 
-          {error && <Typography paragraph={true} sx={{ color: 'red' }}> {error} </Typography>}
+          {error && (
+            <Typography paragraph={true} sx={{ color: "red" }}>
+              {" "}
+              {error}{" "}
+            </Typography>
+          )}
 
-          <Box component='form' onSubmit={handleSubmit} id='form-register-product' sx={{ mt: 3 }}>
-
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            id="form-register-product"
+            sx={{ mt: 3 }}
+          >
             <Box className="register-inventory">
-
               <Grid container spacing={3}>
-
                 <Grid item xs={6}>
                   <InputLabel variant="standard" id="addToInventory-label">
                     Add to Inventory
@@ -290,7 +346,6 @@ const AddProduct = () => {
             </Box>
 
             <Box className="register-product-information">
-
               <Accordion defaultExpanded>
                 <AccordionSummary
                   expandIcon={<RemoveIcon />}
@@ -348,7 +403,10 @@ const AddProduct = () => {
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
-                              <IconButton onClick={handleScan} style={{transform: 'rotate(90deg)'}}>
+                              <IconButton
+                                onClick={handleScan}
+                                style={{ transform: "rotate(90deg)" }}
+                              >
                                 <DocumentScannerOutlined />
                               </IconButton>
                             </InputAdornment>
@@ -371,19 +429,22 @@ const AddProduct = () => {
                     </Grid>
 
                     <Grid item xs={6}>
-                      <DatePicker
+                      <TextField
                         id="expiryDate"
                         onChange={handleChange}
                         name="expiryDate"
                         value={formData.expiryDate}
                         label="Expiry Date"
-                        slotProps={{ textField: { fullWidth: true } }}
-
+                        //slotProps={{ textField: { fullWidth: true } }}
+                        type="date"
                       />
                     </Grid>
 
                     <Grid item xs={12}>
-                      <InputLabel variant="standard" id="periodAfterOpening-label">
+                      <InputLabel
+                        variant="standard"
+                        id="periodAfterOpening-label"
+                      >
                         Period After Opening (PAO)
                       </InputLabel>
                       <Select
@@ -395,7 +456,11 @@ const AddProduct = () => {
                         fullWidth
                       >
                         {periodAfterOpeningData.map((type) => (
-                          <MenuItem key={type.value} value={type.value} fullWidth>
+                          <MenuItem
+                            key={type.value}
+                            value={type.value}
+                            fullWidth
+                          >
                             {type.label}
                           </MenuItem>
                         ))}
@@ -420,10 +485,11 @@ const AddProduct = () => {
 
                 <AccordionDetails>
                   <Box className="low-stock-settings">
-
                     <Grid container item xs={12} spacing={1}>
                       <Grid item xs={6}>
-                        <Typography sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
                           <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} />
                           Low Stock Alert
                         </Typography>
@@ -445,7 +511,10 @@ const AddProduct = () => {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <InputLabel variant="standard" id="lowStockThreshold-label">
+                        <InputLabel
+                          variant="standard"
+                          id="lowStockThreshold-label"
+                        >
                           Notify when stock is below
                         </InputLabel>
                         <Select
@@ -458,21 +527,25 @@ const AddProduct = () => {
                           fullWidth
                         >
                           {lowStockThresholdData.map((type) => (
-                            <MenuItem key={type.value} value={type.value} fullWidth>
+                            <MenuItem
+                              key={type.value}
+                              value={type.value}
+                              fullWidth
+                            >
                               {type.label}
                             </MenuItem>
                           ))}
                         </Select>
                       </Grid>
                     </Grid>
-
                   </Box>
 
                   <Box className="expiration-reminder-settings" sx={{ mt: 3 }}>
-
                     <Grid container item xs={12} spacing={1}>
                       <Grid item xs={6}>
-                        <Typography sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
                           <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} />
                           Expiration Reminder
                         </Typography>
@@ -483,7 +556,9 @@ const AddProduct = () => {
                             <Switch
                               onChange={(e) => {
                                 handleChange(e);
-                                setIsExpirationReminderChecked(e.target.checked);
+                                setIsExpirationReminderChecked(
+                                  e.target.checked
+                                );
                               }}
                               name="isExpirationReminder"
                               value={formData.isExpirationReminder}
@@ -494,7 +569,10 @@ const AddProduct = () => {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <InputLabel variant="standard" id="expirationReminderTime-label">
+                        <InputLabel
+                          variant="standard"
+                          id="expirationReminderTime-label"
+                        >
                           Notify when expiry date is
                         </InputLabel>
                         <Select
@@ -507,39 +585,39 @@ const AddProduct = () => {
                           fullWidth
                         >
                           {expirationReminderTimeData.map((type) => (
-                            <MenuItem key={type.value} value={type.value} fullWidth>
+                            <MenuItem
+                              key={type.value}
+                              value={type.value}
+                              fullWidth
+                            >
                               {type.label}
                             </MenuItem>
                           ))}
                         </Select>
                       </Grid>
                     </Grid>
-
                   </Box>
-
                 </AccordionDetails>
               </Accordion>
             </Box>
 
-            <Box className="register-buttons" aria-label="Form options" sx={{ mt: 3, p: 3 }}>
-              <Button variant='outlined' type="reset" sx={{ mr: 3 }} >
+            <Box
+              className="register-buttons"
+              aria-label="Form options"
+              sx={{ mt: 3, p: 3 }}
+            >
+              <Button variant="outlined" type="reset" sx={{ mr: 3 }}>
                 Cancel
               </Button>
-              <Button variant='contained' type="submit">
+              <Button variant="contained" type="submit">
                 Register
               </Button>
-
             </Box>
-
-
-
           </Box>
-
-
         </LocalizationProvider>
       </Container>
     </>
-  )
+  );
 
   // return (
   //   <>

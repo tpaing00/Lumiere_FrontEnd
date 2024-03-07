@@ -10,8 +10,10 @@ const ProductList = () => {
   const [inventoryData, setInventoryData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [notificationData, setNotificationData] = useState([]);
+  const [wasteData, setWasteData] = useState([]);
   const [showInternalModal, setShowInternalModal] = useState(false);
-  const [selectedInventoryProduct, setSelectedInventoryProduct] = useState(null);
+  const [selectedInventoryProduct, setSelectedInventoryProduct] =
+    useState(null);
   const [filterByStatus, setFilterByStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterByInventory, setFilterByInventory] = useState("");
@@ -23,14 +25,17 @@ const ProductList = () => {
       axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
       axios.get("https://api.lumiereapp.ca/api/v1/products"),
       axios.get("https://api.lumiereapp.ca/api/v1/notification"),
+      axios.get("https://api.lumiereapp.ca/api/v1/waste"),
     ])
       .then((responses) => {
         const inventoryResponse = responses[0].data;
         const productsResponse = responses[1].data;
         const notificationsResponse = responses[2].data;
+        const wastesResponse = responses[3].data;
         setInventoryData(inventoryResponse);
         setProductData(productsResponse);
         setNotificationData(notificationsResponse);
+        setWasteData(wastesResponse);
       })
       .catch((error) => {
         console.error(error);
@@ -39,10 +44,14 @@ const ProductList = () => {
 
   const handleSearch = async (keywords) => {
     try {
-      const response = await axios.get(`http://api.lumiereapp.ca/api/v1/search?keywords=${encodeURIComponent(keywords)}`);
-       //console.log(response.data);
+      const response = await axios.get(
+        `http://api.lumiereapp.ca/api/v1/search?keywords=${encodeURIComponent(
+          keywords
+        )}`
+      );
+      //console.log(response.data);
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      console.error("Error fetching search results:", error);
     }
   };
 
@@ -66,13 +75,19 @@ const ProductList = () => {
       axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
       axios.get("https://api.lumiereapp.ca/api/v1/products"),
       axios.get("https://api.lumiereapp.ca/api/v1/notification"),
+      axios.get("https://api.lumiereapp.ca/api/v1/waste"),
     ])
       .then((responses) => {
-        const [inventoryResponse, productsResponse, notificationsResponse] =
-          responses;
+        const [
+          inventoryResponse,
+          productsResponse,
+          notificationsResponse,
+          wastesResponse,
+        ] = responses;
         setInventoryData(inventoryResponse.data);
         setProductData(productsResponse.data);
         setNotificationData(notificationsResponse.data);
+        setWasteData(wastesResponse.data);
       })
       .catch((error) => {
         console.error(error);
@@ -100,7 +115,8 @@ const ProductList = () => {
     if (
       inventoryData.length === 0 ||
       productData.length === 0 ||
-      notificationData.length === 0
+      notificationData.length === 0 ||
+      wasteData.length === 0
     ) {
       return null; // Return null if either array is empty
     }
@@ -120,6 +136,8 @@ const ProductList = () => {
           expiryDate: formatDate(inventoryRow.expiryDate),
           status: calculateStatus(inventoryRow._id),
           inventoryId: inventoryRow._id,
+          productId: matchingProduct._id,
+          wasteId: "",
         };
 
         // Remove the duplicate _id field if it exists
@@ -129,9 +147,16 @@ const ProductList = () => {
         return inventoryRow;
       }
     });
+    const wasteDataWithStatus = wasteData.map((item) => ({
+      ...item,
+      status: "Wasted",
+      inventoryId: "",
+      wasteId: item._id
+    }));
+    const combinedWithWaste = combinedData.concat(wasteDataWithStatus);
 
     // Sort the combined data based on the selected option for brandName
-    let sortedData = [...combinedData];
+    let sortedData = [...combinedWithWaste];
 
     // Sort the filtered data based on the selected option for brandName
     if (sortByBrand === "asc") {
@@ -175,54 +200,51 @@ const ProductList = () => {
         case "Out of Stock":
           return { color: "purple" };
         case "Wasted":
-        return { color: "gray" };
+          return { color: "gray" };
         default:
           return {};
       }
     };
 
-    const handleViewDetail = (inventoryId, barcodeNumber) => {
+    const handleViewDetail = (inventoryId, barcodeNumber, wasteId) => {
       navigate("/productdetail", {
-        state: { inventoryId, barcodeNumber },
+        state: { inventoryId, barcodeNumber, wasteId },
       });
     };
 
-    const handleReportWasted = async  (row) => {
-      alert(
-        "handleReportWasted (barcodeNumber : " +
-          row.barcodeNumber +
-          " , inventoryId : " +
-          row.inventoryId +
-          ")"
-      );
-        try {
-          // const response = await axios.get(`http://api.lumiereapp.ca/api/v1/waste${row.inventoryId}`);
-          // console.log(response.data);
-          //handleReloadInternalData();
-        } catch (error) {
-          console.error('Error fetching results:', error);
-        }
-
+    const handleReportWasted = async (row) => {
+      try {
         const formData = {
-          inventoryId: row.inventoryId,
-          userId: "user_id",
           barcodeNumber: row.barcodeNumber,
+          productName: row.productName,
+          brandName: row.brandName,
+          unitPrice: row.unitPrice,
+          category: row.category,
+          photo: row.photo,
+          periodAfterOpening: row.periodAfterOpening,
+          totalValue: row.totalValue,
+          dateAdded: row.dateAdded,
+          addToInventory: row.addToInventory,
+          expiryDate: row.expiryDate,
           wasteQuantity: row.stockQuantity,
-          reportDate: new Date().toISOString()
         };
         console.log(formData);
         //POST request to the API
-        // axios
-        //   .post("https://api.lumiereapp.ca/api/v1/waste", formData)
-        //   .then((response) => {
-        //     alert("Reported Waste successful!");
-        //     handleReloadInternalData();
-        //   })
-        //   .catch((error) => {
-        //     // Handle error
-        //     console.error("Error during report:", error);
-        //     alert("Error during report. Please try again.");
-        //   });
+        axios
+          .post("https://api.lumiereapp.ca/api/v1/waste", formData)
+          .then((response) => {
+            alert("Reported Waste successful!");
+            console.log(response.data);
+            handleReloadInternalData();
+          })
+          .catch((error) => {
+            // Handle error
+            console.error("Error during report:", error);
+            alert("Error during report. Please try again.");
+          });
+      } catch (error) {
+        console.error("Error fetching results:", error);
+      }
     };
 
     const handleDelete = (row) => {
@@ -246,13 +268,17 @@ const ProductList = () => {
         <td>{row.addToInventory}</td>
         <td>
           <button
-            onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber)}
+            onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}
           >
             View Detail
           </button>
           <button
             onClick={() => handleStaffCheckOut(row)}
-            disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted"}
+            disabled={
+              row.status === "Out of Stock" ||
+              row.status === "Expired" ||
+              row.status === "Wasted"
+            }
           >
             Staff Check Out
           </button>
@@ -300,7 +326,6 @@ const ProductList = () => {
       (notification) => notification.inventoryId === inventoryId
     );
 
-    const lowStockThreshold = notification.lowStockThreshold;
     const inventory = inventoryData.find(
       (inventory) => inventory._id === inventoryId
     );
@@ -310,10 +335,13 @@ const ProductList = () => {
 
     if (expiryDate < currentDate) return "Expired";
     if (inventory.stockQuantity <= 0) return "Out of Stock";
-    if (inventory.stockQuantity <= lowStockThreshold) return "Low Stock";
+    if (notification) {
+      const lowStockThreshold = notification.lowStockThreshold;
+      if (inventory.stockQuantity <= lowStockThreshold) return "Low Stock";
+    }
     return "In Stock";
   };
-  
+
   return (
     <div>
       <h1>Product list</h1>

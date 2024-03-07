@@ -12,7 +12,17 @@ import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { styled } from "@mui/material"; 
 import theme from "./mui_customization/theme";
+
+const RootContainer = styled('div')({
+  display: "flex",
+  height: "95vh", // Adjust as per your requirement
+});
+const ContentContainer = styled('main')({
+  flexGrow: 1,
+  overflow: "auto",
+});
 
 const App = (props) => {
   const cookies = document.cookie.split(";");
@@ -51,52 +61,56 @@ const App = (props) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
+        <RootContainer>
           {loggedIn && <NavBar />}
-          <Routes>
-              <Route
-                exact
-                path="/"
-                element={
-                  !loggedIn ? <Navigate to="/login" /> : <Dashboard />
-                }
-              />
-              <Route
-                path="/scanner"
-                element={
-                  loggedIn ? <Scanner /> : <Navigate to="/" />
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
-                }
-              />
-              <Route
-                path="/scannerdetail"
-                element={
-                  loggedIn ? <ScannerDetail /> : <Navigate to="/" />
-                }
-              />
-              <Route 
-                path="/add-product"  
-                element={
-                  loggedIn ? <AddProduct />: <Navigate to="/" />
-                } 
-              />
+          <ContentContainer>
+            <Routes>
                 <Route
-                path="/productdetail"
-                element={
-                  loggedIn ? <ProductDetail />: <Navigate to="/" />
-                } 
-              />
-              <Route
-                path="/inventory"
-                element={
-                  loggedIn ? <Inventory />: <Navigate to="/" />
-                } 
-              />
-          </Routes>
+                  exact
+                  path="/"
+                  element={
+                    !loggedIn ? <Navigate to="/login" /> : <Dashboard />
+                  }
+                />
+                <Route
+                  path="/scanner"
+                  element={
+                    loggedIn ? <Scanner /> : <Navigate to="/" />
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+                  }
+                />
+                <Route
+                  path="/scannerdetail"
+                  element={
+                    loggedIn ? <ScannerDetail /> : <Navigate to="/" />
+                  }
+                />
+                <Route 
+                  path="/add-product"  
+                  element={
+                    loggedIn ? <AddProduct />: <Navigate to="/" />
+                  } 
+                />
+                  <Route
+                  path="/productdetail"
+                  element={
+                    loggedIn ? <ProductDetail />: <Navigate to="/" />
+                  } 
+                />
+                <Route
+                  path="/inventory"
+                  element={
+                    loggedIn ? <Inventory />: <Navigate to="/" />
+                  } 
+                />
+            </Routes>
+          </ContentContainer>
+        </RootContainer>
       </BrowserRouter>
       <Footer loggedIn={loggedIn} onLogout={handleLogout} />
       </ThemeProvider>

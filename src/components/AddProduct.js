@@ -4,9 +4,9 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import inventoryTypeData from "./predefined_data/inventorytype.json";
 import productCategoryData from "./predefined_data/productcategory.json";
-import periodAfterOpeningData  from "./predefined_data/periodafteropening.json";
-import expirationReminderTimeData from "./predefined_data/expirationremindertime.json"
-import lowStockThresholdData from "./predefined_data/lowstockthreshold.json"
+import periodAfterOpeningData from "./predefined_data/periodafteropening.json";
+import expirationReminderTimeData from "./predefined_data/expirationremindertime.json";
+import lowStockThresholdData from "./predefined_data/lowstockthreshold.json";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ const AddProduct = () => {
   const inventoryType = state && state.inventoryType ? state.inventoryType : "";
 
   const [formData, setFormData] = useState({
-    //addToInventory: "Internal Use",
     addToInventory: inventoryType !== undefined && inventoryType !== "" ? inventoryType : "Internal Use",
     category: "Select",
     productName: "",
@@ -34,6 +33,15 @@ const AddProduct = () => {
     message: "",
   });
 
+  // State to hold selected image files
+  const [images, setImages] = useState([]);
+
+  // Function to handle file input change
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    setImages([...images, ...files]);
+  };
+
   const [error, setError] = useState(null);
 
   //Fetching existing data with barcodeNumber
@@ -46,16 +54,13 @@ const AddProduct = () => {
         const response = await axios.get(`https://api.lumiereapp.ca/api/v1/barcode/${formData.barcodeNumber}`);
         const { inventoryResults, productResults } = response.data;
         if (productResults.length > 0 && inventoryResults.length > 0) {
-          const { productName, brandName, category, unitPrice, periodAfterOpening  } = productResults[0];
-          //const { addToInventory, stockQuantity, expiryDate} = inventoryResults[0];
-          const { stockQuantity, expiryDate} = inventoryResults[0];
-          // Convert expiryDate to yyyy-MM-dd format
+          const { productName, brandName, category, unitPrice, periodAfterOpening } = productResults[0];
+          const { stockQuantity, expiryDate } = inventoryResults[0];
           const formattedExpiryDate = new Date(expiryDate).toISOString().split('T')[0];
 
           setExistingProductData({ productName, brandName, category, unitPrice, periodAfterOpening });
-          //setExistingInventoryData({ addToInventory, stockQuantity, expiryDate: formattedExpiryDate });
           setExistingInventoryData({ stockQuantity, expiryDate: formattedExpiryDate });
-        }        
+        }
       } catch (error) {
         console.error("Error fetching existing product data:", error);
         setError("Error fetching existing product data");
@@ -69,10 +74,9 @@ const AddProduct = () => {
 
   useEffect(() => {
     if (existingProductData && existingInventoryData) {
-      const { productName, brandName, category, unitPrice, periodAfterOpening  } = existingProductData;
-      const { addToInventory, stockQuantity, expiryDate} = existingInventoryData;
-      
-      // Populate the form fields with existing data
+      const { productName, brandName, category, unitPrice, periodAfterOpening } = existingProductData;
+      const { addToInventory, stockQuantity, expiryDate } = existingInventoryData;
+
       setFormData(prevFormData => ({
         ...prevFormData,
         addToInventory,
@@ -92,7 +96,6 @@ const AddProduct = () => {
     }
   }, [existingProductData, existingInventoryData]);
 
-  // Validation function
   const validateForm = () => {
     if (!formData.expiryDate) {
       setError("Please fill in all required fields.");
@@ -103,24 +106,22 @@ const AddProduct = () => {
     const [year, month, day] = formData.expiryDate.split("-").map(Number);
     const selectedDate = new Date(year, month - 1, day);
 
-    // Set the time part of today's date to 00:00:00 to compare date only
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
-
 
     if (selectedDate <= today) {
       setError("Date of expiry cannot be same date or earlier than today's date.");
       return false;
-    } 
+    }
 
     if (
       formData.category === "Select" ||
       formData.productName.trim() === "" ||
-      formData.brandName.trim() === "" ||      
+      formData.brandName.trim() === "" ||
       formData.stockQuantity <= 0 ||
-      formData.barcodeNumber.trim() === "" ||    
+      formData.barcodeNumber.trim() === "" ||
       formData.unitPrice <= 0 ||
-      formData.expiryDate === "" ||        
+      formData.expiryDate === "" ||
       formData.periodAfterOpening === "Select" ||
       (formData.isLowStockAlert && formData.lowStockThreshold === "Select") ||
       (formData.isExpirationReminder && formData.expirationReminderTime === "Select")
@@ -131,28 +132,20 @@ const AddProduct = () => {
     return true;
   };
 
-  // Conditional enable/disable the low stock threshold based on the checked state of the checkbox isLowStockAlert
-  const [isLowStockThresholdDisabled, setIsLowStockThresholdDisabled] =
-    useState(true);
+  const [isLowStockThresholdDisabled, setIsLowStockThresholdDisabled] = useState(true);
   const [isLowStockAlertChecked, setIsLowStockAlertChecked] = useState(false);
 
   useEffect(() => {
     setIsLowStockThresholdDisabled(!isLowStockAlertChecked);
   }, [isLowStockAlertChecked]);
 
-  // Conditional enable/disable the low stock threshold based on the checked state of the checkbox isExpirationReminder
-  const [
-    isExpirationReminderTimeDisabled,
-    setIsExpirationReminderTimeDisabled,
-  ] = useState(true);
-  const [isExpirationReminderChecked, setIsExpirationReminderChecked] =
-    useState(false);
+  const [isExpirationReminderTimeDisabled, setIsExpirationReminderTimeDisabled] = useState(true);
+  const [isExpirationReminderChecked, setIsExpirationReminderChecked] = useState(false);
 
   useEffect(() => {
     setIsExpirationReminderTimeDisabled(!isExpirationReminderChecked);
   }, [isExpirationReminderChecked]);
 
-  // calculates the total value based on the multiplication of unit price and stock
   useEffect(() => {
     const result = Number(formData.stockQuantity) * Number(formData.unitPrice);
     setFormData((prevFormData) => ({
@@ -178,58 +171,54 @@ const AddProduct = () => {
     navigate("/scanner");
   };
 
-    // handles the submit of the form using axios to pass the data to the backend
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!validateForm()) {
       return;
     }
-    axios
-      .post("https://api.lumiereapp.ca/api/v1/add-product", {
-        addToInventory: formData.addToInventory,
-        category: formData.category,
-        productName: formData.productName,
-        brandName: formData.brandName,
-        stockQuantity: formData.stockQuantity,
-        barcodeNumber: formData.barcodeNumber,
-        unitPrice: formData.unitPrice,
-        totalValue: formData.totalValue,
-        expiryDate: formData.expiryDate,
-        periodAfterOpening: formData.periodAfterOpening,
-        isLowStockAlert: formData.isLowStockAlert,
-        lowStockThreshold: formData.lowStockThreshold,
-        isExpirationReminder: formData.isExpirationReminder,
-        expirationReminderTime: formData.expirationReminderTime,
-        message: formData.message,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          const { inventory, notification, product } = response.data;
-          let inventoryId = inventory._id;
-          let barcodeNumber = formData.barcodeNumber;
-          navigate("/productdetail", {
-            state: { inventoryId, barcodeNumber },
-          });
-          setError(null);
-        } else {
-          setError("Unable to register product");
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          setError(error.response.data.error);
-        } else {
-          console.error("Error:", error.message);
-        }
+    const formDataToSend = new FormData();
+
+    console.log("form data", formData);
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
+    });
+    images.forEach((image) => {
+      formDataToSend.append("images", image);
+    });
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/v1/add-product", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
+      if (response.status === 201) {
+        const { inventory, notification, product } = response.data;
+        let inventoryId = inventory._id;
+        let barcodeNumber = formData.barcodeNumber;
+        navigate("/productdetail", {
+          state: { inventoryId, barcodeNumber },
+        });
+        setError(null);
+      } else {
+        setError("Unable to register product");
+      }
+    } catch (error) {
+      if (error.response) {
+        setError(error.response.data.error);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
   };
 
   return (
     <>
       <h1>Register New Product</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <form id="form-register-product" onSubmit={handleSubmit}>
+      <form id="form-register-product" onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="register-inventory">
           <label htmlFor="addToInventory">Add to Inventory</label>
           <select
@@ -306,9 +295,6 @@ const AddProduct = () => {
             value={formData.unitPrice}
             placeholder="$"
           />
-
-          {/* <label htmlFor="totalValue">Total Value</label>
-                    <input type="number" min="0" onChange={handleChange} name="totalValue" value={formData.totalValue} placeholder="$" disabled /> */}
 
           <label htmlFor="expiryDate">Expiry Date</label>
           <input
@@ -398,6 +384,10 @@ const AddProduct = () => {
             value={formData.message}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          <label htmlFor="images">Select Image(s):</label>
+          <input type="file" id="images" name="images" multiple onChange={handleFileChange} />
         </div>
         <div className="register-buttons">
           <button type="reset">CANCEL</button>

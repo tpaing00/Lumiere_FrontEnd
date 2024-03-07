@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import notifyPeriodData from "./predefined_data/notifyperiod.json";
 import checkoutReasonData from "./predefined_data/checkoutreason.json";
 import axios from "axios";
+import { Box, Button, CssBaseline, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Switch, TextField, Typography } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
 const StaffCheckOutModal = ({
   handleClose,
@@ -62,7 +65,7 @@ const StaffCheckOutModal = ({
     if (selectedDate < today) {
       setError("Date of open cannot be earlier than today's date.");
       return false;
-    }   
+    }
 
     // Validate expirationReminder and notifyPeriod
     if (!expirationReminder || !notifyPeriod) {
@@ -115,67 +118,173 @@ const StaffCheckOutModal = ({
   };
 
   return (
-    <div className="overlay">
-      <div className="overlay-content">
-        <button className="close-button" onClick={handleClose}>
-          x
-        </button>
-        <h2>Staff Check Out</h2>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <label htmlFor="quantity">Quantity:</label>
-        <input
-          type="number"
-          name="quantity"
-          value={quantity}
-          min="1"
-          max={stockQuantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <label htmlFor="reason">Reason:</label>
-        <select
-          name="reason"
-          value={reason}
-          className="dropdown"
-          onChange={(e) => setReason(e.target.value)}
-        >
-          {checkoutReasonData.map((ckreason) => (
-            <option key={ckreason.value} value={ckreason.value}>
-              {ckreason.label}
-            </option>
-          ))}
-        </select>
-        <label htmlFor="dateOfOpen">Date of Open:</label>
-        <input
-          type="date"
-          name="dateOfOpen"
-          value={dateOfOpen}
-          onChange={(e) => setDateOfOpen(e.target.value)}
-        />
-        <label htmlFor="expirationReminder">Expiration Reminder:</label>
-        <input
-          type="checkbox"
-          name="expirationReminder"
-          checked={expirationReminder}
-          onChange={(e) => setExpirationReminder(e.target.checked)}
-        />
-        <label htmlFor="notifyPeriod">
-          Notify when the end of Period-After-Open is*:
-        </label>
-        <select
-          name="notifyPeriod"
-          className="dropdown"
-          value={notifyPeriod}
-          onChange={(e) => setNotifyPeriod(e.target.value)}
-        >
-          {notifyPeriodData.map((period) => (
-            <option key={period.value} value={period.value}>
-              {period.label}
-            </option>
-          ))}
-        </select>
-        <button onClick={handleProceed}>Proceed</button>
-      </div>
-    </div>
+    <>
+      <Box className="overlay">
+        <Box className="overlay-content">
+
+          <Typography component="h2" variant="h2" sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: "space-between" }} >
+            Staff Checkout
+            <Close className="close-button" onClick={handleClose} />
+          </Typography>
+
+          {error && <Typography sx={{ color: "warning" }}>{error}</Typography>}
+
+          <TextField
+            type="number"
+            name="quantity"
+            value={quantity}
+            min="1"
+            max={stockQuantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            label="Quantity:"
+            fullWidth
+          />
+
+          <InputLabel variant="standard" id="reason-label" sx={{ mt: 2 }} >
+            Reason:
+          </InputLabel>
+          <Select
+            id="reason"
+            name="reason"
+            value={reason}
+            className="dropdown"
+            onChange={(e) => setReason(e.target.value)}
+            fullWidth
+          >
+            {checkoutReasonData.map((ckreason) => (
+              <MenuItem key={ckreason.value} value={ckreason.value}>
+                {ckreason.label}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <InputLabel variant="standard" id="dateOfOpen-label" sx={{ mt: 2 }} >
+            Date of Open:
+          </InputLabel>
+          <TextField
+            type="date"
+            name="dateOfOpen"
+            value={dateOfOpen}
+            onChange={(e) => setDateOfOpen(e.target.value)}
+            fullWidth
+          />
+
+          <Grid container sx={{ mt: 3, display: "flex", alignItems: "center" }}>
+            <Grid item xs={10}>
+              <Typography sx={{ display: "flex", alignItems: "center" }}>
+                <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} align="top" />
+                Expiration Reminder
+              </Typography>
+            </Grid>
+
+            <Grid item xs={2}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    onChange={(e) => setExpirationReminder(e.target.checked)}
+                    name="expirationReminder"
+                    value={expirationReminder}
+                    id="expirationReminder"
+                  // checked={expirationReminder}
+                  />
+                }
+                aria-label="Expiration Reminder:"
+              />
+            </Grid>
+          </Grid>
+
+          <InputLabel variant="standard" id="notifyPeriod-label" sx={{ mt: 1 }} >
+            Notify when the end of Period-After-Open is*:
+          </InputLabel>
+          <Select
+            id="notifyPeriod"
+            name="notifyPeriod"
+            value={notifyPeriod}
+            className="dropdown"
+            onChange={(e) => setNotifyPeriod(e.target.value)}
+            fullWidth
+          >
+            {notifyPeriodData.map((ckreason) => (
+              <MenuItem key={ckreason.value} value={ckreason.value}>
+                {ckreason.label}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <Box className="form-control" sx={{ mt: 3 }} >
+            <Button variant='outlined' type="reset" sx={{ mr: 3 }} >
+              Cancel
+            </Button>
+            <Button variant='contained' onClick={handleProceed}>
+              Proceed
+            </Button>
+          </Box>
+
+        </Box>
+      </Box>
+    </>
+
+    // <div className="overlay">
+    //   <div className="overlay-content">
+    //     <button className="close-button" onClick={handleClose}>
+    //       x
+    //     </button>
+    //     <h2>Staff Check Out</h2>
+    //     {error && <p style={{ color: "red" }}>{error}</p>}
+    //     <label htmlFor="quantity">Quantity:</label>
+    //     <input
+    //       type="number"
+    //       name="quantity"
+    //       value={quantity}
+    //       min="1"
+    //       max={stockQuantity}
+    //       onChange={(e) => setQuantity(e.target.value)}
+    //     />
+    //     <label htmlFor="reason">Reason:</label>
+    //     <select
+    //       name="reason"
+    //       value={reason}
+    //       className="dropdown"
+    //       onChange={(e) => setReason(e.target.value)}
+    //     >
+    //       {checkoutReasonData.map((ckreason) => (
+    //         <option key={ckreason.value} value={ckreason.value}>
+    //           {ckreason.label}
+    //         </option>
+    //       ))}
+    //     </select>
+    //     <label htmlFor="dateOfOpen">Date of Open:</label>
+    //     <input
+    //       type="date"
+    //       name="dateOfOpen"
+    //       value={dateOfOpen}
+    //       onChange={(e) => setDateOfOpen(e.target.value)}
+    //     />
+    //     <label htmlFor="expirationReminder">Expiration Reminder:</label>
+    //     <input
+    //       type="checkbox"
+    //       name="expirationReminder"
+    //       checked={expirationReminder}
+    //       onChange={(e) => setExpirationReminder(e.target.checked)}
+    //     />
+    //     <label htmlFor="notifyPeriod">
+    //       Notify when the end of Period-After-Open is*:
+    //     </label>
+    //     <select
+    //       name="notifyPeriod"
+    //       className="dropdown"
+    //       value={notifyPeriod}
+    //       onChange={(e) => setNotifyPeriod(e.target.value)}
+    //     >
+    //       {notifyPeriodData.map((period) => (
+    //         <option key={period.value} value={period.value}>
+    //           {period.label}
+    //         </option>
+    //       ))}
+    //     </select>
+    //     <button onClick={handleProceed}>Proceed</button>
+    //   </div>
+    // </div>
   );
 };
 

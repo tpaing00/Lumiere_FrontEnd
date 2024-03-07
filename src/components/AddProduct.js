@@ -15,16 +15,20 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import { DocumentScannerOutlined } from "@mui/icons-material";
 
 const AddProduct = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { barcode } = location.state ? location.state : "";
+  const location = useLocation();
+  const { state } = location;
+  const barcode = state && state.barcode ? state.barcode : "";
+  const inventoryType = state && state.inventoryType ? state.inventoryType : "";
+
   const [formData, setFormData] = useState({
-    addToInventory: "Internal Use",
+    //addToInventory: "Internal Use",
+    addToInventory: inventoryType !== undefined && inventoryType !== "" ? inventoryType : "Internal Use",
     category: "Select",
     productName: "",
     brandName: "",
     stockQuantity: 0,
-    barcodeNumber: barcode != "" ? barcode : "",
+    barcodeNumber: barcode !== undefined && barcode !== "" ? barcode : "",
     unitPrice: "",
     totalValue: 0,
     expiryDate: "",
@@ -33,22 +37,99 @@ const AddProduct = () => {
     lowStockThreshold: "Select",
     isExpirationReminder: false,
     expirationReminderTime: "Select",
+    message: "",
   });
 
   const [error, setError] = useState(null);
 
+  //Fetching existing data with barcodeNumber
+  const [existingProductData, setExistingProductData] = useState(null);
+  const [existingInventoryData, setExistingInventoryData] = useState(null);
+
+  useEffect(() => {
+    const fetchExistingData = async () => {
+      try {
+        const response = await axios.get(`https://api.lumiereapp.ca/api/v1/barcode/${formData.barcodeNumber}`);
+        const { inventoryResults, productResults } = response.data;
+        if (productResults.length > 0 && inventoryResults.length > 0) {
+          const { productName, brandName, category, unitPrice, periodAfterOpening  } = productResults[0];
+          //const { addToInventory, stockQuantity, expiryDate} = inventoryResults[0];
+          const { stockQuantity, expiryDate} = inventoryResults[0];
+          // Convert expiryDate to yyyy-MM-dd format
+          const formattedExpiryDate = new Date(expiryDate).toISOString().split('T')[0];
+
+          setExistingProductData({ productName, brandName, category, unitPrice, periodAfterOpening });
+          //setExistingInventoryData({ addToInventory, stockQuantity, expiryDate: formattedExpiryDate });
+          setExistingInventoryData({ stockQuantity, expiryDate: formattedExpiryDate });
+        }        
+      } catch (error) {
+        console.error("Error fetching existing product data:", error);
+        setError("Error fetching existing product data");
+      }
+    };
+
+    if (formData.barcodeNumber) {
+      fetchExistingData();
+    }
+  }, [formData.barcodeNumber]);
+
+  useEffect(() => {
+    if (existingProductData && existingInventoryData) {
+      const { productName, brandName, category, unitPrice, periodAfterOpening  } = existingProductData;
+      const { addToInventory, stockQuantity, expiryDate} = existingInventoryData;
+      
+      // Populate the form fields with existing data
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        addToInventory,
+        category,
+        productName,
+        brandName,
+        stockQuantity,
+        unitPrice,
+        expiryDate,
+        periodAfterOpening,
+        isLowStockAlert: false,
+        lowStockThreshold: "Select",
+        isExpirationReminder: false,
+        expirationReminderTime: "Select",
+        message: "",
+      }));
+    }
+  }, [existingProductData, existingInventoryData]);
+
   // Validation function
   const validateForm = () => {
+    if (!formData.expiryDate) {
+      setError("Please fill in all required fields.");
+      return false;
+    }
+
+    const today = new Date();
+    const [year, month, day] = formData.expiryDate.split("-").map(Number);
+    const selectedDate = new Date(year, month - 1, day);
+
+    // Set the time part of today's date to 00:00:00 to compare date only
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+
+    if (selectedDate <= today) {
+      setError("Date of expiry cannot be same date or earlier than today's date.");
+      return false;
+    } 
+
     if (
+      formData.category === "Select" ||
       formData.productName.trim() === "" ||
-      formData.brandName.trim() === "" ||
-      formData.barcodeNumber.trim() === "" ||
+      formData.brandName.trim() === "" ||      
       formData.stockQuantity <= 0 ||
+      formData.barcodeNumber.trim() === "" ||    
       formData.unitPrice <= 0 ||
-      formData.expiryDate === "" ||
+      formData.expiryDate === "" ||        
+      formData.periodAfterOpening === "Select" ||
       (formData.isLowStockAlert && formData.lowStockThreshold === "Select") ||
-      (formData.isExpirationReminder &&
-        formData.expirationReminderTime === "Select")
+      (formData.isExpirationReminder && formData.expirationReminderTime === "Select")
     ) {
       setError("Please fill in all required fields.");
       return false;
@@ -88,10 +169,14 @@ const AddProduct = () => {
 
   // updates values upon change
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, type, checked } = event.target;
+
+    // For checkboxes, the value is either "on" or undefined
+    const newValue = type === 'checkbox' ? checked : value;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
@@ -99,7 +184,7 @@ const AddProduct = () => {
     navigate("/scanner");
   };
 
-  // handles the submit of the form using axios to pass the data to the backend
+    // handles the submit of the form using axios to pass the data to the backend
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -122,6 +207,7 @@ const AddProduct = () => {
         lowStockThreshold: formData.lowStockThreshold,
         isExpirationReminder: formData.isExpirationReminder,
         expirationReminderTime: formData.expirationReminderTime,
+        message: formData.message,
       })
       .then((response) => {
         if (response.status === 201) {

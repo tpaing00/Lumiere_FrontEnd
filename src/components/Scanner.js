@@ -42,7 +42,7 @@ function Scanner() {
           const { productResults, inventoryResults } = response.data;
           if (productResults.length > 0 && inventoryResults.length > 0) {
             navigate("/scannerdetail", {
-              state: { productResults, inventoryResults },
+              state: { productResults, inventoryResults, barcode },
             });
           } else {
             navigate("/add-product", { state: { barcode } });

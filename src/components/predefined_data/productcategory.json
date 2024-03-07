@@ -1,4 +1,5 @@
 [
+    { "value": "Select", "label": "Select" },
     { "value": "Hair Care", "label": "Hair Care" },
     { "value": "Skin Care", "label": "Skin Care" },
     { "value": "Body Care", "label": "Body Care" },

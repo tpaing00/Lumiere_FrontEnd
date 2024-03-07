@@ -9,6 +9,10 @@ video {
   border: 1px solid black;
 }
 
+canvas {
+  height: 5px;
+}
+
 .smallPhoto {
   height: 150px;
 }

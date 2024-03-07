@@ -51,24 +51,41 @@ const RetailCheckOutModal = ({
   };
 
   return (
-    <div className="overlay">
-      <div className="overlay-content">
-        <button className="close-button" onClick={handleClose}>
-          x
-        </button>
-        <h2>Retail Check Out</h2>
-        <label htmlFor="quantity">Quantity:</label>
-        <input
-          type="number"
-          id="quantity"
-          value={quantity}
-          min="1"
-          max={stockQuantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <button onClick={handleProceed}>Proceed</button>
-      </div>
-    </div>
+    <>
+      <Box className="overlay">
+        <Box className="overlay-content">
+
+          <Typography component="h2" variant="h2" sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: "space-between" }} >
+            Retail Checkout
+            <Close className="close-button" onClick={handleClose} />
+          </Typography>
+
+          {error && <Typography sx={{ color: "warning" }}>{error}</Typography>}
+
+          <TextField
+            type="number"
+            name="quantity"
+            value={quantity}
+            min="1"
+            max={stockQuantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            label="Quantity:"
+            fullWidth
+          />
+          
+          <Box className="form-control" sx={{ mt: 3 }} >
+            <Button variant='outlined' type="reset" sx={{ mr: 3 }} >
+              Cancel
+            </Button>
+            <Button variant='contained' onClick={handleProceed}>
+              Proceed
+            </Button>
+          </Box>
+
+        </Box>
+      </Box>
+    </>
+
   );
 };
 

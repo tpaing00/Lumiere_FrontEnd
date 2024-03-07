@@ -30,6 +30,18 @@ const App = (props) => {
 
   const [loggedIn, setLoggedIn] = useState(tokenCookie ? true : false);
 
+  if(loggedIn) {
+      let token = ""
+      const cookies = document.cookie.split(";");
+      const tokenCookie = cookies.find(cookie => cookie.trim().startsWith("token="));
+      if (tokenCookie) {
+          token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
+      }
+      console.log(token);
+      //append token to axios header
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+
   const handleLogin = () => {
     setLoggedIn(() => {
         let token = ""

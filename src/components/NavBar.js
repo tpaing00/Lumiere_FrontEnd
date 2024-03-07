@@ -18,7 +18,7 @@ const NavBar = () => {
               <ListItemIcon>
                 <InboxOutlinedIcon />
               </ListItemIcon>
-              <ListItemText secondary='Home' />
+              <ListItemText secondary='Dashboard' />
             </ListItemButton>
           </ListItem>
 

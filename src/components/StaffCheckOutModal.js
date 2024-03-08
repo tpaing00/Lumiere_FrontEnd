@@ -2,9 +2,22 @@ import React, { useState, useEffect } from "react";
 import notifyPeriodData from "./predefined_data/notifyperiod.json";
 import checkoutReasonData from "./predefined_data/checkoutreason.json";
 import axios from "axios";
-import { Box, Button, CssBaseline, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, Switch, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Close } from "@mui/icons-material";
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 const StaffCheckOutModal = ({
   handleClose,
@@ -60,7 +73,6 @@ const StaffCheckOutModal = ({
     // Set the time part of today's date to 00:00:00 to compare date only
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
-
 
     if (selectedDate < today) {
       setError("Date of open cannot be earlier than today's date.");
@@ -121,8 +133,16 @@ const StaffCheckOutModal = ({
     <>
       <Box className="overlay">
         <Box className="overlay-content">
-
-          <Typography component="h2" variant="h2" sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: "space-between" }} >
+          <Typography
+            component="h2"
+            variant="h2"
+            sx={{
+              mb: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             Staff Checkout
             <Close className="close-button" onClick={handleClose} />
           </Typography>
@@ -140,7 +160,7 @@ const StaffCheckOutModal = ({
             fullWidth
           />
 
-          <InputLabel variant="standard" id="reason-label" sx={{ mt: 2 }} >
+          <InputLabel variant="standard" id="reason-label" sx={{ mt: 2 }}>
             Reason:
           </InputLabel>
           <Select
@@ -158,7 +178,7 @@ const StaffCheckOutModal = ({
             ))}
           </Select>
 
-          <InputLabel variant="standard" id="dateOfOpen-label" sx={{ mt: 2 }} >
+          <InputLabel variant="standard" id="dateOfOpen-label" sx={{ mt: 2 }}>
             Date of Open:
           </InputLabel>
           <TextField
@@ -185,7 +205,7 @@ const StaffCheckOutModal = ({
                     name="expirationReminder"
                     value={expirationReminder}
                     id="expirationReminder"
-                  // checked={expirationReminder}
+                    // checked={expirationReminder}
                   />
                 }
                 aria-label="Expiration Reminder:"
@@ -193,7 +213,7 @@ const StaffCheckOutModal = ({
             </Grid>
           </Grid>
 
-          <InputLabel variant="standard" id="notifyPeriod-label" sx={{ mt: 1 }} >
+          <InputLabel variant="standard" id="notifyPeriod-label" sx={{ mt: 1 }}>
             Notify when the end of Period-After-Open is*:
           </InputLabel>
           <Select
@@ -211,15 +231,19 @@ const StaffCheckOutModal = ({
             ))}
           </Select>
 
-          <Box className="form-control" sx={{ mt: 3 }} >
-            <Button variant='outlined' type="reset" sx={{ mr: 3 }} >
+          <Box className="form-control" sx={{ mt: 3 }}>
+            <Button
+              variant="outlined"
+              type="reset"
+              sx={{ mr: 3 }}
+              onClick={handleClose}
+            >
               Cancel
             </Button>
-            <Button variant='contained' onClick={handleProceed}>
+            <Button variant="contained" onClick={handleProceed}>
               Proceed
             </Button>
           </Box>
-
         </Box>
       </Box>
     </>

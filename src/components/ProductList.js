@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import inventoryTypeData from "./predefined_data/inventorytype.json";
 import productCategoryData from "./predefined_data/productcategory.json";
 import StaffCheckOutModal from "./StaffCheckOutModal";
+import { Box, Button, Grid, IconButton, InputLabel, Menu, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { MoreVert } from "@mui/icons-material";
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const ProductList = () => {
   const [filterByInventory, setFilterByInventory] = useState("");
   const [filterByCategory, setFilterByCategory] = useState("");
   const [sortByBrand, setSortByBrand] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -97,16 +100,16 @@ const ProductList = () => {
   const renderTableHeader = () => {
     // Define the keys to display in the table
     let header = [
-      "productName",
-      "brandName",
-      "category",
-      "dateAdded",
-      "expiryDate",
-      "status",
-      "addToInventory",
+      "Name",
+      "Brand",
+      "Category",
+      "Date Added",
+      "EXP",
+      "Status",
+      "Inventory",
     ];
     return header.map((key, index) => {
-      return <th key={index}>{key}</th>;
+      return <TableCell key={index}>{key}</TableCell>;
     });
   };
 
@@ -259,40 +262,57 @@ const ProductList = () => {
       }
     };
 
+    //Kebab menu:
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
     return filteredData.map((row, index) => (
-      <tr key={index}>
-        <td>{row.productName}</td>
-        <td>{row.brandName}</td>
-        <td>{row.category}</td>
-        <td>{row.dateAdded}</td>
-        <td>{row.expiryDate}</td>
-        <td style={renderStatusStyle(row.status)}>{row.status}</td>
-        <td>{row.addToInventory}</td>
-        <td>
-          <button
-            onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}
+
+      <TableRow key={index}>
+        <TableCell>{row.productName}</TableCell>
+        <TableCell>{row.brandName}</TableCell>
+        <TableCell>{row.category}</TableCell>
+        <TableCell>{row.dateAdded}</TableCell>
+        <TableCell>{row.expiryDate}</TableCell>
+        <TableCell style={renderStatusStyle(row.status)}>{row.status}</TableCell>
+        <TableCell>{row.addToInventory}</TableCell>
+        <TableCell>
+          <IconButton
+            id="more"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
           >
-            View Detail
-          </button>
-          <button
-            onClick={() => handleStaffCheckOut(row)}
-            disabled={
+            <MoreVert />
+          </IconButton>
+
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}>View Detail</MenuItem>
+            <MenuItem onClick={() => handleStaffCheckOut(row)} disabled={
               row.status === "Out of Stock" ||
               row.status === "Expired" ||
               row.status === "Wasted"
-            }
-          >
-            Staff Check Out
-          </button>
-          <button
-            onClick={() => handleReportWasted(row)}
-            disabled={row.status !== "Expired" || row.status === "Wasted"}
-          >
-            Report Wasted
-          </button>
-          <button onClick={() => handleDelete(row)}>Delete</button>
-        </td>
-      </tr>
+            }>Staff Check Out</MenuItem>
+            <MenuItem onClick={() => handleReportWasted(row)} disabled={row.status !== "Expired" || row.status === "Wasted"}>Report Wasted</MenuItem>
+            <MenuItem onClick={() => handleDelete(row)}>Delete</MenuItem>
+          </Menu>
+
+        </TableCell>
+      </TableRow>
     ));
   };
 
@@ -345,80 +365,127 @@ const ProductList = () => {
   };
 
   return (
-    <div>
-      <h1>Product list</h1>
-      <div>
-        <div>
-          <button onClick={handleNewProduct}>Register New Product</button>
-        </div>
-        <div>
-          <label>Filter by Inventory:</label>
-          <select
+    <Box component='main'>
+
+      <Grid container spacing={3} sx={{ mt: 2 }} >
+
+        <Grid item xs={8}>
+          <Typography component='h1' variant='h1'>
+            Product List
+          </Typography>
+        </Grid>
+
+        <Grid item xs={4}>
+          <Button onClick={handleNewProduct} variant="outlined">Register New Product</Button>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={1} sx={{ display: "flex", mt: 5, mb: 3 }}>
+
+        <Grid item xs={2}>
+          <InputLabel variant="standard" id="filterInventory-label">
+            Filter by Inventory:
+          </InputLabel>
+          <Select
+            id="filterInventory"
+            name="filterInventory"
             className="dropdown"
             value={filterByInventory}
             onChange={handleInventoryChange}
+            fullWidth
           >
-            <option value="">All</option>
+            <MenuItem value="">All</MenuItem>
             {inventoryTypeData.map((type) => (
-              <option key={type.value} value={type.value}>
+              <MenuItem key={type.value} value={type.value}>
                 {type.label}
-              </option>
+              </MenuItem>
             ))}
-          </select>
-        </div>
-        <div>
-          <label>Filter by Category:</label>
-          <select
+          </Select>
+        </Grid>
+
+        <Grid item xs={2}>
+          <InputLabel variant="standard" id="filterCategory-label">
+            Filter by Category:
+          </InputLabel>
+          <Select
+            id="filterCategory"
+            name="filterCategory"
             className="dropdown"
             value={filterByCategory}
             onChange={handleCategoryChange}
+            fullWidth
           >
-            <option value="">All</option>
-            {productCategoryData.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label>Sort by Brand Name:</label>
-          <select value={sortByBrand} onChange={handleBrandChange}>
-            <option value="">None</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <label>Filter by Status:</label>
-        <select
-          value={filterByStatus}
-          onChange={(e) => setFilterByStatus(e.target.value)}
-        >
-          <option value="">All</option>
-          <option value="In Stock">In Stock</option>
-          <option value="Low Stock">Low Stock</option>
-          <option value="Expired">Expired</option>
-          <option value="Out of Stock">Out of Stock</option>
-          <option value="Wasted">Wasted</option>
-        </select>
-      </div>
-      <div>
-        <label>Search:</label>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search by name, brand, or category"
-        />
-      </div>
-      <table>
-        <thead>
-          <tr>{renderTableHeader()}</tr>
-        </thead>
-        <tbody>{renderTableData()}</tbody>
-      </table>
+            <MenuItem value="">All</MenuItem>
+            {productCategoryData.map((type) =>
+              type.label !== "Select" ? (
+                <MenuItem key={type.value} value={type.value}>
+                  {type.label}
+                </MenuItem>
+              ) : null
+            )}
+          </Select>
+        </Grid>
+
+        <Grid item xs={2}>
+          <InputLabel variant="standard" id="sortByBrand-label">
+            Sort by Brand:
+          </InputLabel>
+          <Select
+            id="sortByBrand"
+            name="sortByBrand"
+            className="dropdown"
+            value={sortByBrand}
+            onChange={handleBrandChange}
+            fullWidth
+          >
+            <MenuItem value="">None</MenuItem>
+            <MenuItem value="asc">Ascending</MenuItem>
+            <MenuItem value="desc">Descending</MenuItem>
+          </Select>
+        </Grid>
+
+        <Grid item xs={2}>
+          <InputLabel variant="standard" id="filterStatus-label">
+            Filter by Status:
+          </InputLabel>
+          <Select
+            id="filterStatus"
+            name="filterStatus"
+            className="dropdown"
+            value={filterByStatus}
+            onChange={(e) => setFilterByStatus(e.target.value)}
+            fullWidth
+          >
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="In Stock">In Stock</MenuItem>
+            <MenuItem value="Low Stock">Low Stock</MenuItem>
+            <MenuItem value="Expired">Expired</MenuItem>
+            <MenuItem value="Out of Stock">Out of Stock</MenuItem>
+            <MenuItem value="Wasted">Wasted</MenuItem>
+          </Select>
+        </Grid>
+
+        <Grid item xs={4}>
+          <InputLabel variant="standard" id="searchInventory-label">
+            Search:
+          </InputLabel>
+          <TextField
+            id="searchInventory"
+            name="searchInventory"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by name, brand, or category"
+          />
+        </Grid>
+      </Grid>
+
+      <Table>
+        <TableHead>
+          <TableRow>{renderTableHeader()}</TableRow>
+        </TableHead>
+        <TableBody>{renderTableData()}</TableBody>
+      </Table>
 
       {showInternalModal && (
         <StaffCheckOutModal
@@ -429,7 +496,8 @@ const ProductList = () => {
           handleReloadInternalData={handleReloadInternalData}
         />
       )}
-    </div>
+
+    </Box>
   );
 };
 

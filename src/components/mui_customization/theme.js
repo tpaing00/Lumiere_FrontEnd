@@ -1,6 +1,16 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+  breakpoints: {
+    // Define the lg screen breakpoint to be 1440px
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1440,
+      xl: 1920,
+    },
+  },
   palette: {
     primary: {
       light: '#fcdda3',
@@ -44,8 +54,12 @@ const theme = createTheme({
   typography: {
     h1: {
       fontFamily: 'Roboto Condensed',
-      fontSize: 30,
+      fontSize: '30px',
+      '@media (min-width:1440px)': {
+        fontSize: '38px',
+      },
       fontWeight: 700,
+      letterSpacing: '-1.5px',
     },
     h2: {
       fontFamily: 'Roboto Condensed',
@@ -81,7 +95,7 @@ const theme = createTheme({
     subtitle2: {
       fontFamily: 'Outfit',
     },
-  }
+  },
 });
 
 export default theme

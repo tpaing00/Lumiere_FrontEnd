@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 const RetailCheckOutModal = ({
   handleClose,
@@ -9,13 +11,14 @@ const RetailCheckOutModal = ({
   handleReloadRetailData,
 }) => {
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
+  const [error, setError] = useState(null); // Define error state
 
   const validateForm = () => {
     // Validate quantity
     if (quantity <= 0 || quantity > stockQuantity) {
-      alert("Please enter a valid quantity within the available stock.");
+      setError("Please enter a valid quantity within the available stock.");
       return false;
-    }    
+    }
 
     return true; // All validations passed
   };
@@ -54,8 +57,16 @@ const RetailCheckOutModal = ({
     <>
       <Box className="overlay">
         <Box className="overlay-content">
-
-          <Typography component="h2" variant="h2" sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: "space-between" }} >
+          <Typography
+            component="h2"
+            variant="h2"
+            sx={{
+              mb: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             Retail Checkout
             <Close className="close-button" onClick={handleClose} />
           </Typography>
@@ -72,20 +83,23 @@ const RetailCheckOutModal = ({
             label="Quantity:"
             fullWidth
           />
-          
-          <Box className="form-control" sx={{ mt: 3 }} >
-            <Button variant='outlined' type="reset" sx={{ mr: 3 }} >
+
+          <Box className="form-control" sx={{ mt: 3 }}>
+            <Button
+              variant="outlined"
+              type="reset"
+              sx={{ mr: 3 }}
+              onClick={handleClose}
+            >
               Cancel
             </Button>
-            <Button variant='contained' onClick={handleProceed}>
+            <Button variant="contained" onClick={handleProceed}>
               Proceed
             </Button>
           </Box>
-
         </Box>
       </Box>
     </>
-
   );
 };
 

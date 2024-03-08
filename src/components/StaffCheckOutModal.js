@@ -53,9 +53,9 @@ const StaffCheckOutModal = ({
       setError("Please enter a valid quantity within the available stock.");
       return false;
     }
-
+    
     // Validate reason
-    if (!reason) {
+    if (reason === "Select") {
       setError("Please select a reason for checkout.");
       return false;
     }
@@ -79,8 +79,9 @@ const StaffCheckOutModal = ({
       return false;
     }
 
+    
     // Validate expirationReminder and notifyPeriod
-    if (!expirationReminder || !notifyPeriod) {
+    if (!expirationReminder || notifyPeriod === "Select") {
       setError("Please select a notify period for expiration reminder.");
       return false;
     }

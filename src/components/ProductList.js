@@ -247,14 +247,16 @@ const ProductList = () => {
       }
     };
 
-    const handleDelete = (row) => {
-      alert(
-        "handleDelete (barcodeNumber : " +
-          row.barcodeNumber +
-          " , inventoryId : " +
-          row.inventoryId +
-          ")"
-      );
+    const handleDelete = async (row) => {
+      try {
+        await axios.delete(`https://api.lumiereapp.ca/api/v1/delete`, {
+          data: { barcodeNumber: row.barcodeNumber , addToInventory: row.addToInventory}
+        });
+  
+        handleReloadInternalData();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+      }
     };
 
     return filteredData.map((row, index) => (

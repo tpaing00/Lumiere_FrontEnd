@@ -9,6 +9,9 @@ import { Typography, Grid, Card, CardContent, CardMedia } from "@mui/material";
 const ProductDetail = () => {
   const location = useLocation();
   const { inventoryId, barcodeNumber, wasteId } = location.state;
+  // console.log("inId :" +inventoryId);
+  // console.log("barcodeId :" +barcodeNumber);
+  // console.log("wasteId :" +wasteId);
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
   const [notificationResults, setNotificationResults] = useState("");
@@ -35,6 +38,7 @@ const ProductDetail = () => {
       .then((res) => {
         if (res.status === 200) {
           setInventoryResults(res.data);
+          // console.log(res.data);
           if (res.data.addToInventory === "Retail") {
             setshowActivityHistory(false);
           }
@@ -109,7 +113,7 @@ const ProductDetail = () => {
           borderRadius: "100px",
         }}
       >
-        {wasteId === null
+        {wasteId === undefined
           ? inventoryResults.addToInventory
           : wasteProductResults.addToInventory}
       </Typography>
@@ -121,13 +125,13 @@ const ProductDetail = () => {
           borderRadius: "100px",
         }}
       >
-        {wasteId === null
+        {wasteId === undefined
           ? productResults.category
           : wasteProductResults.category}
       </Typography>
       <Typography sx={{ padding: "10px 0 10px 0" }}>
         {`Brand: ${
-          wasteId === null
+          wasteId === undefined
             ? productResults.brandName
             : wasteProductResults.brandName
         }`}
@@ -143,7 +147,7 @@ const ProductDetail = () => {
           component="img"
           alt="product image"
           src={
-            wasteId === null ? productResults.photo : wasteProductResults.photo
+            wasteId === undefined ? productResults.photo : wasteProductResults.photo
           }
           style={{ width: "auto", height: "auto" }}
         />
@@ -155,7 +159,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Stock</Typography>
               <Typography>
-                {wasteId === null
+                {wasteId === undefined
                   ? inventoryResults.stockQuantity
                   : wasteProductResults.wasteQuantity}
               </Typography>
@@ -164,7 +168,7 @@ const ProductDetail = () => {
               <Typography>Unit Price</Typography>
               <Typography>
                 $
-                {wasteId === null
+                {wasteId === undefined
                   ? productResults.unitPrice
                   : wasteProductResults.unitPrice}
               </Typography>
@@ -172,7 +176,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Total Value</Typography>
               <Typography>
-                {wasteId === null
+                {wasteId === undefined
                   ? inventoryResults.totalValue
                   : wasteProductResults.totalValue}
               </Typography>
@@ -180,7 +184,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Barcode Number</Typography>
               <Typography>
-                {wasteId === null
+                {wasteId === undefined
                   ? inventoryResults.barcodeNumber
                   : wasteProductResults.barcodeNumber}
               </Typography>
@@ -192,7 +196,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Period After Opening</Typography>
               <Typography>
-                {wasteId === null
+                {wasteId === undefined
                   ? productResults.periodAfterOpening
                   : wasteProductResults.periodAfterOpening}{" "}
                 M

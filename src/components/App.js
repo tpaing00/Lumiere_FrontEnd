@@ -12,6 +12,7 @@ import Inventory from "./Inventory";
 import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
+import Notification from "./Notification";
 import {
   CssBaseline,
   ThemeProvider,
@@ -128,6 +129,12 @@ const App = (props) => {
                 <Route
                   path="/inventory"
                   element={loggedIn ? <Inventory /> : <Navigate to="/" />}
+                />
+                <Route
+                  path="/notification"
+                  element={
+                    loggedIn ? <Notification />: <Navigate to="/" />
+                  } 
                 />
               </Routes>
             </ContentContainer>

@@ -436,7 +436,7 @@ import { MoreVert } from "@mui/icons-material";
             id="filterInventory"
             name="filterInventory"
             className="dropdown"
-            value="{filterByInventory}"
+            value={filterByInventory}
             onChange={handleInventoryChange}
             fullWidth
           >

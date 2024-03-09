@@ -287,12 +287,12 @@ import { MoreVert } from "@mui/icons-material";
       }
     };
 
-    const handleDelete = async (row) => {
+    const handleDelete = async (row,index) => {
       try {
         await axios.delete(`https://api.lumiereapp.ca/api/v1/delete`, {
           data: { barcodeNumber: row.barcodeNumber , addToInventory: row.addToInventory}
         });
-  
+        handleMenuClose(index);
         handleReloadInternalData();
       } catch (error) {
         console.error('Error deleting product:', error);
@@ -331,7 +331,7 @@ import { MoreVert } from "@mui/icons-material";
             <MenuItem onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}>View Detail</MenuItem>
             <MenuItem onClick={() => handleStaffCheckOut(row, index)} disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted" || row.addToInventory === "Retail"}>Staff Check Out</MenuItem>
             <MenuItem onClick={() => handleReportWasted(row, index)} disabled={row.status !== "Expired" || row.status === "Wasted"}>Report Wasted</MenuItem>
-            <MenuItem onClick={() => handleDelete(row)}>Delete</MenuItem>
+            <MenuItem onClick={() => handleDelete(row, index)}>Delete</MenuItem>
           </Menu>
         </TableCell>
       </TableRow>
@@ -383,6 +383,7 @@ import { MoreVert } from "@mui/icons-material";
       const lowStockThreshold = notification.lowStockThreshold;
       if (inventory.stockQuantity <= lowStockThreshold) return "Low Stock";
     }
+    if (inventory.stockQuantity > 0) return "In Stock";
     return "In Stock";
   };
 

@@ -7,21 +7,23 @@ import StaffCheckOutModal from "./StaffCheckOutModal";
 import { Box, Button, Grid, IconButton, InputLabel, Menu, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 
-const ProductList = () => {
+
+  const ProductList = () => {
   const navigate = useNavigate();
   const [inventoryData, setInventoryData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [notificationData, setNotificationData] = useState([]);
   const [wasteData, setWasteData] = useState([]);
   const [showInternalModal, setShowInternalModal] = useState(false);
-  const [selectedInventoryProduct, setSelectedInventoryProduct] =
-    useState(null);
+  const [selectedInventoryProduct, setSelectedInventoryProduct] = useState(null);
   const [filterByStatus, setFilterByStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterByInventory, setFilterByInventory] = useState("");
   const [filterByCategory, setFilterByCategory] = useState("");
   const [sortByBrand, setSortByBrand] = useState("");
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  //const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState([]);
+  const [open, setOpen] = useState([]);
 
   useEffect(() => {
     Promise.all([
@@ -39,12 +41,39 @@ const ProductList = () => {
         setProductData(productsResponse);
         setNotificationData(notificationsResponse);
         setWasteData(wastesResponse);
+         
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
+  //Kebab menu:
+  const handleMenuClick = (event, index) => {
+    setAnchorEl((prevAnchorEl) => {
+      const newAnchorEl = [...prevAnchorEl];
+      newAnchorEl[index] = event.currentTarget;
+      return newAnchorEl;
+    });
+    setOpen((prevOpen) => {
+      const newOpen = [...prevOpen];
+      newOpen[index] = true;
+      return newOpen;
+    });
+  };
+
+  const handleMenuClose = (index) => {
+    setAnchorEl((prevAnchorEl) => {
+      const newAnchorEl = [...prevAnchorEl];
+      newAnchorEl[index] = null;
+      return newAnchorEl;
+    });
+    setOpen((prevOpen) => {
+      const newOpen = [...prevOpen];
+      newOpen[index] = false;
+      return newOpen;
+    });
+  };
   const handleSearch = async (keywords) => {
     try {
       const response = await axios.get(
@@ -52,7 +81,6 @@ const ProductList = () => {
           keywords
         )}`
       );
-      //console.log(response.data);
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -67,9 +95,12 @@ const ProductList = () => {
     setShowInternalModal(false); // Close the modal
   };
 
-  const handleStaffCheckOut = (row) => {
-    setSelectedInventoryProduct(row);
-    setShowInternalModal(true);
+  const handleStaffCheckOut = (row, index) => {
+    if (row.status == "In Stock" || row.status === "Low Stock"){
+      setSelectedInventoryProduct(row);
+      setShowInternalModal(true);
+      handleMenuClose(index);
+    }    
   };
 
   const handleReloadInternalData = () => {
@@ -123,13 +154,12 @@ const ProductList = () => {
     ) {
       return null; // Return null if either array is empty
     }
-
+    
     const combinedData = inventoryData.map((inventoryRow) => {
       // Find the matching product object from the productData array based on the barcodeNumber
       const matchingProduct = productData.find(
         (product) => product.barcodeNumber === inventoryRow.barcodeNumber
       );
-
       // Merge the properties of inventoryRow and matchingProduct into a new object
       if (matchingProduct) {
         const combined = {
@@ -141,7 +171,7 @@ const ProductList = () => {
           inventoryId: inventoryRow._id,
           productId: matchingProduct._id,
           wasteId: "",
-        };
+        };      
 
         // Remove the duplicate _id field if it exists
         delete combined._id;
@@ -150,46 +180,75 @@ const ProductList = () => {
         return inventoryRow;
       }
     });
+
     const wasteDataWithStatus = wasteData.map((item) => ({
       ...item,
+      stockQuantity: 0,
       status: "Wasted",
       inventoryId: "",
       wasteId: item._id
     }));
+    delete wasteDataWithStatus._id;
+    delete wasteDataWithStatus.wasteQuantity;
     const combinedWithWaste = combinedData.concat(wasteDataWithStatus);
-
     // Sort the combined data based on the selected option for brandName
     let sortedData = [...combinedWithWaste];
 
     // Sort the filtered data based on the selected option for brandName
     if (sortByBrand === "asc") {
-      sortedData.sort((a, b) => a.brandName.localeCompare(b.brandName)); // Sort by ascending order of brandName using string comparison
+      sortedData.sort((a, b) => (a.brandName && b.brandName) ? a.brandName.localeCompare(b.brandName) : 0); // Sort by ascending order of brandName using string comparison
     } else if (sortByBrand === "desc") {
-      sortedData.sort((a, b) => b.brandName.localeCompare(a.brandName)); // Sort by descending order of brandName using string comparison
+      sortedData.sort((a, b) => (a.brandName && b.brandName) ? b.brandName.localeCompare(a.brandName) : 0); // Sort by descending order of brandName using string comparison
     }
+    // if (sortByBrand === "asc") {
+    //   sortedData.sort((a, b) => a.brandName.localeCompare(b.brandName)); // Sort by ascending order of brandName using string comparison
+    // } else if (sortByBrand === "desc") {
+    //   sortedData.sort((a, b) => b.brandName.localeCompare(a.brandName)); // Sort by descending order of brandName using string comparison
+    // }
 
     // Filter the combined data based on the selected options
     const filteredData = sortedData.filter((row) => {
-      // Check if the row matches the filter criteria for addToInventory and category
+      // Check if the row matches the filter criteria for addToInventory, category, and status
       const inventoryMatch =
-        filterByInventory === "" || row.addToInventory === filterByInventory;
-      const categoryMatch =
-        filterByCategory === "" || row.category === filterByCategory;
-      const statusMatch =
-        filterByStatus === "" || row.status === filterByStatus;
+        filterByInventory === "" || (row.addToInventory && row.addToInventory === filterByInventory);
 
-      // Return true if both criteria are met
-      //return inventoryMatch && categoryMatch;
-      return (
-        inventoryMatch &&
-        categoryMatch &&
-        statusMatch &&
-        (searchTerm === "" ||
-          row.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          row.brandName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          row.category.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
+      const categoryMatch =
+        filterByCategory === "" || (row.category && row.category === filterByCategory);
+
+      const statusMatch =
+        filterByStatus === "" || (row.status && row.status === filterByStatus);
+    
+      // Check if searchTerm exists in productName, brandName, or category, and convert all strings to lowercase for case-insensitive matching
+      const searchMatch =
+        searchTerm === "" ||
+        (row.productName && row.productName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (row.brandName && row.brandName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (row.category && row.category.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+      // Return true if all criteria are met
+      return inventoryMatch && categoryMatch && statusMatch && searchMatch;
     });
+    // const filteredData = sortedData.filter((row) => {
+    //   // Check if the row matches the filter criteria for addToInventory and category
+    //   const inventoryMatch =
+    //     filterByInventory === "" || row.addToInventory === filterByInventory;
+    //   const categoryMatch =
+    //     filterByCategory === "" || row.category === filterByCategory;
+    //   const statusMatch =
+    //     filterByStatus === "" || row.status === filterByStatus;
+
+    //   // Return true if both criteria are met
+    //   //return inventoryMatch && categoryMatch;
+    //   return (
+    //     inventoryMatch &&
+    //     categoryMatch &&
+    //     statusMatch &&
+    //     (searchTerm === "" ||
+    //       row.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //       row.brandName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //       row.category.toLowerCase().includes(searchTerm.toLowerCase()))
+    //   );
+    // });
 
     // Render table rows
     const renderStatusStyle = (status) => {
@@ -210,13 +269,15 @@ const ProductList = () => {
     };
 
     const handleViewDetail = (inventoryId, barcodeNumber, wasteId) => {
+      //alert("inventoryId " + inventoryId+  "barcodeNumber " +  barcodeNumber+  "wasteId" + wasteId)
       navigate("/productdetail", {
         state: { inventoryId, barcodeNumber, wasteId },
       });
     };
 
-    const handleReportWasted = async (row) => {
+    const handleReportWasted = async (row, index) => {
       try {
+        handleMenuClose(index);
         const formData = {
           barcodeNumber: row.barcodeNumber,
           productName: row.productName,
@@ -231,13 +292,11 @@ const ProductList = () => {
           expiryDate: row.expiryDate,
           wasteQuantity: row.stockQuantity,
         };
-        console.log(formData);
         //POST request to the API
         axios
           .post("https://api.lumiereapp.ca/api/v1/waste", formData)
           .then((response) => {
             alert("Reported Waste successful!");
-            console.log(response.data);
             handleReloadInternalData();
           })
           .catch((error) => {
@@ -262,17 +321,7 @@ const ProductList = () => {
       }
     };
 
-    //Kebab menu:
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-
     return filteredData.map((row, index) => (
-
       <TableRow key={index}>
         <TableCell>{row.productName}</TableCell>
         <TableCell>{row.brandName}</TableCell>
@@ -284,33 +333,28 @@ const ProductList = () => {
         <TableCell>
           <IconButton
             id="more"
-            aria-controls={open ? 'basic-menu' : undefined}
+            aria-controls={`menu-${index}`}
             aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
+            aria-expanded={open[index] ? 'true' : undefined}
+            onClick={(event) => handleMenuClick(event, index)}
           >
             <MoreVert />
           </IconButton>
 
           <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
+            id={`menu-${index}`}
+            anchorEl={anchorEl[index]}
+            open={open[index]}
+            onClose={() => handleMenuClose(index)}
             MenuListProps={{
               'aria-labelledby': 'basic-button',
             }}
           >
             <MenuItem onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}>View Detail</MenuItem>
-            <MenuItem onClick={() => handleStaffCheckOut(row)} disabled={
-              row.status === "Out of Stock" ||
-              row.status === "Expired" ||
-              row.status === "Wasted"
-            }>Staff Check Out</MenuItem>
-            <MenuItem onClick={() => handleReportWasted(row)} disabled={row.status !== "Expired" || row.status === "Wasted"}>Report Wasted</MenuItem>
+            <MenuItem onClick={() => handleStaffCheckOut(row, index)} disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted"}>Staff Check Out</MenuItem>
+            <MenuItem onClick={() => handleReportWasted(row, index)} disabled={row.status !== "Expired" || row.status === "Wasted"}>Report Wasted</MenuItem>
             <MenuItem onClick={() => handleDelete(row)}>Delete</MenuItem>
           </Menu>
-
         </TableCell>
       </TableRow>
     ));
@@ -390,7 +434,7 @@ const ProductList = () => {
             id="filterInventory"
             name="filterInventory"
             className="dropdown"
-            value={filterByInventory}
+            value="{filterByInventory}"
             onChange={handleInventoryChange}
             fullWidth
           >
@@ -401,6 +445,7 @@ const ProductList = () => {
               </MenuItem>
             ))}
           </Select>
+          
         </Grid>
 
         <Grid item xs={2}>

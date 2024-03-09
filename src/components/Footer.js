@@ -8,9 +8,6 @@ const Footer = ({ loggedIn, onLogout }) => {
         {loggedIn && <Button onClick={onLogout} variant='contained'> Logout</Button>}
       </Box>
     </>
-    // <footer>
-    //     {loggedIn && <button onClick={onLogout}>Logout</button>}
-    // </footer>
   );
 }
 

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import Login from "./Login";
+import Header from "./Header";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import Dashboard from "./Dashboard";
@@ -21,13 +22,11 @@ import {
   Box,
 } from "@mui/material";
 import { styled } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import theme from "./mui_customization/theme";
 
 const RootContainer = styled("div")({
   display: "flex",
-  height: "95vh", // Adjust as per your requirement
+  height: "85vh", // Adjust as per your requirement
 });
 const ContentContainer = styled("main")({
   flexGrow: 1,
@@ -90,24 +89,7 @@ const App = (props) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          {loggedIn && (
-            <AppBar position="static">
-              <Toolbar>
-                <Box position="relative" left={30}>
-                  <Typography component="div" variant="h6" sx={{ flexGrow: 1 }}>
-                    Lumière
-                  </Typography>
-                </Box>
-                <Typography component="div" sx={{ flexGrow: 1 }}></Typography>
-                <IconButton color="inherit" aria-label="notifications">
-                  <NotificationsIcon />
-                </IconButton>
-                <IconButton color="inherit" aria-label="user">
-                  <AccountCircleIcon />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
-          )}
+          {loggedIn && <Header />}
           <RootContainer>
             {loggedIn && <NavBar />}
             <ContentContainer>

@@ -1,149 +1,211 @@
-import React from 'react';
-import {useState, useEffect} from 'react';
-import { format, addDays } from 'date-fns';
-import axios from 'axios';
+import React from "react";
+import { useState, useEffect } from "react";
+import { format, addDays, subDays } from "date-fns";
+import axios from "axios";
 import { useLocation } from "react-router-dom";
+import ActivityHistory from "./ActivityHistory";
+import { Typography, Grid, Card, CardContent, CardMedia } from "@mui/material";
 
 const ProductDetail = () => {
+  const location = useLocation();
+  const { inventoryId, barcodeNumber, wasteId } = location.state;
+  const [productResults, setProductResults] = useState("");
+  const [inventoryResults, setInventoryResults] = useState("");
+  const [notificationResults, setNotificationResults] = useState("");
+  const [internalUseListResults, setInternalUseListResults] = useState([]);
+  const [wasteProductResults, setwasteProductResults] = useState("");
+  const [showActivityHistory, setshowActivityHistory] = useState(true);
+  const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
 
-    const location = useLocation();
-    const { inventoryId, barcodeNumber } = location.state;
+  useEffect(() => {
+    axios
+      .get(`https://api.lumiereapp.ca/api/v1/products/${barcodeNumber}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setProductResults(response.data[0]);
+          console.log(response.data[0]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
 
-    const [productResults, setProductResults] = useState("");
-    const [inventoryResults, setInventoryResults] = useState("");
-    const [notificationResults, setNotificationResults] = useState("");
-    const [internalUseListResults, setInternalUseListResults] = useState([]);
-    const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
+    axios
+      .get(`https://api.lumiereapp.ca/api/v1/inventory/${inventoryId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setInventoryResults(res.data);
+          if (res.data.addToInventory === "Retail") {
+            setshowActivityHistory(false);
+          }
+          const dateString = res.data.expiryDate;
+          const date = new Date(dateString);
+          const adjustedDate = addDays(date, 1);
+          setFormattedexpiryDate(() => {
+            return format(adjustedDate, "dd MMM yyyy");
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
 
-    useEffect(() => {
-    
-        axios.get(`https://api.lumiereapp.ca/api/v1/products/${barcodeNumber}`)
-        .then((response) => {
-            if (response.status === 200) {
-                setProductResults(response.data[0]);
-            } 
+    axios
+      .get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
+      .then((resObj) => {
+        if (resObj.status === 200) {
+          setNotificationResults(resObj.data[0]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
+    axios
+      .get(`https://api.lumiereapp.ca/api/v1/internalUseList/${inventoryId}`)
+      .then((result) => {
+        if (result.status === 200) {
+          setInternalUseListResults(result.data.InternalUseListResults);
+          // console.log(result.data.InternalUseListResults);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
+    if (wasteId !== "" && wasteId !== undefined) {
+      axios
+        .get(`https://api.lumiereapp.ca/api/v1/waste/${wasteId}`)
+        .then((wasteResult) => {
+          if (wasteResult.status === 200) {
+            setwasteProductResults(wasteResult.data);
+            setshowActivityHistory(false);
+            const dateString = wasteResult.data.expiryDate;
+            const date = new Date(dateString);
+            const adjustedDate = addDays(date, 1);
+            setFormattedexpiryDate(() => {
+              return format(adjustedDate, "dd MMM yyyy");
+            });
+            console.log(wasteResult.data);
+          }
         })
         .catch((error) => {
-            console.error("Error:", error.message);
-        }); 
-        
-        
-        axios.get(`https://api.lumiereapp.ca/api/v1/inventory/${inventoryId}`)
-        .then((res) => {
-            if (res.status === 200) {
-                setInventoryResults(res.data);
-                const dateString = res.data.expiryDate;
-                const date = new Date(dateString);
-                const adjustedDate = addDays(date, 1);
-                setFormattedexpiryDate(() => {
-                    return format(adjustedDate, 'dd MMM yyyy');
-                }); 
-            } 
-        })
-        .catch((error) => {
-            console.error("Error:", error.message);
-        }); 
-
-        axios.get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
-        .then((resObj) => {
-            if (resObj.status === 200) {
-                setNotificationResults(resObj.data[0]);
-            } 
-        })
-        .catch((error) => {
-            console.error("Error:", error.message);
-        }); 
-
-        axios.get(`https://api.lumiereapp.ca/api/v1/internalUseList/${inventoryId}`)
-        .then((result) => {
-            if (result.status === 200) {
-                setInternalUseListResults(result.data.InternalUseListResults);
-                // console.log(result.data.InternalUseListResults);
-            } 
-        })
-        .catch((error) => {
-            console.error("Error:", error.message);
-        }); 
-        
-    },[]);
+          console.error("Error:", error.message);
+        });
+    }
+  }, []);
 
   return (
     <>
-    <h1>Product Detail</h1>
-    <p>{inventoryResults.addToInventory}</p>
-    <p>{productResults.category}</p>
-    <p>{`Brand: ${productResults.brandName}`}</p>
-    <h1>{productResults.productName}</h1>
-    <img src={productResults.photo} alt="product image" height="327" />
+      <Typography variant="h1" sx={{ padding: "10px 0 10px 0" }}>
+        Product Detail
+      </Typography>
+      <Typography
+        sx={{
+          backgroundColor: "#DAEDF5",
+          display: "inline-block",
+          marginRight: "20px",
+          padding: "10px",
+          borderRadius: "100px",
+        }}
+      >
+        {wasteId === null
+          ? inventoryResults.addToInventory
+          : wasteProductResults.addToInventory}
+      </Typography>
+      <Typography
+        sx={{
+          backgroundColor: "#DAEDF5",
+          display: "inline-block",
+          padding: "10px",
+          borderRadius: "100px",
+        }}
+      >
+        {wasteId === null
+          ? productResults.category
+          : wasteProductResults.category}
+      </Typography>
+      <Typography sx={{ padding: "10px 0 10px 0" }}>
+        {`Brand: ${
+          wasteId === null
+            ? productResults.brandName
+            : wasteProductResults.brandName
+        }`}
+      </Typography>
+      <Typography variant="h1">
+        {wasteId === null
+          ? productResults.productName
+          : wasteProductResults.productName}
+      </Typography>
 
-    <div>
-        <div>
-            <h2>Product Information</h2>
-        </div>
-        <div>
-            <div>
-                <p>Stock</p>
-                <p>{inventoryResults.stockQuantity}</p>
-            </div>
-            <div>
-                <p>Low Stock Alert</p>
-                <p>{notificationResults.lowStockQuantity}</p>
-            </div>
-            <div>
-                <p>Unit Price</p>
-                <p>${productResults.unitPrice}</p>
-            </div>
-            <div>
-                <p>Total Value</p>
-                <p>{inventoryResults.totalValue}</p>
-            </div>
-        </div>
-        <div>
-            <div>
-                <p>Barcode Number</p>
-                <p>{inventoryResults.barcodeNumber}</p>
-            </div>
-            <div>
-                <p>Expiry Date</p>
-                <p>{`${formattedExpiryDate}`}</p>
-            </div>
-            <div>
-                <p>Period After Opening</p>
-                <p>{productResults.periodAfterOpening} Months</p>
-            </div>
-            
-        </div>
-
-    </div>
-    <div>
-        <h3>Activity History</h3>
-        <div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>User Name</th>
-                    <th>Activity</th>
-                    <th>Quantity Change</th>
-                    <th>Date of Open</th>
-                </tr>
-                </thead>
-                <tbody>
-                {internalUseListResults.map((list, index) => (
-                    <tr key={index}>
-                        <td>{formattedDateTime}</td>
-                        <td>{list.userId}</td>
-                        <td>{list.reason}</td>
-                        <td>-{list.quantity}</td>
-                        <td>-{list.openingDate}</td>
-                    </tr>      
-                ))}
-                </tbody>
-        </table>
-        </div>
-    </div>
+      <Card>
+        <CardMedia
+          component="img"
+          alt="product image"
+          src={
+            wasteId === null ? productResults.photo : wasteProductResults.photo
+          }
+          style={{ width: "auto", height: "auto" }}
+        />
+        <CardContent>
+          <Grid container spacing={5}>
+            <Grid item xs={12} sx={{padding : '20px 0 0 0'}}>
+              <Typography variant="h2">Product Information</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Stock</Typography>
+              <Typography>
+                {wasteId === null
+                  ? inventoryResults.stockQuantity
+                  : wasteProductResults.wasteQuantity}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Unit Price</Typography>
+              <Typography>
+                $
+                {wasteId === null
+                  ? productResults.unitPrice
+                  : wasteProductResults.unitPrice}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Total Value</Typography>
+              <Typography>
+                {wasteId === null
+                  ? inventoryResults.totalValue
+                  : wasteProductResults.totalValue}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Barcode Number</Typography>
+              <Typography>
+                {wasteId === null
+                  ? inventoryResults.barcodeNumber
+                  : wasteProductResults.barcodeNumber}
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Expiry Date</Typography>
+              <Typography>{formattedExpiryDate}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Period After Opening</Typography>
+              <Typography>
+                {wasteId === null
+                  ? productResults.periodAfterOpening
+                  : wasteProductResults.periodAfterOpening}{" "}
+                M
+              </Typography>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+      {showActivityHistory && (
+        <ActivityHistory internalUseListResults={internalUseListResults} />
+      )}
     </>
   );
-}
+};
 
 export default ProductDetail;

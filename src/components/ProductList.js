@@ -97,9 +97,11 @@ import { MoreVert } from "@mui/icons-material";
 
   const handleStaffCheckOut = (row, index) => {
     if (row.status == "In Stock" || row.status === "Low Stock"){
-      setSelectedInventoryProduct(row);
-      setShowInternalModal(true);
-      handleMenuClose(index);
+      if(row.addToInventory !== "Retail"){
+        setSelectedInventoryProduct(row);
+        setShowInternalModal(true);
+        handleMenuClose(index);
+      }      
     }    
   };
 
@@ -351,7 +353,7 @@ import { MoreVert } from "@mui/icons-material";
             }}
           >
             <MenuItem onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}>View Detail</MenuItem>
-            <MenuItem onClick={() => handleStaffCheckOut(row, index)} disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted"}>Staff Check Out</MenuItem>
+            <MenuItem onClick={() => handleStaffCheckOut(row, index)} disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted" || row.addToInventory === "Retail"}>Staff Check Out</MenuItem>
             <MenuItem onClick={() => handleReportWasted(row, index)} disabled={row.status !== "Expired" || row.status === "Wasted"}>Report Wasted</MenuItem>
             <MenuItem onClick={() => handleDelete(row)}>Delete</MenuItem>
           </Menu>

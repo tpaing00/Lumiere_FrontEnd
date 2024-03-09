@@ -11,7 +11,7 @@ const ProductDetail = () => {
   const { inventoryId, barcodeNumber, wasteId } = location.state;
   // console.log("inId :" +inventoryId);
   // console.log("barcodeId :" +barcodeNumber);
-  // console.log("wasteId :" +wasteId);
+  console.log("wasteId :" +wasteId);
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
   const [notificationResults, setNotificationResults] = useState("");
@@ -45,9 +45,11 @@ const ProductDetail = () => {
           const dateString = res.data.expiryDate;
           const date = new Date(dateString);
           const adjustedDate = addDays(date, 1);
-          setFormattedexpiryDate(() => {
-            return format(adjustedDate, "dd MMM yyyy");
-          });
+          if(wasteId === "" || wasteId === undefined){
+            setFormattedexpiryDate(() => {
+              return format(adjustedDate, "dd MMM yyyy");
+            });
+          }
         }
       })
       .catch((error) => {
@@ -70,7 +72,7 @@ const ProductDetail = () => {
       .then((result) => {
         if (result.status === 200) {
           setInternalUseListResults(result.data.InternalUseListResults);
-          // console.log(result.data.InternalUseListResults);
+          console.log(result.data.InternalUseListResults);
         }
       })
       .catch((error) => {
@@ -113,7 +115,7 @@ const ProductDetail = () => {
           borderRadius: "100px",
         }}
       >
-        {wasteId === undefined
+        {wasteId === undefined || wasteId === ""
           ? inventoryResults.addToInventory
           : wasteProductResults.addToInventory}
       </Typography>
@@ -125,19 +127,19 @@ const ProductDetail = () => {
           borderRadius: "100px",
         }}
       >
-        {wasteId === undefined
+        {wasteId === undefined || wasteId === ""
           ? productResults.category
           : wasteProductResults.category}
       </Typography>
       <Typography sx={{ padding: "10px 0 10px 0" }}>
         {`Brand: ${
-          wasteId === undefined
+          wasteId === undefined || wasteId === ""
             ? productResults.brandName
             : wasteProductResults.brandName
         }`}
       </Typography>
       <Typography variant="h1">
-        {wasteId === null
+        {wasteId === undefined || wasteId === ""
           ? productResults.productName
           : wasteProductResults.productName}
       </Typography>
@@ -147,7 +149,7 @@ const ProductDetail = () => {
           component="img"
           alt="product image"
           src={
-            wasteId === undefined ? productResults.photo : wasteProductResults.photo
+            wasteId === undefined || wasteId === ""? productResults.photo : wasteProductResults.photo
           }
           style={{ width: "auto", height: "auto" }}
         />
@@ -159,7 +161,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Stock</Typography>
               <Typography>
-                {wasteId === undefined
+                {wasteId === undefined || wasteId === ""
                   ? inventoryResults.stockQuantity
                   : wasteProductResults.wasteQuantity}
               </Typography>
@@ -168,7 +170,7 @@ const ProductDetail = () => {
               <Typography>Unit Price</Typography>
               <Typography>
                 $
-                {wasteId === undefined
+                {wasteId === undefined || wasteId === ""
                   ? productResults.unitPrice
                   : wasteProductResults.unitPrice}
               </Typography>
@@ -176,7 +178,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Total Value</Typography>
               <Typography>
-                {wasteId === undefined
+                {wasteId === undefined || wasteId === ""
                   ? inventoryResults.totalValue
                   : wasteProductResults.totalValue}
               </Typography>
@@ -184,7 +186,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Barcode Number</Typography>
               <Typography>
-                {wasteId === undefined
+                {wasteId === undefined || wasteId === ""
                   ? inventoryResults.barcodeNumber
                   : wasteProductResults.barcodeNumber}
               </Typography>
@@ -196,7 +198,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Period After Opening</Typography>
               <Typography>
-                {wasteId === undefined
+                {wasteId === undefined || wasteId === ""
                   ? productResults.periodAfterOpening
                   : wasteProductResults.periodAfterOpening}{" "}
                 M

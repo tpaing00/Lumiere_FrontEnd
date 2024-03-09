@@ -21,7 +21,6 @@ import { MoreVert } from "@mui/icons-material";
   const [filterByInventory, setFilterByInventory] = useState("");
   const [filterByCategory, setFilterByCategory] = useState("");
   const [sortByBrand, setSortByBrand] = useState("");
-  //const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorEl, setAnchorEl] = useState([]);
   const [open, setOpen] = useState([]);
 
@@ -205,12 +204,7 @@ import { MoreVert } from "@mui/icons-material";
     } else if (sortByBrand === "desc") {
       sortedData.sort((a, b) => (a.brandName && b.brandName) ? b.brandName.localeCompare(a.brandName) : 0); // Sort by descending order of brandName using string comparison
     }
-    // if (sortByBrand === "asc") {
-    //   sortedData.sort((a, b) => a.brandName.localeCompare(b.brandName)); // Sort by ascending order of brandName using string comparison
-    // } else if (sortByBrand === "desc") {
-    //   sortedData.sort((a, b) => b.brandName.localeCompare(a.brandName)); // Sort by descending order of brandName using string comparison
-    // }
-
+   
     // Filter the combined data based on the selected options
     const filteredData = sortedData.filter((row) => {
       // Check if the row matches the filter criteria for addToInventory, category, and status
@@ -232,29 +226,7 @@ import { MoreVert } from "@mui/icons-material";
     
       // Return true if all criteria are met
       return inventoryMatch && categoryMatch && statusMatch && searchMatch;
-    });
-    
-    // const filteredData = sortedData.filter((row) => {
-    //   // Check if the row matches the filter criteria for addToInventory and category
-    //   const inventoryMatch =
-    //     filterByInventory === "" || row.addToInventory === filterByInventory;
-    //   const categoryMatch =
-    //     filterByCategory === "" || row.category === filterByCategory;
-    //   const statusMatch =
-    //     filterByStatus === "" || row.status === filterByStatus;
-
-    //   // Return true if both criteria are met
-    //   //return inventoryMatch && categoryMatch;
-    //   return (
-    //     inventoryMatch &&
-    //     categoryMatch &&
-    //     statusMatch &&
-    //     (searchTerm === "" ||
-    //       row.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //       row.brandName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //       row.category.toLowerCase().includes(searchTerm.toLowerCase()))
-    //   );
-    // });
+    });  
 
     // Render table rows
     const renderStatusStyle = (status) => {
@@ -332,8 +304,8 @@ import { MoreVert } from "@mui/icons-material";
         <TableCell>{row.productName}</TableCell>
         <TableCell>{row.brandName}</TableCell>
         <TableCell>{row.category}</TableCell>
-        <TableCell>{row.dateAdded}</TableCell>
-        <TableCell>{row.expiryDate}</TableCell>
+        <TableCell>{formatDate(row.dateAdded)}</TableCell>
+        <TableCell>{formatDate(row.expiryDate)}</TableCell>
         <TableCell style={renderStatusStyle(row.status)}>{row.status}</TableCell>
         <TableCell>{row.addToInventory}</TableCell>
         <TableCell>
@@ -442,6 +414,7 @@ import { MoreVert } from "@mui/icons-material";
             className="dropdown"
             value={filterByInventory}
             onChange={handleInventoryChange}
+            //onChange={(event) => setFilterByInventory(event.target.value)}
             fullWidth
           >
             <MenuItem value="">All</MenuItem>
@@ -450,10 +423,8 @@ import { MoreVert } from "@mui/icons-material";
                 {type.label}
               </MenuItem>
             ))}
-          </Select>
-          
+          </Select>          
         </Grid>
-
         <Grid item xs={2}>
           <InputLabel variant="standard" id="filterCategory-label">
             Filter by Category:

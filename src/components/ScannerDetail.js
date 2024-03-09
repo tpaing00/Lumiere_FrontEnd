@@ -124,7 +124,6 @@ const ScannerDetail = () => {
           component="h1"
           align="left"
           variant="h2"
-          color="accent.main"
         >
           Quick Scan
         </Typography>

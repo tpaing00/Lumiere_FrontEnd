@@ -151,7 +151,7 @@ const ProductDetail = () => {
           src={
             wasteId === undefined || wasteId === ""? productResults.photo : wasteProductResults.photo
           }
-          style={{ width: "auto", height: "auto" }}
+          style={{ width: '100px', height: '100px' }}
         />
         <CardContent>
           <Grid container spacing={5}>

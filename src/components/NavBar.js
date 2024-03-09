@@ -35,6 +35,15 @@ const NavBar = () => {
           <ListItemIcon>
             <InboxOutlinedIcon />
           </ListItemIcon>
+          <ListItemText secondary="Quick Scan" />
+        </ListItemButton>
+      </ListItem>
+
+      <ListItem component={Link} to="/dashboard">
+        <ListItemButton>
+          <ListItemIcon>
+            <CropFreeOutlinedIcon />
+          </ListItemIcon>
           <ListItemText secondary="Dashboard" />
         </ListItemButton>
       </ListItem>
@@ -57,23 +66,14 @@ const NavBar = () => {
         </ListItemButton>
       </ListItem>
 
-      <ListItem component={Link} to="/add-product">
+      {/* <ListItem component={Link} to="/add-product">
         <ListItemButton>
           <ListItemIcon>
             <AddBoxOutlinedIcon />
           </ListItemIcon>
           <ListItemText secondary="Register Product" />
         </ListItemButton>
-      </ListItem>
-
-      <ListItem component={Link} to="/scanner">
-        <ListItemButton>
-          <ListItemIcon>
-            <CropFreeOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText secondary="Quick Scan" />
-        </ListItemButton>
-      </ListItem>
+      </ListItem> */}
     </List>
   );
 

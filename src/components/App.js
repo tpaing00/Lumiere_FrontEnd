@@ -1,130 +1,157 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import Login from "./Login";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import Dashboard from "./Dashboard";
 import AddProduct from "./AddProduct";
-import Inventory from "./Inventory"
+import Inventory from "./Inventory";
 import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { styled } from "@mui/material"; 
+import {
+  CssBaseline,
+  ThemeProvider,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+} from "@mui/material";
+import { styled } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import theme from "./mui_customization/theme";
 
-const RootContainer = styled('div')({
+const RootContainer = styled("div")({
   display: "flex",
   height: "95vh", // Adjust as per your requirement
 });
-const ContentContainer = styled('main')({
+const ContentContainer = styled("main")({
   flexGrow: 1,
   overflow: "auto",
 });
 
 const App = (props) => {
   const cookies = document.cookie.split(";");
-  const tokenCookie = cookies.find(cookie => cookie.trim().startsWith("token="));
+  const tokenCookie = cookies.find((cookie) =>
+    cookie.trim().startsWith("token=")
+  );
 
   const [loggedIn, setLoggedIn] = useState(tokenCookie ? true : false);
 
-  if(loggedIn) {
-      let token = ""
-      const cookies = document.cookie.split(";");
-      const tokenCookie = cookies.find(cookie => cookie.trim().startsWith("token="));
-      if (tokenCookie) {
-          token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
-      }
-      console.log(token);
-      //append token to axios header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  if (loggedIn) {
+    let token = "";
+    const cookies = document.cookie.split(";");
+    const tokenCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith("token=")
+    );
+    if (tokenCookie) {
+      token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
+    }
+    console.log(token);
+    //append token to axios header
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
   const handleLogin = () => {
     setLoggedIn(() => {
-        let token = ""
-        const cookies = document.cookie.split(";");
-        const tokenCookie = cookies.find(cookie => cookie.trim().startsWith("token="));
-        if (tokenCookie) {
-            token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
-        }
-        console.log(token);
-        //append token to axios header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let token = "";
+      const cookies = document.cookie.split(";");
+      const tokenCookie = cookies.find((cookie) =>
+        cookie.trim().startsWith("token=")
+      );
+      if (tokenCookie) {
+        token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
+      }
+      console.log(token);
+      //append token to axios header
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        if (token) {
-          return true;
-        }
+      if (token) {
+        return true;
+      }
     });
   };
 
   const handleLogout = () => {
     setLoggedIn(() => {
-        document.cookie ="token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        axios.defaults.headers.common['Authorization'] = null;
-        return false;
+      document.cookie =
+        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      axios.defaults.headers.common["Authorization"] = null;
+      return false;
     });
   };
 
   return (
     <>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <BrowserRouter>
-        <RootContainer>
-          {loggedIn && <NavBar />}
-          <ContentContainer>
-            <Routes>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          {loggedIn && (
+            <AppBar position="static">
+              <Toolbar>
+                <Box position="relative" left={30}>
+                  <Typography component="div" variant="h6" sx={{ flexGrow: 1 }}>
+                    Lumière
+                  </Typography>
+                </Box>
+                <Typography component="div" sx={{ flexGrow: 1 }}></Typography>
+                <IconButton color="inherit" aria-label="notifications">
+                  <NotificationsIcon />
+                </IconButton>
+                <IconButton color="inherit" aria-label="user">
+                  <AccountCircleIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+          )}
+          <RootContainer>
+            {loggedIn && <NavBar />}
+            <ContentContainer>
+              <Routes>
                 <Route
                   exact
                   path="/"
-                  element={
-                    !loggedIn ? <Navigate to="/login" /> : <Dashboard />
-                  }
+                  element={!loggedIn ? <Navigate to="/login" /> : <Scanner />}
                 />
                 <Route
-                  path="/scanner"
-                  element={
-                    loggedIn ? <Scanner /> : <Navigate to="/" />
-                  }
+                  path="/dashboard"
+                  element={loggedIn ? <Dashboard /> : <Navigate to="/" />}
                 />
                 <Route
                   path="/login"
                   element={
-                    loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+                    loggedIn ? (
+                      <Navigate to="/" />
+                    ) : (
+                      <Login onLogin={handleLogin} />
+                    )
                   }
                 />
                 <Route
                   path="/scannerdetail"
-                  element={
-                    loggedIn ? <ScannerDetail /> : <Navigate to="/" />
-                  }
+                  element={loggedIn ? <ScannerDetail /> : <Navigate to="/" />}
                 />
-                <Route 
-                  path="/add-product"  
-                  element={
-                    loggedIn ? <AddProduct />: <Navigate to="/" />
-                  } 
+                <Route
+                  path="/add-product"
+                  element={loggedIn ? <AddProduct /> : <Navigate to="/" />}
                 />
-                  <Route
+                <Route
                   path="/productdetail"
-                  element={
-                    loggedIn ? <ProductDetail />: <Navigate to="/" />
-                  } 
+                  element={loggedIn ? <ProductDetail /> : <Navigate to="/" />}
                 />
                 <Route
                   path="/inventory"
-                  element={
-                    loggedIn ? <Inventory />: <Navigate to="/" />
-                  } 
+                  element={loggedIn ? <Inventory /> : <Navigate to="/" />}
                 />
-            </Routes>
-          </ContentContainer>
-        </RootContainer>
-      </BrowserRouter>
-      <Footer loggedIn={loggedIn} onLogout={handleLogout} />
+              </Routes>
+            </ContentContainer>
+          </RootContainer>
+        </BrowserRouter>
+        <Footer loggedIn={loggedIn} onLogout={handleLogout} />
       </ThemeProvider>
     </>
   );

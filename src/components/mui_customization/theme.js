@@ -2,7 +2,6 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   breakpoints: {
-    // Define the lg screen breakpoint to be 1440px
     values: {
       xs: 0,
       sm: 600,
@@ -60,11 +59,13 @@ const theme = createTheme({
       },
       fontWeight: 700,
       letterSpacing: '-1.5px',
+      color: '#003c5c',
     },
     h2: {
       fontFamily: 'Roboto Condensed',
       fontSize: 28,
       fontWeight: 700,
+      color: '#003c5c',
     },
     h3: {
       fontFamily: 'Roboto Condensed',
@@ -95,7 +96,44 @@ const theme = createTheme({
     subtitle2: {
       fontFamily: 'Outfit',
     },
+    fontFamily: 'Outfit',
+  },
+  components: {
+    MuiSwitch: {
+      styleOverrides: {
+        root: {
+          width: 42,
+          height: 26,
+          padding: 0,
+          display: 'flex',
+          '& .MuiSwitch-switchBase': {
+            padding: 0,
+            margin: 2,
+            transitionDuration: '300ms',
+            '&.Mui-checked': {
+              transform: 'translateX(16px)',
+              color: '#fff',
+              '& + .MuiSwitch-track': {
+                opacity: 1,
+                backgroundColor: '#f5b02c',
+                borderColor: '#f5b02c',
+              },
+            },
+          },
+          '& .MuiSwitch-thumb': {
+            width: 22,
+            height: 22,
+            boxShadow: 'none',
+          },
+          '& .MuiSwitch-track': {
+            borderRadius: 26 / 2,
+            opacity: 1,
+            backgroundColor: '#6a6a6a',
+          },
+        },
+      },
+    },
   },
 });
 
-export default theme
+export default theme;

@@ -78,7 +78,7 @@ const AddProduct = () => {
         const response = await axios.get(
           `https://api.lumiereapp.ca/api/v1/barcode/${formData.barcodeNumber}`
         );
-       const { inventoryResults, productResults } = response.data;
+        const { inventoryResults, productResults } = response.data;
         if (productResults.length > 0 && inventoryResults.length > 0) {
           const {
             productName,
@@ -88,7 +88,7 @@ const AddProduct = () => {
             periodAfterOpening,
           } = productResults[0];
           //const { addToInventory, stockQuantity, expiryDate} = inventoryResults[0];
-         const { stockQuantity, expiryDate } = inventoryResults[0];
+          const { stockQuantity, expiryDate } = inventoryResults[0];
           // Convert expiryDate to yyyy-MM-dd format
           const formattedExpiryDate = new Date(expiryDate)
             .toISOString()
@@ -104,7 +104,7 @@ const AddProduct = () => {
             stockQuantity,
             expiryDate: format(formattedExpiryDate, "yyyy-MM-dd"),
           });
-       }
+        }
       } catch (error) {
         console.error("Error fetching existing product data:", error);
         setError("Error fetching existing product data");
@@ -269,13 +269,12 @@ const AddProduct = () => {
 
   return (
     <>
-      <Container component="main" maxWidth="lg">
+      <Container component="main" maxWidth="lg" sx={{mt: 3}} >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Typography
             component="h1"
             align="left"
-            variant="h2"
-            color="accent.main"
+            variant="h1"
           >
             Register new Product
           </Typography>
@@ -350,113 +349,148 @@ const AddProduct = () => {
                 </AccordionSummary>
 
                 <AccordionDetails>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="productName"
-                        onChange={handleChange}
-                        name="productName"
-                        value={formData.productName}
-                        label="Product Name"
-                        fullWidth
-                      />
+                  <Grid container spacing={10}>
+                    <Grid container item spacing={3} xs={7} className="register-product-info">
+                      <Grid item xs={12}>
+                        <InputLabel variant="standard" id="productName-label">
+                          Product Name
+                        </InputLabel>
+                        <TextField
+                          id="productName"
+                          onChange={handleChange}
+                          name="productName"
+                          value={formData.productName}
+                          placeholder="Product name"
+                          fullWidth
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <InputLabel variant="standard" id="brandName-label">
+                          Brand
+                        </InputLabel>
+                        <TextField
+                          id="brandName"
+                          onChange={handleChange}
+                          name="brandName"
+                          value={formData.brandName}
+                          placeholder="Brand"
+                          fullWidth
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <InputLabel variant="standard" id="stockQuantity-label">
+                          Stock Quantity
+                        </InputLabel>
+                        <TextField
+                          type="number"
+                          id="stockQuantity"
+                          onChange={handleChange}
+                          name="stockQuantity"
+                          value={formData.stockQuantity}
+                          fullWidth
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <InputLabel variant="standard" id="barcodeNumber-label">
+                          Barcode Number
+                        </InputLabel>
+                        <TextField
+                          id="barcodeNumber"
+                          onChange={handleChange}
+                          name="barcodeNumber"
+                          value={formData.barcodeNumber}
+                          fullWidth
+                          placeholder="12 digits"
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleScan}
+                                  style={{ transform: "rotate(90deg)" }}
+                                >
+                                  <DocumentScannerOutlined />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <InputLabel variant="standard" id="unitPrice-label">
+                          Unit price
+                        </InputLabel>
+                        <TextField
+                          id="unitPrice"
+                          type="number"
+                          onChange={handleChange}
+                          name="unitPrice"
+                          value={formData.unitPrice}
+                          placeholder="$"
+                          label="Unit price"
+                          fullWidth
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <InputLabel variant="standard" id="expiryDate-label">
+                          Expiry date
+                        </InputLabel>
+                        <TextField
+                          id="expiryDate"
+                          onChange={handleChange}
+                          name="expiryDate"
+                          value={formData.expiryDate}
+                          fullWidth
+                          type="date"
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <InputLabel
+                          variant="standard"
+                          id="periodAfterOpening-label"
+                        >
+                          Period After Opening (PAO)
+                        </InputLabel>
+                        <Select
+                          id="periodAfterOpening"
+                          name="periodAfterOpening"
+                          className="dropdown"
+                          value={formData.periodAfterOpening}
+                          onChange={handleChange}
+                          fullWidth
+                        >
+                          {periodAfterOpeningData.map((type) => (
+                            <MenuItem
+                              key={type.value}
+                              value={type.value}
+                              fullWidth
+                            >
+                              {type.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Grid>
                     </Grid>
 
-                    <Grid item xs={12}>
-                      <TextField
-                        id="brandName"
-                        onChange={handleChange}
-                        name="brandName"
-                        value={formData.brandName}
-                        label="Brand"
-                        fullWidth
-                      />
-                    </Grid>
+                    <Grid item xs={5} className="register-product-images">
+                      <Typography component="h2" align="left" variant="h3" sx={{mb: 2}} >
+                        Product Images
+                      </Typography>
 
-                    <Grid item xs={6}>
-                      <TextField
-                        type="number"
-                        id="stockQuantity"
-                        onChange={handleChange}
-                        name="stockQuantity"
-                        value={formData.stockQuantity}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="barcodeNumber"
-                        onChange={handleChange}
-                        name="barcodeNumber"
-                        value={formData.barcodeNumber}
-                        label="Barcode Number"
-                        fullWidth
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={handleScan}
-                                style={{ transform: "rotate(90deg)" }}
-                              >
-                                <DocumentScannerOutlined />
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="unitPrice"
-                        type="number"
-                        onChange={handleChange}
-                        name="unitPrice"
-                        value={formData.unitPrice}
-                        placeholder="$"
-                        label="Unit price"
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="expiryDate"
-                        onChange={handleChange}
-                        name="expiryDate"
-                        value={formData.expiryDate}
-                        label="Expiry Date"
-                        //slotProps={{ textField: { fullWidth: true } }}
-                        type="date"
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <InputLabel
-                        variant="standard"
-                        id="periodAfterOpening-label"
-                      >
-                        Period After Opening (PAO)
-                      </InputLabel>
-                      <Select
-                        id="periodAfterOpening"
-                        name="periodAfterOpening"
-                        className="dropdown"
-                        value={formData.periodAfterOpening}
-                        onChange={handleChange}
-                        fullWidth
-                      >
-                        {periodAfterOpeningData.map((type) => (
-                          <MenuItem
-                            key={type.value}
-                            value={type.value}
-                            fullWidth
-                          >
-                            {type.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      <Box sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2 }}>
+                        <TextField
+                          type="file"
+                          id="productImages"
+                          name="productImages"
+                          multiple
+                          onChange={handleFileChange}
+                        />
+                      </Box>
                     </Grid>
                   </Grid>
                 </AccordionDetails>
@@ -591,25 +625,6 @@ const AddProduct = () => {
                   </Box>
                 </AccordionDetails>
               </Accordion>
-            </Box>
-
-            <Box className="register-product-images">
-              <Grid container item xs={12} spacing={1}>
-                <Grid item xs={12}>
-                  <Typography component="h2" align="left" variant="h3">
-                    Product Images
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <input
-                    type="file"
-                    id="productImages"
-                    name="productImages"
-                    multiple
-                    onChange={handleFileChange}
-                  />
-                </Grid>
-              </Grid>
             </Box>
 
             <Box

@@ -40,8 +40,7 @@ import { MoreVert } from "@mui/icons-material";
         setInventoryData(inventoryResponse);
         setProductData(productsResponse);
         setNotificationData(notificationsResponse);
-        setWasteData(wastesResponse);
-         
+        setWasteData(wastesResponse);        
       })
       .catch((error) => {
         console.error(error);
@@ -151,8 +150,8 @@ import { MoreVert } from "@mui/icons-material";
     if (
       inventoryData.length === 0 ||
       productData.length === 0 ||
-      notificationData.length === 0 ||
-      wasteData.length === 0
+      notificationData.length === 0 
+      //wasteData.length === 0
     ) {
       return null; // Return null if either array is empty
     }
@@ -182,20 +181,24 @@ import { MoreVert } from "@mui/icons-material";
         return inventoryRow;
       }
     });
-
-    const wasteDataWithStatus = wasteData.map((item) => ({
-      ...item,
-      stockQuantity: 0,
-      status: "Wasted",
-      inventoryId: "",
-      wasteId: item._id
-    }));
-    delete wasteDataWithStatus._id;
-    delete wasteDataWithStatus.wasteQuantity;
-    const combinedWithWaste = combinedData.concat(wasteDataWithStatus);
-    // Sort the combined data based on the selected option for brandName
-    let sortedData = [...combinedWithWaste];
-
+  // Sort the combined data based on the selected option for brandName
+    let sortedData = [];
+    if (wasteData.length !== 0){
+      const wasteDataWithStatus = wasteData.map((item) => ({
+        ...item,
+        stockQuantity: 0,
+        status: "Wasted",
+        inventoryId: "",
+        wasteId: item._id
+      }));
+      delete wasteDataWithStatus._id;
+      delete wasteDataWithStatus.wasteQuantity;
+      const combinedWithWaste = combinedData.concat(wasteDataWithStatus);
+      sortedData = [...combinedWithWaste]
+    } else{
+      sortedData = [...combinedData]
+    } 
+    
     // Sort the filtered data based on the selected option for brandName
     if (sortByBrand === "asc") {
       sortedData.sort((a, b) => (a.brandName && b.brandName) ? a.brandName.localeCompare(b.brandName) : 0); // Sort by ascending order of brandName using string comparison
@@ -230,6 +233,7 @@ import { MoreVert } from "@mui/icons-material";
       // Return true if all criteria are met
       return inventoryMatch && categoryMatch && statusMatch && searchMatch;
     });
+    
     // const filteredData = sortedData.filter((row) => {
     //   // Check if the row matches the filter criteria for addToInventory and category
     //   const inventoryMatch =

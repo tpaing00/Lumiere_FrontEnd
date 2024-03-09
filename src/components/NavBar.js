@@ -31,7 +31,7 @@ const NavBar = () => {
   const drawerContent = (
     <List>
       <ListItem component={Link} to="/">
-        <ListItemButton>
+        <ListItemButton onClick={handleDrawerToggle}>
           <ListItemIcon>
             <InboxOutlinedIcon />
           </ListItemIcon>
@@ -40,7 +40,7 @@ const NavBar = () => {
       </ListItem>
 
       <ListItem component={Link} to="/dashboard">
-        <ListItemButton>
+        <ListItemButton onClick={handleDrawerToggle}>
           <ListItemIcon>
             <CropFreeOutlinedIcon />
           </ListItemIcon>
@@ -49,7 +49,7 @@ const NavBar = () => {
       </ListItem>
 
       <ListItem component={Link} to="/inventory">
-        <ListItemButton>
+        <ListItemButton onClick={handleDrawerToggle}>
           <ListItemIcon>
             <Inventory2OutlinedIcon />
           </ListItemIcon>
@@ -58,7 +58,7 @@ const NavBar = () => {
       </ListItem>
 
       <ListItem component={Link} to="/analytics">
-        <ListItemButton>
+        <ListItemButton onClick={handleDrawerToggle}> 
           <ListItemIcon>
             <InsertChartOutlinedIcon />
           </ListItemIcon>
@@ -67,7 +67,7 @@ const NavBar = () => {
       </ListItem>
 
       {/* <ListItem component={Link} to="/add-product">
-        <ListItemButton>
+        <ListItemButton onClick={handleDrawerToggle}>
           <ListItemIcon>
             <AddBoxOutlinedIcon />
           </ListItemIcon>

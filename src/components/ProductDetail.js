@@ -8,11 +8,7 @@ import { Typography, Grid, Card, CardContent, CardMedia } from "@mui/material";
 
 const ProductDetail = () => {
   const location = useLocation();
-  // const { inventoryId, barcodeNumber, wasteId } = location.state;
-  const inventoryId = "65ea18258e63aee7f0022b57";
-  const barcodeNumber = "4477332288811";
-  const wasteId = null;
-  // const wasteId = "65e98d232d41c12c98f0b5c1";
+  const { inventoryId, barcodeNumber, wasteId } = location.state;
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
   const [notificationResults, setNotificationResults] = useState("");
@@ -101,22 +97,41 @@ const ProductDetail = () => {
 
   return (
     <>
-      <Typography variant="h1">Product Detail</Typography>
-      <Typography>
+      <Typography variant="h1" sx={{ padding: "10px 0 10px 0" }}>
+        Product Detail
+      </Typography>
+      <Typography
+        sx={{
+          backgroundColor: "#DAEDF5",
+          display: "inline-block",
+          marginRight: "20px",
+          padding: "10px",
+          borderRadius: "100px",
+        }}
+      >
         {wasteId === null
           ? inventoryResults.addToInventory
           : wasteProductResults.addToInventory}
       </Typography>
-      <Typography>
+      <Typography
+        sx={{
+          backgroundColor: "#DAEDF5",
+          display: "inline-block",
+          padding: "10px",
+          borderRadius: "100px",
+        }}
+      >
         {wasteId === null
           ? productResults.category
           : wasteProductResults.category}
       </Typography>
-      <Typography>{`Brand: ${
-        wasteId === null
-          ? productResults.brandName
-          : wasteProductResults.brandName
-      }`}</Typography>
+      <Typography sx={{ padding: "10px 0 10px 0" }}>
+        {`Brand: ${
+          wasteId === null
+            ? productResults.brandName
+            : wasteProductResults.brandName
+        }`}
+      </Typography>
       <Typography variant="h1">
         {wasteId === null
           ? productResults.productName
@@ -134,7 +149,7 @@ const ProductDetail = () => {
         />
         <CardContent>
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{padding : '20px 0 0 0'}}>
               <Typography variant="h2">Product Information</Typography>
             </Grid>
             <Grid item xs={4}>
@@ -180,7 +195,7 @@ const ProductDetail = () => {
                 {wasteId === null
                   ? productResults.periodAfterOpening
                   : wasteProductResults.periodAfterOpening}{" "}
-                Months
+                M
               </Typography>
             </Grid>
           </Grid>

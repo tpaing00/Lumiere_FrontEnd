@@ -13,7 +13,7 @@ import {
 const ActivityHistory = ({ internalUseListResults }) => {
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{padding : '20px 0 0 10px'}}>
         <Typography variant="h3">Activity History</Typography>
       </Grid>
       <Grid item xs={12}>

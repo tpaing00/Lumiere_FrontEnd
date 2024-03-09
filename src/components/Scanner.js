@@ -65,7 +65,7 @@ function Scanner() {
 
   return (
     <Box sx={{ mt: 3 }} >
-      <Typography component="h1" align="left" variant="h2" color="accent.main">
+      <Typography component="h1" align="left" variant="h2">
         Quick Scan
       </Typography>
       <Box>

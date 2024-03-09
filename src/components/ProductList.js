@@ -388,9 +388,9 @@ import { MoreVert } from "@mui/icons-material";
   };
 
   return (
-    <Box component='main'>
+    <Box component='main' sx={{ mt: 3 }}>
 
-      <Grid container spacing={3} sx={{ mt: 2 }} >
+      <Grid container spacing={3} >
 
         <Grid item xs={8}>
           <Typography component='h1' variant='h1'>

@@ -16,11 +16,11 @@ import { MoreVert } from "@mui/icons-material";
   const [wasteData, setWasteData] = useState([]);
   const [showInternalModal, setShowInternalModal] = useState(false);
   const [selectedInventoryProduct, setSelectedInventoryProduct] = useState(null);
-  const [filterByStatus, setFilterByStatus] = useState("");
+  const [filterByStatus, setFilterByStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterByInventory, setFilterByInventory] = useState("");
-  const [filterByCategory, setFilterByCategory] = useState("");
-  const [sortByBrand, setSortByBrand] = useState("");
+  const [filterByInventory, setFilterByInventory] = useState("All");
+  const [filterByCategory, setFilterByCategory] = useState("All");
+  const [sortByBrand, setSortByBrand] = useState("None");
   const [anchorEl, setAnchorEl] = useState([]);
   const [open, setOpen] = useState([]);
 
@@ -209,13 +209,13 @@ import { MoreVert } from "@mui/icons-material";
     const filteredData = sortedData.filter((row) => {
       // Check if the row matches the filter criteria for addToInventory, category, and status
       const inventoryMatch =
-        filterByInventory === "" || (row.addToInventory && row.addToInventory === filterByInventory);
+        filterByInventory === "All" || (row.addToInventory && row.addToInventory === filterByInventory);
 
       const categoryMatch =
-        filterByCategory === "" || (row.category && row.category === filterByCategory);
+        filterByCategory === "All" || (row.category && row.category === filterByCategory);
 
       const statusMatch =
-        filterByStatus === "" || (row.status && row.status === filterByStatus);
+        filterByStatus === "All" || (row.status && row.status === filterByStatus);
     
       // Check if searchTerm exists in productName, brandName, or category, and convert all strings to lowercase for case-insensitive matching
       const searchMatch =
@@ -289,11 +289,32 @@ import { MoreVert } from "@mui/icons-material";
 
     const handleDelete = async (row,index) => {
       try {
-        await axios.delete(`https://api.lumiereapp.ca/api/v1/delete`, {
-          data: { barcodeNumber: row.barcodeNumber , addToInventory: row.addToInventory}
-        });
         handleMenuClose(index);
-        handleReloadInternalData();
+        if ( row.wasteId !== ""){
+          await axios.delete(`https://api.lumiereapp.ca/api/v1/wastedelete`, {          
+            data: { wasteId: row.wasteId}
+          }).then((response) => {
+            alert("Waste Product deleted successful!");
+            handleReloadInternalData();
+          })
+          .catch((error) => {
+            // Handle error
+            console.error("Error during delete:", error);
+            alert("Error during deleting. Please try again.");
+          });
+        }else{
+          await axios.delete(`https://api.lumiereapp.ca/api/v1/delete`, {
+            data: { barcodeNumber: row.barcodeNumber , addToInventory: row.addToInventory}
+          }).then((response) => {
+            alert("Product deleted successful!");
+            handleReloadInternalData();
+          })
+          .catch((error) => {
+            // Handle error
+            console.error("Error during delete:", error);
+            alert("Error during deleting. Please try again.");
+          });
+        }
       } catch (error) {
         console.error('Error deleting product:', error);
       }
@@ -418,7 +439,7 @@ import { MoreVert } from "@mui/icons-material";
             //onChange={(event) => setFilterByInventory(event.target.value)}
             fullWidth
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value="All">All</MenuItem>
             {inventoryTypeData.map((type) => (
               <MenuItem key={type.value} value={type.value}>
                 {type.label}
@@ -438,7 +459,7 @@ import { MoreVert } from "@mui/icons-material";
             onChange={handleCategoryChange}
             fullWidth
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value="All">All</MenuItem>
             {productCategoryData.map((type) =>
               type.label !== "Select" ? (
                 <MenuItem key={type.value} value={type.value}>
@@ -461,7 +482,7 @@ import { MoreVert } from "@mui/icons-material";
             onChange={handleBrandChange}
             fullWidth
           >
-            <MenuItem value="">None</MenuItem>
+            <MenuItem value="None">None</MenuItem>
             <MenuItem value="asc">Ascending</MenuItem>
             <MenuItem value="desc">Descending</MenuItem>
           </Select>
@@ -479,7 +500,7 @@ import { MoreVert } from "@mui/icons-material";
             onChange={(e) => setFilterByStatus(e.target.value)}
             fullWidth
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value="All">All</MenuItem>
             <MenuItem value="In Stock">In Stock</MenuItem>
             <MenuItem value="Low Stock">Low Stock</MenuItem>
             <MenuItem value="Expired">Expired</MenuItem>

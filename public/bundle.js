@@ -55230,26 +55230,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const ActivityHistory = _ref => {
   let {
-    internalUseListResults
+    internalUseListResults,
+    userListResults
   } = _ref;
+  console.log(userListResults);
+  console.log(internalUseListResults);
+  const combinedData = internalUseListResults.map(internalUseRow => {
+    const found = userListResults.find(user => user._id === internalUseRow.userId);
+    if (found) {
+      const combined = {
+        ...internalUseRow,
+        ...found
+      };
+      console.log("combined" + combined);
+      return combined;
+    }
+  });
+  console.log(combinedData);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_1__["default"], {
     container: true
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_1__["default"], {
     item: true,
     xs: 12,
     sx: {
-      padding: '20px 0 0 10px'
+      padding: "20px 0 0 10px"
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], {
     variant: "h3"
   }, "Activity History")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_1__["default"], {
     item: true,
     xs: 12
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_3__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "User Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Activity"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Quantity Change"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Date of Open"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_7__["default"], null, internalUseListResults.map((list, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_3__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "User Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Activity"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Quantity Change"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Date of Open"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_7__["default"], null, combinedData.map((list, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: index
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 1), "MM/dd/yyyy")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 1), "HH:mm"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.userId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.reason), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "-", list.quantity), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.openingDate), 1), "MM/dd/yyyy"))))))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 1), "MM/dd/yyyy")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 1), "HH:mm"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.firstName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.reason), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "-", list.quantity), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.openingDate), 1), "MM/dd/yyyy"))))))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ActivityHistory);
 
@@ -56783,16 +56799,17 @@ const ProductDetail = () => {
   console.log("wasteId :" + wasteId);
   const [productResults, setProductResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   const [inventoryResults, setInventoryResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
-  const [notificationResults, setNotificationResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  // const [notificationResults, setNotificationResults] = useState("");
   const [internalUseListResults, setInternalUseListResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [wasteProductResults, setwasteProductResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const [userListResults, setUserListResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   const [showActivityHistory, setshowActivityHistory] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("https://api.lumiereapp.ca/api/v1/products/".concat(barcodeNumber)).then(response => {
       if (response.status === 200) {
         setProductResults(response.data[0]);
-        console.log(response.data[0]);
+        // console.log(response.data[0]);
       }
     }).catch(error => {
       console.error("Error:", error.message);
@@ -56816,17 +56833,29 @@ const ProductDetail = () => {
     }).catch(error => {
       console.error("Error:", error.message);
     });
-    axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("https://api.lumiereapp.ca/api/v1/notification/".concat(inventoryId)).then(resObj => {
-      if (resObj.status === 200) {
-        setNotificationResults(resObj.data[0]);
-      }
-    }).catch(error => {
-      console.error("Error:", error.message);
-    });
+
+    // axios
+    //   .get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
+    //   .then((resObj) => {
+    //     if (resObj.status === 200) {
+    //       setNotificationResults(resObj.data[0]);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error.message);
+    //   });
+
     axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("https://api.lumiereapp.ca/api/v1/internalUseList/".concat(inventoryId)).then(result => {
       if (result.status === 200) {
         setInternalUseListResults(result.data.InternalUseListResults);
         console.log(result.data.InternalUseListResults);
+      }
+    }).catch(error => {
+      console.error("Error:", error.message);
+    });
+    axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("https://api.lumiereapp.ca/api/v1/user").then(userResult => {
+      if (userResult.status === 200) {
+        setUserListResults(userResult.data);
       }
     }).catch(error => {
       console.error("Error:", error.message);
@@ -56842,7 +56871,7 @@ const ProductDetail = () => {
           setFormattedexpiryDate(() => {
             return (0,date_fns__WEBPACK_IMPORTED_MODULE_5__.format)(adjustedDate, "dd MMM yyyy");
           });
-          console.log(wasteResult.data);
+          // console.log(wasteResult.data);
         }
       }).catch(error => {
         console.error("Error:", error.message);
@@ -56912,8 +56941,9 @@ const ProductDetail = () => {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Expiry Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, formattedExpiryDate)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_10__["default"], {
     item: true,
     xs: 4
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Period After Opening"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, wasteId === undefined || wasteId === "" ? productResults.periodAfterOpening : wasteProductResults.periodAfterOpening, " ", "M"))))), showActivityHistory && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ActivityHistory__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    internalUseListResults: internalUseListResults
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Period After Opening"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, wasteId === undefined || wasteId === "" ? productResults.periodAfterOpening : wasteProductResults.periodAfterOpening, " ", "M"))))), showActivityHistory && userListResults && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ActivityHistory__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    internalUseListResults: internalUseListResults,
+    userListResults: userListResults
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProductDetail);

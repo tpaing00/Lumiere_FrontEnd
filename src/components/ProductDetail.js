@@ -14,9 +14,10 @@ const ProductDetail = () => {
   console.log("wasteId :" +wasteId);
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
-  const [notificationResults, setNotificationResults] = useState("");
+  // const [notificationResults, setNotificationResults] = useState("");
   const [internalUseListResults, setInternalUseListResults] = useState([]);
   const [wasteProductResults, setwasteProductResults] = useState("");
+  const [userListResults, setUserListResults] = useState("");
   const [showActivityHistory, setshowActivityHistory] = useState(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
 
@@ -26,7 +27,7 @@ const ProductDetail = () => {
       .then((response) => {
         if (response.status === 200) {
           setProductResults(response.data[0]);
-          console.log(response.data[0]);
+          // console.log(response.data[0]);
         }
       })
       .catch((error) => {
@@ -56,16 +57,17 @@ const ProductDetail = () => {
         console.error("Error:", error.message);
       });
 
-    axios
-      .get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
-      .then((resObj) => {
-        if (resObj.status === 200) {
-          setNotificationResults(resObj.data[0]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error.message);
-      });
+    // axios
+    //   .get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
+    //   .then((resObj) => {
+    //     if (resObj.status === 200) {
+    //       setNotificationResults(resObj.data[0]);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error.message);
+    //   });
+
 
     axios
       .get(`https://api.lumiereapp.ca/api/v1/internalUseList/${inventoryId}`)
@@ -73,6 +75,18 @@ const ProductDetail = () => {
         if (result.status === 200) {
           setInternalUseListResults(result.data.InternalUseListResults);
           console.log(result.data.InternalUseListResults);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
+
+      axios
+      .get(`https://api.lumiereapp.ca/api/v1/user`)
+      .then((userResult) => {
+        if (userResult.status === 200) {
+          setUserListResults(userResult.data);
         }
       })
       .catch((error) => {
@@ -92,7 +106,7 @@ const ProductDetail = () => {
             setFormattedexpiryDate(() => {
               return format(adjustedDate, "dd MMM yyyy");
             });
-            console.log(wasteResult.data);
+            // console.log(wasteResult.data);
           }
         })
         .catch((error) => {
@@ -207,8 +221,8 @@ const ProductDetail = () => {
           </Grid>
         </CardContent>
       </Card>
-      {showActivityHistory && (
-        <ActivityHistory internalUseListResults={internalUseListResults} />
+      {showActivityHistory && userListResults && (
+        <ActivityHistory internalUseListResults={internalUseListResults} userListResults={userListResults}/>
       )}
     </>
   );

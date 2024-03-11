@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { subDays, format } from "date-fns";
 import {
   Typography,
@@ -8,12 +9,32 @@ import {
   TableRow,
   TableCell,
   Grid,
+  Box,
 } from "@mui/material";
 
-const ActivityHistory = ({ internalUseListResults }) => {
+const ActivityHistory = ({ internalUseListResults, userListResults }) => {
+  console.log(userListResults);
+  console.log(internalUseListResults);
+
+  const combinedData = internalUseListResults.map((internalUseRow) => {
+    const found = userListResults.find(
+      (user) => user._id === internalUseRow.userId
+    );
+    if (found) {
+      const combined = {
+        ...internalUseRow,
+        ...found,
+      };   
+      console.log("combined" +combined);   
+      return combined;
+    }
+  });
+  console.log(combinedData);
+
+
   return (
     <Grid container>
-      <Grid item xs={12} sx={{padding : '20px 0 0 10px'}}>
+      <Grid item xs={12} sx={{ padding: "20px 0 0 10px" }}>
         <Typography variant="h3">Activity History</Typography>
       </Grid>
       <Grid item xs={12}>
@@ -28,7 +49,7 @@ const ActivityHistory = ({ internalUseListResults }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {internalUseListResults.map((list, index) => (
+            {combinedData.map((list, index) => (
               <TableRow key={index}>
                 <TableCell>
                   <Typography>
@@ -41,7 +62,9 @@ const ActivityHistory = ({ internalUseListResults }) => {
                     {format(subDays(new Date(list.checkoutDate), 1), "HH:mm")}
                   </Typography>
                 </TableCell>
-                <TableCell>{list.userId}</TableCell>
+                <TableCell>
+                  {list.firstName}
+                </TableCell>
                 <TableCell>{list.reason}</TableCell>
                 <TableCell>-{list.quantity}</TableCell>
                 <TableCell>

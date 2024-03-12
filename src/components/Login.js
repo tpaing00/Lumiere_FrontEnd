@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import Cookies from "js-cookie";
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 
 
@@ -26,7 +27,6 @@ const Login = ({ onLogin }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-
         axios.post('https://api.lumiereapp.ca/api/v1/login', {
             email: formData.userName,
             password: formData.password
@@ -34,10 +34,13 @@ const Login = ({ onLogin }) => {
             .then(response => {
                 if (response.status === 200) {
                     console.log(response);
-                    document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
+                    // document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
+                    Cookies.set("token", response.data.token);
+                    Cookies.set("firstName", response.data.firstName);
+                    Cookies.set("photo", response.data.photo);
                     setError(null);
                     onLogin();
-                    //  alert('Successfully logged in');
+                    //alert('Successfully logged in');
                 } else {
                     setError('Authentication failed');
                 }

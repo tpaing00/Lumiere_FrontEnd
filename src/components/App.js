@@ -13,21 +13,17 @@ import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
 import Notification from "./Notification";
+import Cookies from "js-cookie";
 import {
   CssBaseline,
-  ThemeProvider,
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Box,
+  ThemeProvider
 } from "@mui/material";
 import { styled } from "@mui/material";
 import theme from "./mui_customization/theme";
 
 const RootContainer = styled("div")({
   display: "flex",
-  height: "85vh", // Adjust as per your requirement
+  height: "85vh",
 });
 const ContentContainer = styled("main")({
   flexGrow: 1,
@@ -35,44 +31,48 @@ const ContentContainer = styled("main")({
 });
 
 const App = (props) => {
-  const cookies = document.cookie.split(";");
-  const tokenCookie = cookies.find((cookie) =>
-    cookie.trim().startsWith("token=")
-  );
+  // const cookies = document.cookie.split(";");
+  // const tokenCookie = cookies.find((cookie) =>
+  //   cookie.trim().startsWith("token=")
+  // );
+  let token = Cookies.get("token");
 
-  const [loggedIn, setLoggedIn] = useState(tokenCookie ? true : false);
-
+  const [loggedIn, setLoggedIn] = useState(token ? true : false);
+  // const [userInfo, setUserInfo] = useState({ firstName: "", photo: "" });
+ 
   if (loggedIn) {
-    let token = "";
-    const cookies = document.cookie.split(";");
-    const tokenCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("token=")
-    );
-    if (tokenCookie) {
-      token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
-    }
-    console.log(token);
+    let token = Cookies.get("token");
+    
+    // const cookies = document.cookie.split(";");
+    // const tokenCookie = cookies.find((cookie) =>
+    //   cookie.trim().startsWith("token=")
+    // );
+    // if (tokenCookie) {
+    //   token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
+    // }
+    // console.log(token);
     //append token to axios header
+    console.log(token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
-  const handleLogin = () => {
+  const handleLogin = (firstName, photo) => {
     setLoggedIn(() => {
-      let token = "";
-      const cookies = document.cookie.split(";");
-      const tokenCookie = cookies.find((cookie) =>
-        cookie.trim().startsWith("token=")
-      );
-      if (tokenCookie) {
-        token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
-      }
-      console.log(token);
-      //append token to axios header
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      // let token = "";
+      // const cookies = document.cookie.split(";");
+      // const tokenCookie = cookies.find((cookie) =>
+      //   cookie.trim().startsWith("token=")
+      // );
+      // if (tokenCookie) {
+      //   token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
+      // }
+      // console.log(token);
+      // //append token to axios header
+      // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      if (token) {
+      // if (token) {
         return true;
-      }
+      // }
     });
   };
 

@@ -34,13 +34,11 @@ const Login = ({ onLogin }) => {
             .then(response => {
                 if (response.status === 200) {
                     console.log(response);
-                    // document.cookie = `token=${response.data.token}; expires=${new Date(Date.now() + 86400e3).toUTCString()}; path=/`;
                     Cookies.set("token", response.data.token);
                     Cookies.set("firstName", response.data.firstName);
                     Cookies.set("photo", response.data.photo);
                     setError(null);
                     onLogin();
-                    //alert('Successfully logged in');
                 } else {
                     setError('Authentication failed');
                 }

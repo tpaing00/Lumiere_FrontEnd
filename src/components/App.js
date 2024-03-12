@@ -30,49 +30,20 @@ const ContentContainer = styled("main")({
   overflow: "auto",
 });
 
-const App = (props) => {
-  // const cookies = document.cookie.split(";");
-  // const tokenCookie = cookies.find((cookie) =>
-  //   cookie.trim().startsWith("token=")
-  // );
+const App = () => {
   let token = Cookies.get("token");
 
   const [loggedIn, setLoggedIn] = useState(token ? true : false);
-  // const [userInfo, setUserInfo] = useState({ firstName: "", photo: "" });
- 
+  
   if (loggedIn) {
     let token = Cookies.get("token");
-    
-    // const cookies = document.cookie.split(";");
-    // const tokenCookie = cookies.find((cookie) =>
-    //   cookie.trim().startsWith("token=")
-    // );
-    // if (tokenCookie) {
-    //   token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
-    // }
-    // console.log(token);
-    //append token to axios header
     console.log(token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
-  const handleLogin = (firstName, photo) => {
+  const handleLogin = () => {
     setLoggedIn(() => {
-      // let token = "";
-      // const cookies = document.cookie.split(";");
-      // const tokenCookie = cookies.find((cookie) =>
-      //   cookie.trim().startsWith("token=")
-      // );
-      // if (tokenCookie) {
-      //   token = tokenCookie.substring(tokenCookie.indexOf("=") + 1);
-      // }
-      // console.log(token);
-      // //append token to axios header
-      // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      // if (token) {
         return true;
-      // }
     });
   };
 

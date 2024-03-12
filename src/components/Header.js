@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
+import Cookies from "js-cookie";
+import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, useMediaQuery} from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = (props) => {
+
+  let firstName = Cookies.get("firstName");
+  let photo = Cookies.get("photo");
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
   return (
     <>
       <AppBar position="static">
@@ -19,8 +24,13 @@ const Header = (props) => {
             <NotificationsIcon />
           </IconButton>
           <IconButton color="inherit" aria-label="user">
-            <AccountCircleIcon />
+            {photo && <Avatar alt="User Photo" src={photo} />}
           </IconButton>
+          {!isMobile && firstName && (
+            <Typography component="div">
+              <Typography variant="subtitle1">{firstName}</Typography>
+            </Typography>
+          )}
         </Toolbar>
       </AppBar>
     </>

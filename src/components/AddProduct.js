@@ -220,7 +220,7 @@ const AddProduct = () => {
   };
 
   const handleScan = () => {
-    navigate("/scanner");
+    navigate("/");
   };
 
 

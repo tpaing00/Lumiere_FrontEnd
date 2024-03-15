@@ -33,6 +33,12 @@ import { DocumentScannerOutlined } from "@mui/icons-material";
 import { format, addDays } from "date-fns";
 
 const AddProduct = () => {
+  // State to hold all selected image files
+  const [allImages, setAllImages] = useState([]);
+  
+  
+
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -60,11 +66,12 @@ const AddProduct = () => {
   // State to hold selected image files
   const [images, setImages] = useState([]);
 
-  // Function to handle file input change
   const handleFileChange = (event) => {
     const files = event.target.files;
-    setImages([...images, ...files]);
+    // Concatenate the new images with existing ones
+    setImages((prevImages) => [...prevImages, ...files]);
   };
+  
 
   const [error, setError] = useState(null);
 
@@ -86,6 +93,7 @@ const AddProduct = () => {
             category,
             unitPrice,
             periodAfterOpening,
+            photo,
           } = productResults[0];
           //const { addToInventory, stockQuantity, expiryDate} = inventoryResults[0];
           const { stockQuantity, expiryDate } = inventoryResults[0];
@@ -99,6 +107,7 @@ const AddProduct = () => {
             category,
             unitPrice,
             periodAfterOpening,
+            photo,
           });
           setExistingInventoryData({
             stockQuantity,
@@ -226,27 +235,29 @@ const AddProduct = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
+    
     const formDataToSend = new FormData();
-
+  
     console.log("form data", formData);
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
-    images.forEach((image) => {
-      formDataToSend.append("images", image);
+  
+    images.forEach((image, index) => {
+      formDataToSend.append(`images`, image);
     });
-
+  
     try {
       const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+  
       if (response.status === 201) {
         const { inventory, notification, product } = response.data;
         let inventoryId = inventory._id;
@@ -266,7 +277,7 @@ const AddProduct = () => {
       }
     }
   };
-
+  
   return (
     <>
       <Container component="main" maxWidth="lg" sx={{mt: 3}} >
@@ -477,21 +488,36 @@ const AddProduct = () => {
                       </Grid>
                     </Grid>
 
-                    <Grid item xs={5} className="register-product-images">
-                      <Typography component="h2" align="left" variant="h3" sx={{mb: 2}} >
-                        Product Images
-                      </Typography>
-
-                      <Box sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2 }}>
-                        <TextField
-                          type="file"
-                          id="productImages"
-                          name="productImages"
-                          multiple
-                          onChange={handleFileChange}
-                        />
-                      </Box>
-                    </Grid>
+<Grid item xs={5} className="register-product-images">
+  <Typography component="h2" align="left" variant="h3" sx={{ mb: 2 }}>
+    Product Images
+  </Typography>
+  
+  <Box sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2 }}>
+    <Grid container spacing={1}>
+      {/* Render existing images */}
+      {existingProductData && existingProductData.photo && existingProductData.photo.map((image, index) => (
+        <Grid item key={index}>
+          <img src={image} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
+        </Grid>
+      ))}
+      {/* Render newly uploaded images */}
+      {images && images.length > 0 && Array.from(images).map((image, index) => (
+        <Grid item key={index}>
+          <img src={URL.createObjectURL(image)} alt={`Newly Uploaded Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
+        </Grid>
+      ))}
+    </Grid>
+    
+    <TextField
+      type="file"
+      id="productImages"
+      name="productImages"
+      multiple
+      onChange={handleFileChange}
+    />
+  </Box>
+</Grid>
                   </Grid>
                 </AccordionDetails>
               </Accordion>
@@ -645,7 +671,7 @@ const AddProduct = () => {
     </>
   );
 
-  // return (
+// return (
   //   <>
   //     <h1>Register New Product</h1>
   //     {error && <p style={{ color: "red" }}>{error}</p>}
@@ -817,6 +843,6 @@ const AddProduct = () => {
   //     </form>
   //   </>
   // );
-};
+  };
 
 export default AddProduct;

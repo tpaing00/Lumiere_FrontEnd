@@ -139,7 +139,7 @@ const ScannerDetail = () => {
                   {/* Column 1 - Product Image */}
                   <Grid item xs={4}>
                     <img
-                      src={productResults[0].photo}
+                      src={productResults[0].photo[0]}
                       className="smallPhoto"
                       alt="Product Photo"
                     />
@@ -258,9 +258,10 @@ const ScannerDetail = () => {
             <CardContent>
               <Grid container spacing={2}>
                 {/* Column 1 - Product Image */}
+                {console.log("product photo", productResults)}
                 <Grid item xs={4}>
                   <img
-                    src={productResults[0].photo}
+                    src={productResults[0].photo[0]}
                     className="smallPhoto"
                     alt="Product Photo"
                   />

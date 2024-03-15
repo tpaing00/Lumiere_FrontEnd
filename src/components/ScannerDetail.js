@@ -258,7 +258,6 @@ const ScannerDetail = () => {
             <CardContent>
               <Grid container spacing={2}>
                 {/* Column 1 - Product Image */}
-                {console.log("product photo", productResults)}
                 <Grid item xs={4}>
                   <img
                     src={productResults[0].photo[0]}

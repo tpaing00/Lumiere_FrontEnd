@@ -36,7 +36,12 @@ const RetailCheckOutModal = ({
       soldQuantity: quantity,
       soldDate: new Date().toISOString(),
       reason: "checkout for sale",
+      productName: productData.productName,
+      brandName: productData.brandName,
+      category: productData.category,
+      unitPrice: productData.unitPrice,
     };
+    
     //POST request to the API
     axios
       .post("https://api.lumiereapp.ca/api/v1/checkout", formData)
@@ -77,7 +82,7 @@ const RetailCheckOutModal = ({
             type="number"
             name="quantity"
             value={quantity}
-            inputProps={{ min: 1, max: stockQuantity }}
+            InputProps={{ inputProps: { min: 1, max: stockQuantity } }}
             onChange={(e) => setQuantity(e.target.value)}
             label="Quantity:"
             fullWidth

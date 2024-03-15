@@ -3,8 +3,14 @@ import Quagga from "quagga";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import config from "./predefined_data/scanner.json";
-import { Box } from "@mui/system";
-import { IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  Grid,
+} from "@mui/material";
 import { Search } from "@mui/icons-material";
 
 function Scanner() {
@@ -64,34 +70,44 @@ function Scanner() {
   };
 
   return (
-    <Box sx={{ mt: 3 }} >
+    <Box sx={{ mt: 3 }}>
       <Typography component="h1" align="left" variant="h2">
         Quick Scan
       </Typography>
-      <Box>
-        <Typography component="p">
-          Scan or enter barcode to find and checkout products.
-        </Typography>
-        {barcode && <Typography component="p"> Detected Barcode: {barcode} </Typography>}
-        <Box id="barcode-scanner"></Box>
-        <TextField
-          type="text"
-          max={15}
-          min={7}
-          value={barcode}
-          onChange={(e) => setBarcode(e.target.value)}
-          label="Barcode Number"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleSearch} >
-                  <Search />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
+      <Grid container justifyContent="center" sx={{ backgroundColor: '#f0f0f0' }}>
+        <Grid item xs={12} sm={8} md={6}>
+          <Box>
+            <Typography component="p">
+              Scan or enter barcode to find and checkout products.
+            </Typography>
+            {barcode && (
+              <Typography component="p">
+                {" "}
+                Detected Barcode: {barcode}{" "}
+              </Typography>
+            )}
+            <Box id="barcode-scanner"></Box>
+            <TextField
+              type="text"
+              max={15}
+              min={7}
+              value={barcode}
+              onChange={(e) => setBarcode(e.target.value)}
+              label="Barcode Number"
+              sx={{ width: '400px' }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch}>
+                      <Search />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

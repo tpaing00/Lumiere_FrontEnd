@@ -39,7 +39,9 @@ const RetailCheckOutModal = ({
       productName: productData.productName,
       brandName: productData.brandName,
       category: productData.category,
+      unitPrice: productData.unitPrice,
     };
+    
     //POST request to the API
     axios
       .post("https://api.lumiereapp.ca/api/v1/checkout", formData)

@@ -19,10 +19,10 @@ const theme = createTheme({
       contrastText: '#fff',
     },
     secondary: {
-      light: '#daedf5',
+      light: '#87bbd7',
       main: '#87bbd7',
       dark: '#003c5c',
-      buttonPressed: '132f3e',
+      button: '132f3e',
       contrastText: '#000',
     },
     accent: {
@@ -32,14 +32,14 @@ const theme = createTheme({
       main: '#277c5e'
     },
     error: {
-      main: '#aa230e'
+      main: '#962600'
     },
     text: {
-      primary: '#292929',
+      body: '#292929',
       placeholder: '#6a6a6a'
     },
     environment: {
-      fieldStroke: '#919191',
+      stroke: '#919191',
       neutral: '#dfdfdf',
       neutralLight: '#f2f2f2',
       white: '#fcfcfc',
@@ -99,6 +99,68 @@ const theme = createTheme({
     fontFamily: 'Outfit',
   },
   components: {
+    MuiButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          border: 'none',
+          borderRadius: '12px',
+          boxShadow: 'none',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          height: '48px',
+          margin: '10px',
+          padding: '6px 16px',
+          textTransform: 'none',
+          width: '288px',
+        },
+      },
+      variants: [
+        {
+          props: { variant: 'contained' },
+          style: {
+            backgroundColor: '#fdcb2a',
+            color: '#003c5c',
+            '&:hover': {
+              backgroundColor: '#fdcb2a',
+              boxShadow: 'none'
+            },
+            '&:active': {
+              backgroundColor: '#f5b02c',
+              boxShadow: 'none'
+            },
+            '&:disabled': {
+              backgroundColor: '#dfdfdf',
+              color: '#919191',
+            },
+          },
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            backgroundColor: '#fcfcfc',
+            border: '1.5px solid #003c5c',
+            color: '#003c5c',
+            '&:hover': {
+              backgroundColor: '#fcfcfc',
+              border: '1.5px solid #003c5c',
+              boxShadow: 'none'
+            },
+            '&:active': {
+              backgroundColor: '#d3e5ed',
+              boxShadow: 'none'
+            },
+            '&:disabled': {
+              backgroundColor: '#dfdfdf',
+              border: '1.5px solid #6a6a6a',
+              color: '#6a6a6a',
+            },
+          },
+        },
+      ],
+    },
     MuiSwitch: {
       styleOverrides: {
         root: {
@@ -131,6 +193,13 @@ const theme = createTheme({
             backgroundColor: '#6a6a6a',
           },
         },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+
+        }
       },
     },
   },

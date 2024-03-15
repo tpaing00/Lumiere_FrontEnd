@@ -158,19 +158,21 @@ const ProductDetail = () => {
           : wasteProductResults.productName}
       </Typography>
 
+
       <Card>
-        <CardMedia
-          component="img"
-          alt="product image"
-          src={
-            wasteId === undefined || wasteId === ""? productResults.photo : wasteProductResults.photo
-          }
-          style={{ width: '100px', height: '100px' }}
-        />
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12} sx={{padding : '20px 0 0 0'}}>
               <Typography variant="h2">Product Information</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                {productResults.photo && productResults.photo.map((photoUrl, index) => (
+                  <Grid item key={index}>
+                    <img src={photoUrl} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: '100px' }} />
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
             <Grid item xs={4}>
               <Typography>Stock</Typography>

@@ -154,7 +154,7 @@ const StaffCheckOutModal = ({
             type="number"
             name="quantity"
             value={quantity}
-            inputProps={{ min: 1, max: stockQuantity }}
+            InputProps={{ inputProps: { min: 1, max: stockQuantity } }}
             onChange={(e) => setQuantity(e.target.value)}
             label="Quantity:"
             fullWidth

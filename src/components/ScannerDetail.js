@@ -120,14 +120,12 @@ const ScannerDetail = () => {
 
   return (
     <Container component="main" maxWidth="lg">
-      <Typography
-          component="h1"
-          align="left"
-          variant="h2"
-        >
-          Quick Scan
+      <Box sx={{ mt: 3 }}>
+        <Typography component="h1" align="left" variant="h2">
+          Scan Result
         </Typography>
-      <Box sx={{ mt: 3 }}>        
+      </Box>
+      <Box sx={{ mt: 3 }}>
         {internalInventory.length > 0 && (
           <div>
             <Typography variant="h3">
@@ -150,25 +148,47 @@ const ScannerDetail = () => {
                       {/* Row 1 - Barcode Number & Category */}
                       <Grid item container xs={4} spacing={1}>
                         <Grid item>
-                          <Typography>{productResults[0].barcodeNumber}</Typography>
-                        </Grid>                       
+                          <Typography>
+                            {productResults[0].barcodeNumber}
+                          </Typography>
+                        </Grid>
                         <Grid item>
-                          <Typography>{productResults[0].category}</Typography>
+                          <Typography
+                            sx={{
+                              backgroundColor: "#DAEDF5",
+                              display: "inline-block",
+                              padding: "10px",
+                              borderRadius: "100px",
+                            }}
+                          >
+                            {productResults[0].category}
+                          </Typography>
                         </Grid>
                       </Grid>
                       <Grid item xs>
-                          <Typography><strong>{productResults[0].productName}</strong></Typography>
+                        <Typography>
+                          <strong>{productResults[0].productName}</strong>
+                        </Typography>
                       </Grid>
                       {/* Row 2 - Stock Quantity & Unit Price */}
                       <Grid item container xs={4} spacing={1}>
                         <Grid item>
-                          <Typography><strong>Stock:</strong> {internalInventory[0].stockQuantity}</Typography>
+                          <Typography>
+                            <strong>Stock Quantity:</strong>{" "}
+                            {internalInventory[0].stockQuantity}
+                          </Typography>
                         </Grid>
                         <Grid item>
-                          <Typography><strong>Unit Price:</strong> {productResults[0].unitPrice}</Typography>
+                          <Typography>
+                            <strong>Unit Price:</strong>{" "}
+                            {productResults[0].unitPrice}
+                          </Typography>
                         </Grid>
                         <Grid item>
-                          <Typography><strong>Expiry Date:</strong> {formatDate(internalInventory[0].expiryDate)}</Typography>
+                          <Typography>
+                            <strong>Expiry Date:</strong>{" "}
+                            {formatDate(internalInventory[0].expiryDate)}
+                          </Typography>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -177,10 +197,18 @@ const ScannerDetail = () => {
                   <Grid item xs={2}>
                     <Grid container direction="column" spacing={1}>
                       <Grid item>
-                        <Button onClick={handleEdit} fullWidth>Edit</Button>
+                        <Button onClick={handleEdit} fullWidth>
+                          Edit
+                        </Button>
                       </Grid>
                       <Grid item>
-                        <Button onClick={handleStaffCheckOut} disabled={internalInventory[0].stockQuantity === 0} fullWidth>Staff Checkout</Button>
+                        <Button
+                          onClick={handleStaffCheckOut}
+                          disabled={internalInventory[0].stockQuantity === 0}
+                          fullWidth
+                        >
+                          Staff Checkout
+                        </Button>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -251,64 +279,85 @@ const ScannerDetail = () => {
         )}
         {retailInventory.length > 0 && (
           <div>
-          <Typography variant="h3">
-            {retailInventory[0].addToInventory}
-          </Typography>
-          <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
-            <CardContent>
-              <Grid container spacing={2}>
-                {/* Column 1 - Product Image */}
-                <Grid item xs={4}>
-                  <img
-                    src={productResults[0].photo[0]}
-                    className="smallPhoto"
-                    alt="Product Photo"
-                  />
-                </Grid>
-                {/* Column 2 - Product Details */}
-                <Grid item xs={5}>
-                  <Grid container direction="column" spacing={1}>
-                    {/* Row 1 - Barcode Number & Category */}
-                    <Grid item container xs={4} spacing={1}>
-                      <Grid item>
-                        <Typography>{productResults[0].barcodeNumber}</Typography>
-                      </Grid>                       
-                      <Grid item>
-                        <Typography>{productResults[0].category}</Typography>
+            <Typography variant="h3">
+              {retailInventory[0].addToInventory}
+            </Typography>
+            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
+              <CardContent>
+                <Grid container spacing={2}>
+                  {/* Column 1 - Product Image */}
+                  <Grid item xs={4}>
+                    <img
+                      src={productResults[0].photo[0]}
+                      className="smallPhoto"
+                      alt="Product Photo"
+                    />
+                  </Grid>
+                  {/* Column 2 - Product Details */}
+                  <Grid item xs={5}>
+                    <Grid container direction="column" spacing={1}>
+                      {/* Row 1 - Barcode Number & Category */}
+                      <Grid item container xs={4} spacing={1}>
+                        <Grid item>
+                          <Typography>
+                            {productResults[0].barcodeNumber}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography>{productResults[0].category}</Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs>
+                        <Typography>
+                          <strong>{productResults[0].productName}</strong>
+                        </Typography>
+                      </Grid>
+                      {/* Row 2 - Stock Quantity & Unit Price */}
+                      <Grid item container xs={4} spacing={1}>
+                        <Grid item>
+                          <Typography>
+                            <strong>Stock Quantity:</strong>{" "}
+                            {retailInventory[0].stockQuantity}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography>
+                            <strong>Unit Price:</strong>{" "}
+                            {productResults[0].unitPrice}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography>
+                            <strong>Expiry Date:</strong>{" "}
+                            {formatDate(retailInventory[0].expiryDate)}
+                          </Typography>
+                        </Grid>
                       </Grid>
                     </Grid>
-                    <Grid item xs>
-                        <Typography><strong>{productResults[0].productName}</strong></Typography>
-                    </Grid>
-                    {/* Row 2 - Stock Quantity & Unit Price */}
-                    <Grid item container xs={4} spacing={1}>
+                  </Grid>
+                  {/* Column 3 - Edit and Staff Checkout Buttons */}
+                  <Grid item xs={2}>
+                    <Grid container direction="column" spacing={1}>
                       <Grid item>
-                        <Typography><strong>Stock:</strong> {retailInventory[0].stockQuantity}</Typography>
+                        <Button onClick={handleEdit} fullWidth>
+                          Edit
+                        </Button>
                       </Grid>
                       <Grid item>
-                        <Typography><strong>Unit Price:</strong> {productResults[0].unitPrice}</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography><strong>Expiry Date:</strong> {formatDate(retailInventory[0].expiryDate)}</Typography>
+                        <Button
+                          onClick={handleRetailCheckOut}
+                          disabled={retailInventory[0].stockQuantity === 0}
+                          fullWidth
+                        >
+                          Retail Checkout
+                        </Button>
                       </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-                {/* Column 3 - Edit and Staff Checkout Buttons */}
-                <Grid item xs={2}>
-                  <Grid container direction="column" spacing={1}>
-                    <Grid item>
-                      <Button onClick={handleEdit} fullWidth>Edit</Button>
-                    </Grid>
-                    <Grid item>
-                      <Button onClick={handleRetailCheckOut} disabled={retailInventory[0].stockQuantity === 0} fullWidth>Retail Checkout</Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>          
-        </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
         {showRetailModal && (
           <Modal open={showRetailModal} onClose={handleRetailCloseModal}>

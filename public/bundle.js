@@ -56328,7 +56328,9 @@ const App = () => {
   };
   const handleLogout = () => {
     setLoggedIn(() => {
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      js_cookie__WEBPACK_IMPORTED_MODULE_12__["default"].set("token", "");
+      js_cookie__WEBPACK_IMPORTED_MODULE_12__["default"].set("firstName", "");
+      js_cookie__WEBPACK_IMPORTED_MODULE_12__["default"].set("photo", "");
       axios__WEBPACK_IMPORTED_MODULE_15__["default"].defaults.headers.common["Authorization"] = null;
       return false;
     });
@@ -56628,6 +56630,11 @@ const Login = _ref => {
     value: formData.userName,
     onChange: handleChange,
     fullWidth: true,
+    required: true // Add required attribute
+    ,
+    error: error && !formData.userName // Set error if username is empty
+    ,
+    helperText: error && !formData.userName && "Username is required",
     sx: {
       mt: 1
     }
@@ -56639,6 +56646,11 @@ const Login = _ref => {
     value: formData.password,
     onChange: handleChange,
     fullWidth: true,
+    required: true // Add required attribute
+    ,
+    error: error && !formData.password // Set error if password is empty
+    ,
+    helperText: error && !formData.password && "Password is required",
     sx: {
       mt: 1
     }

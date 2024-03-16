@@ -55352,25 +55352,30 @@ const ActivityHistory = _ref => {
   let {
     inventoryResults,
     internalUseListResults,
-    userListResults
+    userListResults,
+    saleResults,
+    wasteProductResults
   } = _ref;
-  console.log(userListResults);
-  console.log(internalUseListResults);
-  console.log(inventoryResults);
+  // console.log(userListResults);
+  // console.log(internalUseListResults);
+  console.log(saleResults);
 
   // const [userInventoryResults, setUserInventoryResults] = useState("");
 
-  const combinedData = internalUseListResults.map(internalUseRow => {
-    const found = userListResults.find(user => user._id === internalUseRow.userId);
-    if (found) {
+  let combinedData;
+  if (internalUseListResults !== undefined) {
+    combinedData = internalUseListResults.map(internalUseRow => {
+      const found = userListResults.find(user => user._id === internalUseRow.userId);
+      // if (found) {
       const combined = {
         ...internalUseRow,
         ...found
       };
       console.log("combined" + combined);
       return combined;
-    }
-  });
+      // }
+    });
+  }
   let combinedUserInventoryResults;
   if (inventoryResults !== "") {
     console.log("inventoryResults" + inventoryResults);
@@ -55383,6 +55388,20 @@ const ActivityHistory = _ref => {
     // setUserInventoryResults(combinedUserInventoryResults);
     console.log(combinedUserInventoryResults);
     // }
+  }
+  let combinedUserSaleData;
+  if (saleResults) {
+    combinedUserSaleData = saleResults.map(saleResultsRow => {
+      const found = userListResults.find(user => user._id === saleResultsRow.userId);
+      // if (found) {
+      const combined = {
+        ...saleResultsRow,
+        ...found
+      };
+      // console.log("combined" +combined);
+      return combined;
+      // }
+    });
   }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_1__["default"], {
     container: true
@@ -55399,7 +55418,9 @@ const ActivityHistory = _ref => {
     xs: 12
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_3__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "User Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Activity"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Quantity Change"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Date of Open"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(combinedUserInventoryResults.dateAdded), 0), "MM/dd/yyyy")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(combinedUserInventoryResults.dateAdded), 0), "HH:mm"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, combinedUserInventoryResults.firstName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Product Added"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "+", combinedUserInventoryResults.initialStock), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null)), combinedData.map((list, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: index
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 0), "MM/dd/yyyy")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 0), "HH:mm"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.firstName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.reason), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "-", list.quantity), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.openingDate), 0), "MM/dd/yyyy"))))))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 0), "MM/dd/yyyy")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.checkoutDate), 0), "HH:mm"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.firstName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.reason), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "-", list.quantity), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.openingDate), 0), "MM/dd/yyyy")))), combinedUserSaleData.map((list, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    key: index
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.soldDate), 0), "MM/dd/yyyy")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_2__["default"], null, (0,date_fns__WEBPACK_IMPORTED_MODULE_8__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_9__.subDays)(new Date(list.soldDate), 0), "HH:mm"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, list.firstName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Sold"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "-", list.soldQuantity), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null)))))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ActivityHistory);
 
@@ -56965,6 +56986,7 @@ const ProductDetail = () => {
   const [internalUseListResults, setInternalUseListResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   const [wasteProductResults, setwasteProductResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   const [userListResults, setUserListResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const [saleResults, setSaleResults] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   // const [showActivityHistory, setshowActivityHistory] = useState(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -57007,6 +57029,14 @@ const ProductDetail = () => {
     //     console.error("Error:", error.message);
     //   });
 
+    axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("https://api.lumiereapp.ca/api/v1/sale/".concat(inventoryId)).then(resSaleObj => {
+      if (resSaleObj.status === 200) {
+        setSaleResults(resSaleObj.data);
+        console.log(resSaleObj.data);
+      }
+    }).catch(error => {
+      console.error("Error:", error.message);
+    });
     axios__WEBPACK_IMPORTED_MODULE_3__["default"].get("https://api.lumiereapp.ca/api/v1/internalUseList/".concat(inventoryId)).then(result => {
       if (result.status === 200) {
         setInternalUseListResults(result.data.InternalUseListResults);
@@ -57083,7 +57113,17 @@ const ProductDetail = () => {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_9__["default"], {
     container: true,
     spacing: 2
-  }, productResults.photo && productResults.photo.map((photoUrl, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }, wasteId === undefined || wasteId === "" ? productResults.photo && productResults.photo.map((photoUrl, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    item: true,
+    key: index
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: photoUrl,
+    alt: "Product Image ".concat(index + 1),
+    style: {
+      width: '100px',
+      height: '100px'
+    }
+  }))) : wasteProductResults.photo && wasteProductResults.photo.map((photoUrl, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_9__["default"], {
     item: true,
     key: index
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
@@ -57111,10 +57151,11 @@ const ProductDetail = () => {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Expiry Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, formattedExpiryDate)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_9__["default"], {
     item: true,
     xs: 4
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Period After Opening"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, wasteId === undefined || wasteId === "" ? productResults.periodAfterOpening : wasteProductResults.periodAfterOpening, " ", "M"))))), userListResults && inventoryResults && internalUseListResults && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ActivityHistory__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Period After Opening"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], null, wasteId === undefined || wasteId === "" ? productResults.periodAfterOpening : wasteProductResults.periodAfterOpening, " ", "M"))))), userListResults && inventoryResults && internalUseListResults && saleResults && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ActivityHistory__WEBPACK_IMPORTED_MODULE_1__["default"], {
     inventoryResults: inventoryResults,
     internalUseListResults: internalUseListResults,
-    userListResults: userListResults
+    userListResults: userListResults,
+    saleResults: saleResults
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProductDetail);

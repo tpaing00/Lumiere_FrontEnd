@@ -18,6 +18,7 @@ const ProductDetail = () => {
   const [internalUseListResults, setInternalUseListResults] = useState("");
   const [wasteProductResults, setwasteProductResults] = useState("");
   const [userListResults, setUserListResults] = useState("");
+  const [saleResults, setSaleResults] = useState("");
   // const [showActivityHistory, setshowActivityHistory] = useState(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
 
@@ -67,6 +68,19 @@ const ProductDetail = () => {
     //   .catch((error) => {
     //     console.error("Error:", error.message);
     //   });
+
+
+       axios
+      .get(`https://api.lumiereapp.ca/api/v1/sale/${inventoryId}`)
+      .then((resSaleObj) => {
+        if (resSaleObj.status === 200) {
+          setSaleResults(resSaleObj.data);
+          console.log(resSaleObj.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
 
 
     axios
@@ -167,11 +181,18 @@ const ProductDetail = () => {
             </Grid>
             <Grid item xs={12}>
               <Grid container spacing={2}>
-                {productResults.photo && productResults.photo.map((photoUrl, index) => (
-                  <Grid item key={index}>
-                    <img src={photoUrl} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: '100px' }} />
-                  </Grid>
-                ))}
+                {wasteId === undefined || wasteId === ""
+              ? productResults.photo && productResults.photo.map((photoUrl, index) => (
+                <Grid item key={index}>
+                  <img src={photoUrl} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: '100px' }} />
+                </Grid>
+              ))
+              : wasteProductResults.photo && wasteProductResults.photo.map((photoUrl, index) => (
+                <Grid item key={index}>
+                  <img src={photoUrl} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: '100px' }} />
+                </Grid>
+              ))}
+                
               </Grid>
             </Grid>
             <Grid item xs={4}>
@@ -224,8 +245,8 @@ const ProductDetail = () => {
           </Grid>
         </CardContent>
       </Card>
-      { userListResults && inventoryResults && internalUseListResults &&(
-        <ActivityHistory inventoryResults = {inventoryResults} internalUseListResults={internalUseListResults} userListResults={userListResults}/>
+      { userListResults && inventoryResults && internalUseListResults && saleResults && (
+        <ActivityHistory inventoryResults = {inventoryResults} internalUseListResults={internalUseListResults} userListResults={userListResults} saleResults={saleResults}/>
       )}
     </>
   );

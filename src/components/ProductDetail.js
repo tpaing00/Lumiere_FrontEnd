@@ -11,7 +11,7 @@ const ProductDetail = () => {
   const { inventoryId, barcodeNumber, wasteId } = location.state;
   // console.log("inId :" +inventoryId);
   // console.log("barcodeId :" +barcodeNumber);
-  console.log("wasteId :" +wasteId);
+  console.log("wasteId :" + wasteId);
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
   // const [notificationResults, setNotificationResults] = useState("");
@@ -47,7 +47,7 @@ const ProductDetail = () => {
           const dateString = res.data.expiryDate;
           const date = new Date(dateString);
           const adjustedDate = addDays(date, 1);
-          if(wasteId === "" || wasteId === undefined){
+          if (wasteId === "" || wasteId === undefined) {
             setFormattedexpiryDate(() => {
               return format(adjustedDate, "dd MMM yyyy");
             });
@@ -69,8 +69,7 @@ const ProductDetail = () => {
     //     console.error("Error:", error.message);
     //   });
 
-
-       axios
+    axios
       .get(`https://api.lumiereapp.ca/api/v1/sale/${inventoryId}`)
       .then((resSaleObj) => {
         if (resSaleObj.status === 200) {
@@ -81,7 +80,6 @@ const ProductDetail = () => {
       .catch((error) => {
         console.error("Error:", error.message);
       });
-
 
     axios
       .get(`https://api.lumiereapp.ca/api/v1/internalUseList/${inventoryId}`)
@@ -95,8 +93,7 @@ const ProductDetail = () => {
         console.error("Error:", error.message);
       });
 
-
-      axios
+    axios
       .get(`https://api.lumiereapp.ca/api/v1/user`)
       .then((userResult) => {
         if (userResult.status === 200) {
@@ -172,28 +169,37 @@ const ProductDetail = () => {
           : wasteProductResults.productName}
       </Typography>
 
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          {wasteId === undefined || wasteId === ""
+            ? productResults.photo &&
+              productResults.photo.map((photoUrl, index) => (
+                <Grid item key={index}>
+                  <img
+                    src={photoUrl}
+                    alt={`Product Image ${index + 1}`}
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                </Grid>
+              ))
+            : wasteProductResults.photo &&
+              wasteProductResults.photo.map((photoUrl, index) => (
+                <Grid item key={index}>
+                  <img
+                    src={photoUrl}
+                    alt={`Product Image ${index + 1}`}
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                </Grid>
+              ))}
+        </Grid>
+      </Grid>
 
       <Card>
         <CardContent>
           <Grid container spacing={5}>
-            <Grid item xs={12} sx={{padding : '20px 0 0 0'}}>
+            <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
               <Typography variant="h2">Product Information</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container spacing={2}>
-                {wasteId === undefined || wasteId === ""
-              ? productResults.photo && productResults.photo.map((photoUrl, index) => (
-                <Grid item key={index}>
-                  <img src={photoUrl} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: '100px' }} />
-                </Grid>
-              ))
-              : wasteProductResults.photo && wasteProductResults.photo.map((photoUrl, index) => (
-                <Grid item key={index}>
-                  <img src={photoUrl} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: '100px' }} />
-                </Grid>
-              ))}
-                
-              </Grid>
             </Grid>
             <Grid item xs={4}>
               <Typography>Stock</Typography>
@@ -238,16 +244,32 @@ const ProductDetail = () => {
               <Typography>
                 {wasteId === undefined || wasteId === ""
                   ? productResults.periodAfterOpening
-                  : wasteProductResults.periodAfterOpening}{" "}
+                  : wasteProductResults.periodAfterOpening}
                 M
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography>Notes</Typography>
+              <Typography>
+                {wasteId === undefined || wasteId === ""
+                  ? productResults.message
+                  : wasteProductResults.message}
               </Typography>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
-      { userListResults && inventoryResults && internalUseListResults && saleResults && (
-        <ActivityHistory inventoryResults = {inventoryResults} internalUseListResults={internalUseListResults} userListResults={userListResults} saleResults={saleResults}/>
-      )}
+      {userListResults &&
+        inventoryResults &&
+        internalUseListResults &&
+        saleResults && (
+          <ActivityHistory
+            inventoryResults={inventoryResults}
+            internalUseListResults={internalUseListResults}
+            userListResults={userListResults}
+            saleResults={saleResults}
+          />
+        )}
     </>
   );
 };

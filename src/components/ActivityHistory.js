@@ -9,12 +9,14 @@ import {
   TableRow,
   TableCell,
   Grid,
-  Box,
 } from "@mui/material";
 
-const ActivityHistory = ({ internalUseListResults, userListResults }) => {
+const ActivityHistory = ({ inventoryResults, internalUseListResults, userListResults }) => {
   console.log(userListResults);
   console.log(internalUseListResults);
+  console.log(inventoryResults);
+
+  // const [userInventoryResults, setUserInventoryResults] = useState("");
 
   const combinedData = internalUseListResults.map((internalUseRow) => {
     const found = userListResults.find(
@@ -29,8 +31,23 @@ const ActivityHistory = ({ internalUseListResults, userListResults }) => {
       return combined;
     }
   });
-  console.log(combinedData);
 
+ let combinedUserInventoryResults
+  if(inventoryResults !== ""){
+    console.log("inventoryResults" +inventoryResults);
+    
+      const found = userListResults.find(
+        (user) => user._id === inventoryResults.userId
+      );
+      // if (found) {
+        combinedUserInventoryResults = {
+          ...inventoryResults,
+          ...found,
+        };     
+        // setUserInventoryResults(combinedUserInventoryResults);
+        console.log(combinedUserInventoryResults);
+      // }
+  }
 
   return (
     <Grid container>
@@ -48,31 +65,52 @@ const ActivityHistory = ({ internalUseListResults, userListResults }) => {
               <TableCell>Date of Open</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {combinedData.map((list, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <Typography>
-                    {format(
-                      subDays(new Date(list.checkoutDate), 1),
-                      "MM/dd/yyyy"
-                    )}
-                  </Typography>
-                  <Typography>
-                    {format(subDays(new Date(list.checkoutDate), 1), "HH:mm")}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  {list.firstName}
-                </TableCell>
-                <TableCell>{list.reason}</TableCell>
-                <TableCell>-{list.quantity}</TableCell>
-                <TableCell>
-                  {format(subDays(new Date(list.openingDate), 1), "MM/dd/yyyy")}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+             <TableBody>
+             <TableRow>
+               <TableCell>
+                 <Typography>
+                   {format(
+                     subDays(new Date(combinedUserInventoryResults.dateAdded), 0),
+                     "MM/dd/yyyy"
+                   )}
+                 </Typography>
+                 <Typography>
+                   {format(subDays(new Date(combinedUserInventoryResults.dateAdded), 0), "HH:mm")}
+                 </Typography>
+               </TableCell>
+               <TableCell>
+                 {combinedUserInventoryResults.firstName}
+               </TableCell>
+               <TableCell>Product Added</TableCell>
+               <TableCell>+{combinedUserInventoryResults.initialStock}</TableCell>
+               <TableCell>
+               </TableCell>
+             </TableRow>
+           {combinedData.map((list, index) => (
+             <TableRow key={index}>
+               <TableCell>
+                 <Typography>
+                   {format(
+                     subDays(new Date(list.checkoutDate), 0),
+                     "MM/dd/yyyy"
+                   )}
+                 </Typography>
+                 <Typography>
+                   {format(subDays(new Date(list.checkoutDate), 0), "HH:mm")}
+                 </Typography>
+               </TableCell>
+               <TableCell>
+                 {list.firstName}
+               </TableCell>
+               <TableCell>{list.reason}</TableCell>
+               <TableCell>-{list.quantity}</TableCell>
+               <TableCell>
+                 {format(subDays(new Date(list.openingDate), 0), "MM/dd/yyyy")}
+               </TableCell>
+             </TableRow>
+           ))}
+         </TableBody> 
+                
         </Table>
       </Grid>
     </Grid>

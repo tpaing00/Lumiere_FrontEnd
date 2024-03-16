@@ -15,10 +15,10 @@ const ProductDetail = () => {
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
   // const [notificationResults, setNotificationResults] = useState("");
-  const [internalUseListResults, setInternalUseListResults] = useState([]);
+  const [internalUseListResults, setInternalUseListResults] = useState("");
   const [wasteProductResults, setwasteProductResults] = useState("");
   const [userListResults, setUserListResults] = useState("");
-  const [showActivityHistory, setshowActivityHistory] = useState(true);
+  // const [showActivityHistory, setshowActivityHistory] = useState(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
 
   useEffect(() => {
@@ -40,9 +40,9 @@ const ProductDetail = () => {
         if (res.status === 200) {
           setInventoryResults(res.data);
           // console.log(res.data);
-          if (res.data.addToInventory === "Retail") {
-            setshowActivityHistory(false);
-          }
+          // if (res.data.addToInventory === "Retail") {
+          //   setshowActivityHistory(false);
+          // }
           const dateString = res.data.expiryDate;
           const date = new Date(dateString);
           const adjustedDate = addDays(date, 1);
@@ -74,7 +74,7 @@ const ProductDetail = () => {
       .then((result) => {
         if (result.status === 200) {
           setInternalUseListResults(result.data.InternalUseListResults);
-          console.log(result.data.InternalUseListResults);
+          // console.log(result.data.InternalUseListResults);
         }
       })
       .catch((error) => {
@@ -99,7 +99,7 @@ const ProductDetail = () => {
         .then((wasteResult) => {
           if (wasteResult.status === 200) {
             setwasteProductResults(wasteResult.data);
-            setshowActivityHistory(false);
+            // setshowActivityHistory(false);
             const dateString = wasteResult.data.expiryDate;
             const date = new Date(dateString);
             const adjustedDate = addDays(date, 1);
@@ -194,6 +194,7 @@ const ProductDetail = () => {
             <Grid item xs={4}>
               <Typography>Total Value</Typography>
               <Typography>
+                $
                 {wasteId === undefined || wasteId === ""
                   ? inventoryResults.totalValue
                   : wasteProductResults.totalValue}
@@ -223,8 +224,8 @@ const ProductDetail = () => {
           </Grid>
         </CardContent>
       </Card>
-      {showActivityHistory && userListResults && (
-        <ActivityHistory internalUseListResults={internalUseListResults} userListResults={userListResults}/>
+      { userListResults && inventoryResults && internalUseListResults &&(
+        <ActivityHistory inventoryResults = {inventoryResults} internalUseListResults={internalUseListResults} userListResults={userListResults}/>
       )}
     </>
   );

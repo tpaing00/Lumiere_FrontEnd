@@ -187,7 +187,6 @@ import { MoreVert } from "@mui/icons-material";
         ...item,
         stockQuantity: 0,
         status: "Wasted",
-        inventoryId: "",
         wasteId: item._id
       }));
       delete wasteDataWithStatus._id;
@@ -269,7 +268,10 @@ import { MoreVert } from "@mui/icons-material";
           addToInventory: row.addToInventory,
           expiryDate: row.expiryDate,
           wasteQuantity: row.stockQuantity,
+          inventoryId: row.inventoryId,
+          message: row.message !== undefined &&  row.message !== "" ?  row.message : "",
         };
+        
         //POST request to the API
         axios
           .post("https://api.lumiereapp.ca/api/v1/waste", formData)

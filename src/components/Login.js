@@ -90,6 +90,9 @@ const Login = ({ onLogin }) => {
                                 placeholder='Type your email here'
                                 value={formData.userName}
                                 onChange={handleChange}
+                                required  // Add required attribute
+                                error={error && !formData.userName}  // Set error if username is empty
+                                helperText={error && !formData.userName && "Username is required"}
                             />
 
                             <CustomTextField
@@ -99,6 +102,9 @@ const Login = ({ onLogin }) => {
                                 placeholder='Type your password here'
                                 value={formData.password}
                                 onChange={handleChange}
+                                required  // Add required attribute
+                                error={error && !formData.password}  // Set error if password is empty
+                                helperText={error && !formData.password && "Password is required"}
                             />
 
                             {error && <span style={{ color: 'red' }}>{error}</span>}

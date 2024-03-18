@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputLabel, TextField, useTheme } from '@mui/material';
 
-export default function CustomTextField({ id, name, labelText, placeholder, value, onChange }) {
+export default function CustomTextField({ id, name, labelText, placeholder, value, onChangeFunction }) {
     const theme = useTheme();
 
     return (
@@ -13,7 +13,7 @@ export default function CustomTextField({ id, name, labelText, placeholder, valu
                 className='TextField'
                 id={id}
                 name={name}
-                placeholder={placeholder}
+                placeholder={onChangeFunction}
                 value={value}
                 onChange={onChange}
                 fullWidth

@@ -2,7 +2,13 @@ import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import Cookies from "js-cookie";
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, InputLabel, SvgIcon, TextField, Typography } from '@mui/material';
+import CustomButton from './mui_customization/buttons/CustomButton';
+import CustomTextField from './mui_customization/forms/CustomTextField';
+import CustomHeading2 from './mui_customization/typography/CustomHeading2';
+import Logo from './mui_customization/buttons/Logo';
+import LogInPage from '../assets/images/LogInPage.jpg';
+
 
 
 const Login = ({ onLogin }) => {
@@ -53,59 +59,68 @@ const Login = ({ onLogin }) => {
     }
 
     return (<>
-        <Container align='center' component='main' maxWidth='xs' >
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography variant='h2' component='h2' sm={12} >
-                    Login
-                </Typography>
 
-                <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }} >
+        <Container component='main' >
 
-                    <TextField
-                        className='TextField'
-                        id='username'
-                        label='Username'
-                        name='userName'
-                        value={formData.userName}
-                        onChange={handleChange}
-                        fullWidth
-                        required  // Add required attribute
-                        error={error && !formData.userName}  // Set error if username is empty
-                        helperText={error && !formData.userName && "Username is required"}
-                        sx={{ mt: 1 }}
-                    />
+            <Grid container>
 
-                    <TextField
-                        className='TextField'
-                        id='password'
-                        label='Password'
-                        name='password'
-                        value={formData.password}
-                        onChange={handleChange}
-                        fullWidth
-                        required  // Add required attribute
-                        error={error && !formData.password}  // Set error if password is empty
-                        helperText={error && !formData.password && "Password is required"}  
-                        sx={{ mt: 1 }}
-                    />
+                <Grid item xs={0} lg={6}
+                >
+                    {LogInPage}
+                    {/* <img src="../assets/images/LogInPage.jpg" height='100px' width='100px' /> */}
+                    {/* include image here */}
+                </Grid>
 
-                    {error && <span style={{ color: 'red' }}>{error}</span>}
-                    <Box ></Box >
-                    <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
-                        LOGIN
-                    </Button>
-                </Box>
-            </Box>
+                <Grid item xs={12} lg={6}>
+                    <Logo />
+
+                    <CustomHeading2 text='Login' />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'left',
+                        }}
+                    >
+                        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }} >
+
+                            <CustomTextField
+                                id='username'
+                                name='userName'
+                                labelText='Email'
+                                placeholder='Type your email here'
+                                value={formData.userName}
+                                onChange={handleChange}
+                                required  // Add required attribute
+                                error={error && !formData.userName}  // Set error if username is empty
+                                helperText={error && !formData.userName && "Username is required"}
+                            />
+
+                            <CustomTextField
+                                id='password'
+                                name='password'
+                                labelText='Password'
+                                placeholder='Type your password here'
+                                value={formData.password}
+                                onChange={handleChange}
+                                required  // Add required attribute
+                                error={error && !formData.password}  // Set error if password is empty
+                                helperText={error && !formData.password && "Password is required"}
+                            />
+
+                            {error && <span style={{ color: 'red' }}>{error}</span>}
+
+                            <CustomButton text="Login" variant="contained" type="submit" />
+                        </Box>
+                    </Box>
+                </Grid>
+
+            </Grid>
+
         </Container>
     </>
     )
 }
 
 export default Login;
+

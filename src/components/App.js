@@ -14,10 +14,7 @@ import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
 import Notification from "./Notification";
 import Cookies from "js-cookie";
-import {
-  CssBaseline,
-  ThemeProvider
-} from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { styled } from "@mui/material";
 import theme from "./mui_customization/theme";
 
@@ -34,7 +31,7 @@ const App = () => {
   let token = Cookies.get("token");
 
   const [loggedIn, setLoggedIn] = useState(token ? true : false);
-  
+
   if (loggedIn) {
     let token = Cookies.get("token");
     console.log(token);
@@ -43,14 +40,15 @@ const App = () => {
 
   const handleLogin = () => {
     setLoggedIn(() => {
-        return true;
+      return true;
     });
   };
 
   const handleLogout = () => {
     setLoggedIn(() => {
-      document.cookie =
-        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      Cookies.set("token", "");
+      Cookies.set("firstName", "");
+      Cookies.set("photo", "");
       axios.defaults.headers.common["Authorization"] = null;
       return false;
     });
@@ -103,9 +101,7 @@ const App = () => {
                 />
                 <Route
                   path="/notification"
-                  element={
-                    loggedIn ? <Notification />: <Navigate to="/" />
-                  } 
+                  element={loggedIn ? <Notification /> : <Navigate to="/" />}
                 />
               </Routes>
             </ContentContainer>

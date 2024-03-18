@@ -112,6 +112,7 @@ const StaffCheckOutModal = ({
       openingDate: dateOfOpen,
       reminderTime: notifyPeriod,
       isExpirationReminder: expirationReminder,
+      unitPrice: productData.unitPrice,
     };
 
     //POST request to the API

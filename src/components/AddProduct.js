@@ -36,9 +36,6 @@ const AddProduct = () => {
   // State to hold all selected image files
   const [allImages, setAllImages] = useState([]);
   
-  
-
-  
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -61,6 +58,7 @@ const AddProduct = () => {
     isExpirationReminder: false,
     expirationReminderTime: "Select",
     message: "",
+    location:"",
   });
 
   // State to hold selected image files
@@ -94,6 +92,8 @@ const AddProduct = () => {
             unitPrice,
             periodAfterOpening,
             photo,
+            message,
+            location,
           } = productResults[0];
           //const { addToInventory, stockQuantity, expiryDate} = inventoryResults[0];
           const { stockQuantity, expiryDate } = inventoryResults[0];
@@ -108,6 +108,8 @@ const AddProduct = () => {
             unitPrice,
             periodAfterOpening,
             photo,
+            message,
+            location,
           });
           setExistingInventoryData({
             stockQuantity,
@@ -133,6 +135,8 @@ const AddProduct = () => {
         category,
         unitPrice,
         periodAfterOpening,
+        message,
+        location,
       } = existingProductData;
       const { expiryDate } =
         existingInventoryData;
@@ -152,7 +156,8 @@ const AddProduct = () => {
         lowStockThreshold: "",
         isExpirationReminder: false,
         expirationReminderTime: "",
-        message: "",
+        message,
+        location,
       }));
     }
   }, [existingProductData, existingInventoryData]);
@@ -242,7 +247,7 @@ const AddProduct = () => {
     
     const formDataToSend = new FormData();
   
-    console.log("form data", formData);
+    //console.log("form data", formData);
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
@@ -252,7 +257,8 @@ const AddProduct = () => {
     });
   
     try {
-      const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
+       const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
+        
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -376,7 +382,7 @@ const AddProduct = () => {
                         />
                       </Grid>
 
-                      <Grid item xs={12}>
+                      <Grid item xs={6}>
                         <InputLabel variant="standard" id="brandName-label">
                           Brand
                         </InputLabel>
@@ -389,10 +395,22 @@ const AddProduct = () => {
                           fullWidth
                         />
                       </Grid>
-
+                      <Grid item xs={6}>
+                        <InputLabel variant="standard" id="location-label">
+                          Location
+                        </InputLabel>
+                        <TextField
+                          id="location"
+                          onChange={handleChange}
+                          name="location"
+                          value={formData.location}
+                          placeholder="Location"
+                          fullWidth
+                        />
+                      </Grid>
                       <Grid item xs={6}>
                         <InputLabel variant="standard" id="stockQuantity-label">
-                          Stock Quantity
+                          Stock
                         </InputLabel>
                         <TextField
                           type="number"
@@ -485,6 +503,21 @@ const AddProduct = () => {
                             </MenuItem>
                           ))}
                         </Select>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <InputLabel variant="standard" id="message-label">
+                            Notes
+                          </InputLabel>
+                          <TextField
+                            id="message"
+                            onChange={handleChange}
+                            name="message"
+                            value={formData.message}
+                            multiline
+                            rows={4}
+                            placeholder=""
+                            fullWidth
+                          />
                       </Grid>
                     </Grid>
 

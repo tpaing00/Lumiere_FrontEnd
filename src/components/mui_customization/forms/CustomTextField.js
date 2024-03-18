@@ -13,9 +13,9 @@ export default function CustomTextField({ id, name, labelText, placeholder, valu
                 className='TextField'
                 id={id}
                 name={name}
-                placeholder={onChangeFunction}
+                placeholder={placeholder}
                 value={value}
-                onChange={onChange}
+                onChange={onChangeFunction}
                 fullWidth
             />
 

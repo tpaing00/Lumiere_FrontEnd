@@ -2,11 +2,11 @@ import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import Cookies from "js-cookie";
-import { Box, Button, Container, Grid, InputLabel, SvgIcon, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import CustomButton from './mui_customization/buttons/CustomButton';
 import CustomTextField from './mui_customization/forms/CustomTextField';
 import CustomHeading2 from './mui_customization/typography/CustomHeading2';
-import Logo from './mui_customization/buttons/Logo';
+import Logo from './logo/Logo';
 import LogInPage from '../assets/images/LogInPage.jpg';
 
 
@@ -65,10 +65,13 @@ const Login = ({ onLogin }) => {
             <Grid container>
 
                 <Grid item xs={0} lg={6}
+                style={{
+                    backgroundImage: `url(${LogInPage})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    minHeight: '100vh', // Set a minimum height to cover the entire viewport
+                  }}
                 >
-                    {LogInPage}
-                    {/* <img src="../assets/images/LogInPage.jpg" height='100px' width='100px' /> */}
-                    {/* include image here */}
                 </Grid>
 
                 <Grid item xs={12} lg={6}>
@@ -95,6 +98,7 @@ const Login = ({ onLogin }) => {
                                 error={error && !formData.userName}  // Set error if username is empty
                                 helperText={error && !formData.userName && "Username is required"}
                             />
+
 
                             <CustomTextField
                                 id='password'

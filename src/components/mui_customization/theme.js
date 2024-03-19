@@ -185,6 +185,14 @@ const theme = createTheme({
         },
       ],
     },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          margin: 0,
+          padding: 0,
+        }
+      },
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: {

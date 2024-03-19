@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Grid, Box, Card, CardContent } from "@mui/material";
 
 const Dashboard = () => {
   const [totalInventoryResults, setTotalInventoryResults] = useState("");
@@ -93,123 +93,132 @@ const Dashboard = () => {
       });
 
     axios
-    .get(`https://api.lumiereapp.ca/api/v1/totalinstore`)
-    .then((response) => {
-      if (response.status === 200) {
-        setTotalInternalUseProducts(response.data.totalSale);
-        console.log(response.data);
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error.message);
-    });
-
+      .get(`https://api.lumiereapp.ca/api/v1/totalinstore`)
+      .then((response) => {
+        if (response.status === 200) {
+          setTotalInternalUseProducts(response.data.totalSale);
+          console.log(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
   }, []);
 
   return (
     <>
       <Grid container direction="column" alignItems="left">
-        <Typography variant="h1">Dashboard</Typography>
-        <Grid container spacing={10}>
-          <Grid item xs={2}>
-            <Box>
-              <Typography>Total Inventory</Typography>
-              <Typography>{totalInventoryResults.toLocaleString()}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box>
-              <Typography>Total Inventory Value</Typography>
-              <Typography>
-                ${totalInventoryValueResults.toLocaleString()}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box>
-              <Typography>Total Sales</Typography>
-              <Typography>{totalSaleResults.toLocaleString()}</Typography>
-            </Box>
-          </Grid>
-        </Grid>
+        <Card>
+          <CardContent>
+            <Typography variant="h1">Dashboard</Typography>
+            <Grid container spacing={10}>
+              <Grid item xs={2}>
+                <Box>
+                  <Typography>Total Inventory</Typography>
+                  <Typography>
+                    {totalInventoryResults.toLocaleString()}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box>
+                  <Typography>Total Inventory Value</Typography>
+                  <Typography>
+                    ${totalInventoryValueResults.toLocaleString()}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box>
+                  <Typography>Total Sales</Typography>
+                  <Typography>{totalSaleResults.toLocaleString()}</Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
 
-        <section>
-          <Typography variant="h2">Inventory Overview</Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Total of Retail Products</Typography>
-                <Typography>{totalSaleResults.toLocaleString()}</Typography>
-              </Box>
+        <Card>
+          <CardContent>
+            <Typography variant="h2">Inventory Overview</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Total of Retail Products</Typography>
+                  <Typography>{totalSaleResults.toLocaleString()}</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Total of In-Store Products</Typography>
+                  {totalInternalUseProducts.toLocaleString()}
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Nearly Expired</Typography>
+                  <Typography>
+                    {nearlyExpiredProducts.toLocaleString()}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Expired Products</Typography>
+                  <Typography>{expiredProducts.toLocaleString()}</Typography>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Total of In-Store Products</Typography>
-                {totalInternalUseProducts.toLocaleString()}
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Nearly Expired</Typography>
-                <Typography>
-                  {nearlyExpiredProducts.toLocaleString()}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Expired Products</Typography>
-                <Typography>{expiredProducts.toLocaleString()}</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </section>
+          </CardContent>
+        </Card>
 
-        <section>
-          <Typography variant="h2">Sales Overview</Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Hair Care</Typography>
-                <Typography>
-                  {totalInventoryByCategory["Hair Care"]
-                    ? totalInventoryByCategory["Hair Care"].toLocaleString()
-                    : ""}
-                </Typography>
-              </Box>
+        <Card>
+          <CardContent>
+            <Typography variant="h2">Sales Overview</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Hair Care</Typography>
+                  <Typography>
+                    {totalInventoryByCategory["Hair Care"]
+                      ? totalInventoryByCategory["Hair Care"].toLocaleString()
+                      : ""}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Make-Up</Typography>
+                  <Typography>
+                    {totalInventoryByCategory["Make Up"]
+                      ? totalInventoryByCategory["Make Up"].toLocaleString()
+                      : ""}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Skin Care</Typography>
+                  <Typography>
+                    {totalInventoryByCategory["Skin Care"]
+                      ? totalInventoryByCategory["Skin Care"].toLocaleString()
+                      : ""}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box>
+                  <Typography>Body Care</Typography>
+                  <Typography>
+                    {totalInventoryByCategory["Body Care"]
+                      ? totalInventoryByCategory["Body Care"].toLocaleString()
+                      : ""}
+                  </Typography>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Make-Up</Typography>
-                <Typography>
-                  {totalInventoryByCategory["Make Up"]
-                    ? totalInventoryByCategory["Make Up"].toLocaleString()
-                    : ""}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Skin Care</Typography>
-                <Typography>
-                  {totalInventoryByCategory["Skin Care"]
-                    ? totalInventoryByCategory["Skin Care"].toLocaleString()
-                    : ""}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box>
-                <Typography>Body Care</Typography>
-                <Typography>
-                  {totalInventoryByCategory["Body Care"]
-                    ? totalInventoryByCategory["Body Care"].toLocaleString()
-                    : ""}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </section>
+          </CardContent>
+        </Card>
       </Grid>
       {/* <h1>Dashboard</h1>
         <div>

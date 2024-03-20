@@ -13,6 +13,8 @@ import Scanner from "./Scanner";
 import ScannerDetail from "./ScannerDetail";
 import ProductDetail from "./ProductDetail";
 import Notification from "./Notification";
+import Analytics from "./Analytics";
+import ProductWastage from './ProductWastage'
 import Cookies from "js-cookie";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { styled } from "@mui/material";
@@ -103,7 +105,16 @@ const App = () => {
                   path="/notification"
                   element={loggedIn ? <Notification /> : <Navigate to="/" />}
                 />
+                <Route
+                  path="/analytics"
+                  element={loggedIn ? <Analytics /> : <Navigate to="/" />}
+                />
+                <Route
+                  path="/productwastage"
+                  element={loggedIn ? <ProductWastage /> : <Navigate to="/" />}
+                />
               </Routes>
+              
             </ContentContainer>
           </RootContainer>
         </BrowserRouter>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { SvgIcon, useTheme, useMediaQuery } from '@mui/material';
-import LogoDesktop from '../../assets/logo/LogoDesktop.svg';
-import LogoMobile from '../../assets/logo/LogoMobile.svg';
+import LogoDesktop from '../../assets/logo/logoDesktop.svg';
+import LogoMobile from '../../assets/logo/logoMobile.svg';
 
 export default function Logo() {
     const theme = useTheme();

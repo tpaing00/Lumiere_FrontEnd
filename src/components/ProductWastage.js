@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@mui/styles";
-import ImageList from "@material-ui/core/ImageList";
-import ImageListItem from "@material-ui/core/ImageListItem";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 const data = [
@@ -21,14 +21,15 @@ const useStyles = makeStyles((theme) => ({
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: "translateZ(0)",
     width: "auto", // Ensuring images do not resize
+    height: "350px",
     "&::-webkit-scrollbar": {
       display: "none", // Hide the scrollbar
     },
   },
   image: {
-    width: "150px", // Fixed width for images
-    height: "auto",
-  },
+    width: "150px"
+  }
+  
 }));
 
 const ProductWastage = () => {
@@ -54,7 +55,7 @@ useEffect(() => {
         console.error("Error fetching data:", error);
       }
     };
-    fetchInventoryData
+    fetchInventoryData();
 }, []);
 
   useEffect(() => {

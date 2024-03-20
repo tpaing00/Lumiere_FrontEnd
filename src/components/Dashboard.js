@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Typography, Grid, Box, Card, CardContent } from "@mui/material";
+import StockQuantityChart from "./StockQuantityChart";
 
 const Dashboard = () => {
   const [totalInventoryResults, setTotalInventoryResults] = useState("");
@@ -219,7 +220,9 @@ const Dashboard = () => {
             </Grid>
           </CardContent>
         </Card>
+        {<StockQuantityChart />}
       </Grid>
+
       {/* <h1>Dashboard</h1>
         <div>
           <div>

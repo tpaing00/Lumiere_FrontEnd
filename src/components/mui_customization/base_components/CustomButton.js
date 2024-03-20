@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, useTheme } from '@mui/material';
-import IconQuickScan from '../../icons/QuickScan';
+import { Button, SvgIcon, useTheme } from '@mui/material';
+import QuickScan from '../../../assets/icons/QuickScan.svg';
 
 export default function CustomButton({ variant, type, text, onClick }) {
     const theme = useTheme();
@@ -15,7 +15,7 @@ export default function CustomButton({ variant, type, text, onClick }) {
                     height: { lg: '56px' },
                 }}
             >
-                {variant === 'floating' && <IconQuickScan />}
+                {variant === 'floating' && <SvgIcon component={QuickScan} />}
                 {text}
             </Button>
 

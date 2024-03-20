@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/system";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
@@ -9,34 +9,32 @@ const data = [
   { category: "Hair Care", totalWasteQuantity: 58 },
   { category: "Skin Care", totalWasteQuantity: 3 },
 ];
-const useStyles = makeStyles((theme) => ({
-  root: {
+
+const RootContainer = styled("div")({
     display: "flex",
-    justifyContent: "center", // Center the content horizontally
-    overflowX: "auto", // Enable horizontal scrolling
-    maxWidth: "100%", // Ensure the container doesn't overflow
-  },
-  imageList: {
-    flexWrap: "nowrap",
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: "translateZ(0)",
-    width: "auto", // Ensuring images do not resize
-    height: "350px",
-    "&::-webkit-scrollbar": {
-      display: "none", // Hide the scrollbar
-    },
-  },
-  image: {
-    width: "150px"
-  }
+    justifyContent: "center",
+    overflowX: "auto",
+    maxWidth: "100%",
+  });
   
-}));
+  const StyledImageList = styled(ImageList)({
+    flexWrap: "nowrap",
+    transform: "translateZ(0)",
+    width: "auto",
+    scrollbarWidth: "none", // For Firefox
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+  });
+  
+  const StyledImage = styled("img")({
+    width: "250px",
+    height: "350px",
+  });
 
 const ProductWastage = () => {
   const [wasteProducts, setWasteProducts] = useState([]);
   const [inventory, setInventory] = useState([]);
-  const classes = useStyles();
-//   /gettotalinventorybycategory
 
 useEffect(() => {
     const fetchInventoryData = async () => {
@@ -83,15 +81,15 @@ useEffect(() => {
 
   return (
     <>
-      <div className={classes.root}>
-        <ImageList className={classes.imageList} cols={wasteProducts.length}>
-          {wasteProducts.map((product) => (
-            <ImageListItem key={product._id}>
-              <img src={product.photo[0]} alt={product.productName} />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      </div>
+      <RootContainer>
+      <StyledImageList cols={wasteProducts.length}>
+        {wasteProducts.map((product) => (
+          <ImageListItem key={product._id}>
+            <StyledImage src={product.photo[0]} alt={product.productName} />
+          </ImageListItem>
+        ))}
+      </StyledImageList>
+    </RootContainer>
       <ResponsiveContainer width="100%" height={300}>
       <BarChart
         data={data}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Select, MenuItem, useTheme } from '@mui/material';
+import { InputLabel, MenuItem, Select, useTheme } from '@mui/material';
 
-export default function CustomSelect({ id, name, labelText, value, onChangeFunction, optionsArrayName }) {
+export default function CustomSelect({ id, name, labelText, value, array }) {
     const theme = useTheme();
 
     return (
@@ -10,19 +10,15 @@ export default function CustomSelect({ id, name, labelText, value, onChangeFunct
                 {labelText}
             </InputLabel>
             <Select
+                aria-label={labelText}
                 className="dropdown"
                 id={id}
                 name={name}
                 value={value}
-                onChange={onChangeFunction}
                 fullWidth
             >
-                {optionsArrayName.map((type) => (
-                    <MenuItem
-                        key={type.value}
-                        value={type.value}
-                        fullWidth
-                    >
+                {array.map((type) => (
+                    <MenuItem key={type.value} value={type.value}>
                         {type.label}
                     </MenuItem>
                 ))}

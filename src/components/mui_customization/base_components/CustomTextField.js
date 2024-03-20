@@ -6,10 +6,11 @@ export default function CustomTextField({ id, name, labelText, placeholder, valu
 
     return (
         <>
-            <InputLabel variant="standard" id={`${id}-label`} sx={{mt: '16px'}} >
+            <InputLabel variant="standard" id={`${id}-label`} sx={{ mt: '16px' }} >
                 {labelText}
             </InputLabel>
             <TextField
+                aria-label={labelText}
                 className='TextField'
                 id={id}
                 name={name}

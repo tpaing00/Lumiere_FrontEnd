@@ -47,7 +47,7 @@ const theme = createTheme({
     },
     background: {
       paper: '#fcfcfc',
-      default: '#fcfcfc',
+      default: '#dfdfdf',
     }
   },
   typography: {
@@ -183,6 +183,32 @@ const theme = createTheme({
             },
           },
         },
+        {
+          props: { variant: 'link' },
+          style: {
+            backgroundColor: 'transparent',
+            border: 'none',
+            boxShadow: 'none',
+            color: '#132f3e',
+            fontWeight: '600',
+            textDecoration: 'underline',
+            '&:hover': {
+              backgroundColor: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+            },
+            '&:active': {
+              backgroundColor: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+            },
+            '&:disabled': {
+              backgroundColor: 'transparent',
+              border: 'none',
+              color: '#6a6a6a',
+            },
+          },
+        },
       ],
     },
     MuiContainer: {
@@ -202,6 +228,14 @@ const theme = createTheme({
           fontWeight: 'normal',
           martingTop: '16px'
         },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '16px',
+          boxShadow: ''
+        }
       },
     },
     MuiSwitch: {

@@ -6,6 +6,7 @@ import productCategoryData from "./predefined_data/productcategory.json";
 import StaffCheckOutModal from "./StaffCheckOutModal";
 import { Box, Button, Grid, IconButton, InputLabel, Menu, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
+import CustomSearch from "./mui_customization/base_components/CustomSearch";
 
 
   const ProductList = () => {
@@ -512,16 +513,14 @@ import { MoreVert } from "@mui/icons-material";
         </Grid>
 
         <Grid item xs={4}>
-          <InputLabel variant="standard" id="searchInventory-label">
-            Search:
-          </InputLabel>
-          <TextField
-            id="searchInventory"
-            name="searchInventory"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by name, brand, or category"
+          <CustomSearch
+          id="searchInventory"
+          name="searchInventory"
+          labelText="Search"
+          type="text"
+          value={searchTerm}
+          placeholder="Search"
+          onChange={(e) => setSearchTerm(e.target.value)}
           />
         </Grid>
       </Grid>

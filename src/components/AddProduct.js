@@ -31,11 +31,12 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import { DocumentScannerOutlined } from "@mui/icons-material";
 import { format, addDays } from "date-fns";
+import CustomSelect from "./mui_customization/base_components/CustomSelect";
 
 const AddProduct = () => {
   // State to hold all selected image files
   const [allImages, setAllImages] = useState([]);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
@@ -58,7 +59,7 @@ const AddProduct = () => {
     isExpirationReminder: false,
     expirationReminderTime: "Select",
     message: "",
-    location:"",
+    location: "",
   });
 
   // State to hold selected image files
@@ -69,7 +70,7 @@ const AddProduct = () => {
     // Concatenate the new images with existing ones
     setImages((prevImages) => [...prevImages, ...files]);
   };
-  
+
 
   const [error, setError] = useState(null);
 
@@ -240,30 +241,30 @@ const AddProduct = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (!validateForm()) {
       return;
     }
-    
+
     const formDataToSend = new FormData();
-  
+
     //console.log("form data", formData);
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
-  
+
     images.forEach((image, index) => {
       formDataToSend.append(`images`, image);
     });
-  
+
     try {
-       const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
-        
+      const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
+
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       if (response.status === 201) {
         const { inventory, notification, product } = response.data;
         let inventoryId = inventory._id;
@@ -283,10 +284,10 @@ const AddProduct = () => {
       }
     }
   };
-  
+
   return (
     <>
-      <Container component="main" maxWidth="lg" sx={{mt: 3}} >
+      <Container component="main" maxWidth="lg" sx={{ mt: 3 }} >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Typography
             component="h1"
@@ -312,23 +313,16 @@ const AddProduct = () => {
             <Box className="register-inventory">
               <Grid container spacing={3}>
                 <Grid item xs={6}>
-                  <InputLabel variant="standard" id="addToInventory-label">
-                    Add to Inventory
-                  </InputLabel>
-                  <Select
+                  <CustomSelect
                     id="addToInventory"
                     name="addToInventory"
                     className="dropdown"
                     value={formData.addToInventory}
                     onChange={handleChange}
-                    fullWidth
-                  >
-                    {inventoryTypeData.map((type) => (
-                      <MenuItem key={type.value} value={type.value}>
-                        {type.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    labelText="Add to inventory"
+                    array={inventoryTypeData}
+                  />
+
                 </Grid>
 
                 <Grid item xs={6}>
@@ -506,51 +500,51 @@ const AddProduct = () => {
                       </Grid>
                       <Grid item xs={12}>
                         <InputLabel variant="standard" id="message-label">
-                            Notes
-                          </InputLabel>
-                          <TextField
-                            id="message"
-                            onChange={handleChange}
-                            name="message"
-                            value={formData.message}
-                            multiline
-                            rows={4}
-                            placeholder=""
-                            fullWidth
-                          />
+                          Notes
+                        </InputLabel>
+                        <TextField
+                          id="message"
+                          onChange={handleChange}
+                          name="message"
+                          value={formData.message}
+                          multiline
+                          rows={4}
+                          placeholder=""
+                          fullWidth
+                        />
                       </Grid>
                     </Grid>
 
-<Grid item xs={5} className="register-product-images">
-  <Typography component="h2" align="left" variant="h3" sx={{ mb: 2 }}>
-    Product Images
-  </Typography>
-  
-  <Box sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2 }}>
-    <Grid container spacing={1}>
-      {/* Render existing images */}
-      {existingProductData && existingProductData.photo && existingProductData.photo.map((image, index) => (
-        <Grid item key={index}>
-          <img src={image} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
-        </Grid>
-      ))}
-      {/* Render newly uploaded images */}
-      {images && images.length > 0 && Array.from(images).map((image, index) => (
-        <Grid item key={index}>
-          <img src={URL.createObjectURL(image)} alt={`Newly Uploaded Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
-        </Grid>
-      ))}
-    </Grid>
-    
-    <TextField
-      type="file"
-      id="productImages"
-      name="productImages"
-      multiple
-      onChange={handleFileChange}
-    />
-  </Box>
-</Grid>
+                    <Grid item xs={5} className="register-product-images">
+                      <Typography component="h2" align="left" variant="h3" sx={{ mb: 2 }}>
+                        Product Images
+                      </Typography>
+
+                      <Box sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2 }}>
+                        <Grid container spacing={1}>
+                          {/* Render existing images */}
+                          {existingProductData && existingProductData.photo && existingProductData.photo.map((image, index) => (
+                            <Grid item key={index}>
+                              <img src={image} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
+                            </Grid>
+                          ))}
+                          {/* Render newly uploaded images */}
+                          {images && images.length > 0 && Array.from(images).map((image, index) => (
+                            <Grid item key={index}>
+                              <img src={URL.createObjectURL(image)} alt={`Newly Uploaded Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
+                            </Grid>
+                          ))}
+                        </Grid>
+
+                        <TextField
+                          type="file"
+                          id="productImages"
+                          name="productImages"
+                          multiple
+                          onChange={handleFileChange}
+                        />
+                      </Box>
+                    </Grid>
                   </Grid>
                 </AccordionDetails>
               </Accordion>
@@ -704,7 +698,7 @@ const AddProduct = () => {
     </>
   );
 
-// return (
+  // return (
   //   <>
   //     <h1>Register New Product</h1>
   //     {error && <p style={{ color: "red" }}>{error}</p>}
@@ -876,6 +870,6 @@ const AddProduct = () => {
   //     </form>
   //   </>
   // );
-  };
+};
 
 export default AddProduct;

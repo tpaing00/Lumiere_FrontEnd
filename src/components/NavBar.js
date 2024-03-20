@@ -1,24 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import {
-  Box,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-  useMediaQuery,
-} from "@mui/material/";
-import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
-import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
-import InsertChartOutlinedIcon from "@mui/icons-material/InsertChartOutlined";
-import CropFreeOutlinedIcon from "@mui/icons-material/CropFreeOutlined";
-import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import { Link } from "react-router-dom";
+import { Box, Drawer, List, IconButton, SvgIcon, useMediaQuery } from "@mui/material/";
+import CustomListItem from "./mui_customization/base_components/CustomListItem";
+import Close from '../assets/icons/Close.svg'
+import Hamburger from '../assets/icons/Hamburger.svg'
 
 const NavBar = () => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -30,50 +15,26 @@ const NavBar = () => {
 
   const drawerContent = (
     <List>
-      <ListItem component={Link} to="/">
-        <ListItemButton onClick={handleDrawerToggle}>
-          <ListItemIcon>
-            <InboxOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText secondary="Quick Scan" />
-        </ListItemButton>
-      </ListItem>
-
-      <ListItem component={Link} to="/dashboard">
-        <ListItemButton onClick={handleDrawerToggle}>
-          <ListItemIcon>
-            <CropFreeOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText secondary="Dashboard" />
-        </ListItemButton>
-      </ListItem>
-
-      <ListItem component={Link} to="/inventory">
-        <ListItemButton onClick={handleDrawerToggle}>
-          <ListItemIcon>
-            <Inventory2OutlinedIcon />
-          </ListItemIcon>
-          <ListItemText secondary="Inventory" />
-        </ListItemButton>
-      </ListItem>
-
-      <ListItem component={Link} to="/analytics">
-        <ListItemButton onClick={handleDrawerToggle}> 
-          <ListItemIcon>
-            <InsertChartOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText secondary="Analytics" />
-        </ListItemButton>
-      </ListItem>
-
-      {/* <ListItem component={Link} to="/add-product">
-        <ListItemButton onClick={handleDrawerToggle}>
-          <ListItemIcon>
-            <AddBoxOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText secondary="Register Product" />
-        </ListItemButton>
-      </ListItem> */}
+      <CustomListItem
+        variant="quickscan"
+        endpoint="/"
+        onClick={handleDrawerToggle}
+      />
+      <CustomListItem
+        variant="dashboard"
+        endpoint="/dashboard"
+        onClick={handleDrawerToggle}
+      />
+      <CustomListItem
+        variant="inventory"
+        endpoint="/inventory"
+        onClick={handleDrawerToggle}
+      />
+      <CustomListItem
+        variant="analytics"
+        endpoint="/analytics"
+        onClick={handleDrawerToggle}
+      />
     </List>
   );
 
@@ -88,7 +49,7 @@ const NavBar = () => {
               onClick={handleDrawerToggle}
               edge="start"
             >
-              {open ? <CloseIcon onClick={handleDrawerToggle} /> : <MenuIcon />}
+              {open ? <SvgIcon component={Close} onClick={handleDrawerToggle} /> : <SvgIcon component={Hamburger} />}
             </IconButton>
           </Box>
           <Drawer

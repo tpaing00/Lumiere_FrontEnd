@@ -7,8 +7,8 @@ export default function LogoMobile() {
   return (
     <>
       <SvgIcon sx={{
-        width: '100px', // Define width here
-        height: '100px', // Define height here
+        width: '100px',
+        height: '100px',
       }} >
 
         <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115.03 24">

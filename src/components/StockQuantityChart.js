@@ -2,27 +2,22 @@ import React from "react";
 import { Typography, Grid, Card, CardContent } from "@mui/material";
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
 
-const data = [
-  { _id: "Skin Care", totalStockQuantity: 131, unitPrice: 10 },
-  { _id: "Make Up", totalStockQuantity: 75, unitPrice: 15 },
-  { _id: "Hair Care", totalStockQuantity: 858, unitPrice: 8 },
-  { _id: "Body Care", totalStockQuantity: 150, unitPrice: 12 },
-];
+const StockQuantityChart = ({totalInventoryStock}) => {
+    const data = totalInventoryStock;
+    console.log(data);
+    const totalQuantity = data.reduce(
+        (acc, curr) => acc + curr.totalStockQuantity,
+        0
+      );
+      
+      const colors = ["#F26419", "#000000", "#F5B02C", "#87BBD7"];
+      
+      const pieData = data.map((item, index) => ({
+        name: item._id,
+        value: item.totalStockQuantity,
+        fill: colors[index],
+      }));
 
-const totalQuantity = data.reduce(
-  (acc, curr) => acc + curr.totalStockQuantity,
-  0
-);
-
-const colors = ["#F26419", "#000000", "#F5B02C", "#87BBD7"];
-
-const pieData = data.map((item, index) => ({
-  name: item._id,
-  value: item.totalStockQuantity,
-  fill: colors[index],
-}));
-
-const StockQuantityChart = () => {
   return (
     <>
       <Typography variant="h2">Total Products</Typography>
@@ -76,7 +71,7 @@ const StockQuantityChart = () => {
                 const percentage = (
                   (payload.value / totalStockQuantity) *
                   100
-                ).toFixed(1);
+                ).toFixed(0);
                 return `${percentage}%`;
               }}
             />
@@ -119,7 +114,7 @@ const StockQuantityChart = () => {
                               dominantBaseline="middle"
                               fontSize={14}
                             >
-                              {`${percentage.toFixed(1)}%`}
+                              {`${percentage.toFixed(0)}%`}
                             </text>
                           )}
                           labelLine={false}

@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [nearlyExpiredProducts, setNearlyExpiredProducts] = useState("");
   const [expiredProducts, setExpiredProducts] = useState("");
   const [totalInventoryByCategory, setTotalInventoryByCategory] = useState({});
+  const [totalInventoryStock, setTotalInventoryStock] = useState();
 
   useEffect(() => {
     axios
@@ -20,7 +21,6 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalInventoryResults(response.data.totalInventory);
-          // console.log(response.data);
         }
       })
       .catch((error) => {
@@ -32,7 +32,6 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalInventoryValueResults(response.data.totalInventoryValue);
-          // console.log(response.data);
         }
       })
       .catch((error) => {
@@ -44,7 +43,6 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalSaleResults(response.data.totalSale);
-          // console.log(response.data);
         }
       })
       .catch((error) => {
@@ -56,7 +54,6 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setNearlyExpiredProducts(response.data.totalNearlyExpiredProducts);
-          // console.log(response.data);
         }
       })
       .catch((error) => {
@@ -68,7 +65,6 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setExpiredProducts(response.data.totalExpiredProducts);
-          // console.log(response.data);
         }
       })
       .catch((error) => {
@@ -79,11 +75,10 @@ const Dashboard = () => {
       .get(`https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory`)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response);
+          setTotalInventoryStock(response.data);
           let totalStockByCategory = {};
           response.data.forEach((item) => {
             totalStockByCategory[item._id] = item.totalStockQuantity;
-            // console.log(totalStockByCategory);
           });
 
           setTotalInventoryByCategory(totalStockByCategory);
@@ -98,7 +93,6 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalInternalUseProducts(response.data.totalSale);
-          console.log(response.data);
         }
       })
       .catch((error) => {
@@ -220,7 +214,7 @@ const Dashboard = () => {
             </Grid>
           </CardContent>
         </Card>
-        {<StockQuantityChart />}
+        {totalInventoryStock && (<StockQuantityChart totalInventoryStock={totalInventoryStock}/>)}
       </Grid>
 
       {/* <h1>Dashboard</h1>

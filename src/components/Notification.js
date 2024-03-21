@@ -205,7 +205,6 @@ const Notification = ({ inPopup }) => {
                 {inPopup
                     ? notifications.slice(0, 10).map((notification, index) => {
                         
-                        console.log("Notification at index", index, ":", notification);
                         return (
                             <div key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item">
                                 <h2>{notification.type}</h2>
@@ -220,8 +219,6 @@ const Notification = ({ inPopup }) => {
                         );
                     })
                     : notifications.map((notification, index) => {
-                        console.log("data in notifications is ", notifications);
-                        console.log("Notification at index", index, ":", notification);
                         return (
                             <div key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item">
                                 <h2>{notification.type}</h2>

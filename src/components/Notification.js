@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Typography, ButtonGroup, Button } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Notification = ({ inPopup }) => {
+    const navigate = useNavigate();
+
     const [notifications, setNotifications] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [wasteData, setWasteData] = useState([]);
     const [filterOption, setFilterOption] = useState('all'); // State to track filter option
+
+    const handleViewDetail = (inventoryId, barcodeNumber) => {
+        navigate("/productdetail", {
+          state: { inventoryId, barcodeNumber },
+        });
+      };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // Fetch products first
                 const productsResponse = await axios.get('https://api.lumiereapp.ca/api/v1/products');
+                console.log("Product Response ", productsResponse.data);
                 setProducts(productsResponse.data);
                 // Fetch notifications after products are fetched
                 const notificationResponse = await axios.get('https://api.lumiereapp.ca/api/v1/activeNotificationList');
+                console.log("notification response ", notificationResponse.data);
                 // Call generateNotifications after both products and notifications are fetched
                 generateNotifications(productsResponse.data, notificationResponse.data);
                 setLoading(false); // Update loading state
@@ -31,24 +43,21 @@ const Notification = ({ inPopup }) => {
     // Function to generate notifications based on filter option
     const generateNotifications = (productsData, notificationsData) => {
         const allNotifications = [];
-
-        // Check if notificationsData is available
-        if (!notificationsData.lowStockResults || !notificationsData.expiryResults) {
-            console.error('Missing notification data');
-            return;
-        }
-
-        // Iterate over notificationsData and generate notifications based on filter option
+    
+        // Iterate over low stock notifications and generate notifications
         notificationsData.lowStockResults.forEach(notification => {
             const productData = findProductByBarcode(productsData, notification.barcodeNumber);
             allNotifications.push({
                 type: 'Low Stock',
                 productName: productData.productName,
                 productPhoto: productData.productPhoto,
-                message: `The ${productData.productName} has low-stock.`
+                message: `The ${productData.productName} has low-stock.`,
+                inventoryId: notification._id, // Include inventoryId from the low stock notification
+                barcodeNumber: productData.barcodeNumber
             });
         });
-
+    
+        // Iterate over expiry notifications and generate notifications
         notificationsData.expiryResults.forEach(notification => {
             const productData = findProductByBarcode(productsData, notification.barcodeNumber);
             const expiryDate = new Date(notification.expiryDate).toLocaleDateString();
@@ -56,14 +65,18 @@ const Notification = ({ inPopup }) => {
                 type: 'Expiration',
                 productName: productData.productName,
                 productPhoto: productData.productPhoto,
-                message: `The ${productData.productName} is almost expired ( ${expiryDate} ).`
+                message: `The ${productData.productName} is almost expired (${expiryDate}).`,
+                inventoryId: notification._id, // Include inventoryId from the expiry notification
+                barcodeNumber: productData.barcodeNumber
             });
         });
-
+    
         // Apply filtering based on filterOption
         const filteredNotifications = applyFilter(allNotifications, filterOption);
         setNotifications(filteredNotifications);
     };
+    
+    
 
     // Function to apply filtering based on filterOption
     const applyFilter = (notifications, filterOption) => {
@@ -99,7 +112,8 @@ const Notification = ({ inPopup }) => {
     
         return {
             productName: product.productName,
-            productPhoto: product.photo.length > 0 ? product.photo[0] : 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' // Default photo URL
+            productPhoto: product.photo.length > 0 ? product.photo[0] : 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', // Default photo URL
+            barcodeNumber: product.barcodeNumber 
         };
     };
     const handleFilterNotifications = async (filterType) => {
@@ -115,7 +129,9 @@ const Notification = ({ inPopup }) => {
                         type: 'Low Stock',
                         productName: productData.productName,
                         productPhoto: productData.productPhoto,
-                        message: `The ${productData.productName} has low stock.`
+                        message: `The ${productData.productName} has low stock.`,
+                        inventoryId: notification._id,
+                        barcodeNumber: productData.barcodeNumber
                     };
                 }));
             } else if (filterType === 'expiration') {
@@ -126,7 +142,9 @@ const Notification = ({ inPopup }) => {
                         type: 'Expiration',
                         productName: productData.productName,
                         productPhoto: productData.productPhoto,
-                        message: `The ${productData.productName} is almost expired ( ${expiryDate} ).`
+                        message: `The ${productData.productName} is almost expired ( ${expiryDate} ).`,
+                        inventoryId: notification._id,
+                        barcodeNumber: productData.barcodeNumber
                     };
                 }));
             } else if (filterType === 'all') {
@@ -137,7 +155,9 @@ const Notification = ({ inPopup }) => {
                             type: 'Low Stock',
                             productName: productData.productName,
                             productPhoto: productData.productPhoto,
-                            message: `The ${productData.productName} has low stock.`
+                            message: `The ${productData.productName} has low stock.`,
+                            inventoryId: notification._id,
+                            barcodeNumber: productData.barcodeNumber
                         };
                     }),
                     ...notificationResponse.data.expiryResults.map(notification => {
@@ -146,7 +166,9 @@ const Notification = ({ inPopup }) => {
                             type: 'Expiration',
                             productName: productData.productName,
                             productPhoto: productData.productPhoto,
-                            message: `The ${productData.productName} is almost expired ${notification.expiryDate}.`
+                            message: `The ${productData.productName} is almost expired ${notification.expiryDate}.`,
+                            inventoryId: notification._id,
+                            barcodeNumber: productData.barcodeNumber
                         };
                     })
                 ];
@@ -158,6 +180,7 @@ const Notification = ({ inPopup }) => {
             setLoading(false); // Update loading state
         }
     };
+    
     
     
     return (
@@ -178,32 +201,44 @@ const Notification = ({ inPopup }) => {
                 <p>Loading...</p>
             ) : (
                 <div className="notification-list">
-                    {/* Show only the first few notifications in the popup */}
-                    {inPopup
-                        ? notifications.slice(0, 10).map((notification, index) => (
-                            <div key={index} className="notification-item">
+                {/* Show only the first few notifications in the popup */}
+                {inPopup
+                    ? notifications.slice(0, 10).map((notification, index) => {
+                        
+                        console.log("Notification at index", index, ":", notification);
+                        return (
+                            <div key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item">
                                 <h2>{notification.type}</h2>
                                 <p>{notification.message}</p>
-                                <img src={notification.productPhoto} 
-                                    alt={notification.productName} 
-                                    className="notification-image" 
-                                    style={{ width: '100px', height: '100px' }} 
+                                <img
+                                    src={notification.productPhoto}
+                                    alt={notification.productName}
+                                    className="notification-image"
+                                    style={{ width: '100px', height: '100px' }}
                                 />
                             </div>
-                        ))
-                        : notifications.map((notification, index) => (
-                            <div key={index} className="notification-item">
+                        );
+                    })
+                    : notifications.map((notification, index) => {
+                        console.log("data in notifications is ", notifications);
+                        console.log("Notification at index", index, ":", notification);
+                        return (
+                            <div key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item">
                                 <h2>{notification.type}</h2>
                                 <p>{notification.message}</p>
-                                <img src={notification.productPhoto} 
-                                    alt={notification.productName} 
-                                    className="notification-image" 
-                                    style={{ width: '100px', height: '100px' }} 
+                                <img
+                                    src={notification.productPhoto}
+                                    alt={notification.productName}
+                                    className="notification-image"
+                                    style={{ width: '100px', height: '100px' }}
                                 />
                             </div>
-                        ))
-                    }
-                </div>
+                        );
+                    })
+                }
+            </div>
+            
+
             )}
         </>
     );

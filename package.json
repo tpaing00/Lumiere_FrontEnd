@@ -41,7 +41,8 @@
     "recharts": "^2.12.3",
     "style-loader": "^3.3.4",
     "webpack": "^5.90.2",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "xlsx": "^0.18.5"
   },
   "browserslist": {
     "production": [

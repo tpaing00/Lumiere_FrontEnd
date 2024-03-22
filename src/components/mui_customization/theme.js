@@ -47,29 +47,37 @@ const theme = createTheme({
     },
     background: {
       paper: '#fcfcfc',
-      default: '#dfdfdf',
+      default: '#f5f4f1',
     }
   },
   typography: {
     h1: {
       fontFamily: 'Roboto Condensed',
-      fontSize: '30px',
+      fontSize: 32,
       '@media (min-width:1440px)': {
-        fontSize: '38px',
+        fontSize: 48,
       },
       fontWeight: 700,
       letterSpacing: '-1.5px',
+      marginBottom: 24,
+      marginTop: 24,
       color: '#003c5c',
     },
     h2: {
       fontFamily: 'Roboto Condensed',
       fontSize: 28,
+      '@media (min-width:1440px)': {
+        fontSize: 32,
+      },
       fontWeight: 700,
       color: '#003c5c',
     },
     h3: {
       fontFamily: 'Roboto Condensed',
       fontSize: 18,
+      '@media (min-width:1440px)': {
+        fontSize: 24,
+      },
       fontWeight: 700,
     },
     body1: {
@@ -211,12 +219,36 @@ const theme = createTheme({
         },
       ],
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          boxShadow: '0px 8px 20px 0px rgba(199, 191, 165, 0.15)'
+        }
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          marginTop: '12px',
+          marginBottom: '12px',
+          padding: '12px 12px 12px 12px',
+        }
+      },
+    },
     MuiContainer: {
       styleOverrides: {
         root: {
           margin: 0,
           padding: 0,
         }
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#fcfcfc',
+        },
       },
     },
     MuiInputLabel: {

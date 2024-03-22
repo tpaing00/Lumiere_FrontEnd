@@ -12,6 +12,7 @@ export default function CustomTypography({ text, variant }) {
             sx={{
                 marginLeft: 0,
                 textAlign: 'left'
+                
             }}
             >
                 {text}

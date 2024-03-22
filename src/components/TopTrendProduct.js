@@ -5,10 +5,10 @@ import { SvgIcon } from '@mui/material';
 
 
 import AllCategoriesIcon from '../assets/icons/All.svg';
-import HairCareIcon from '../assets/icons/Icon-hair-care.svg';
-import SkinCareIcon from '../assets/icons/Face Icon.svg';
-import BodyCareIcon from '../assets/icons/Bodycare Icon.svg';
-import MakeUpIcon from '../assets/icons/Make-Up-Icon.svg';
+import HairCareIcon from '../assets/icons/HairCare.svg';
+import SkinCareIcon from '../assets/icons/SkinCare.svg';
+import BodyCareIcon from '../assets/icons/BodyCare.svg';
+import MakeUpIcon from '../assets/icons/MakeUp.svg';
 
 const TopTrendProducts = () => {
     const [trendyProducts, setTrendyProducts] = useState([]);

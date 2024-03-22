@@ -18,8 +18,8 @@ const TopTrendProducts = () => {
 
     useEffect(() => {
         Promise.all([
-            axios.get("http://localhost:8080/api/v1/topbyproductname"),
-            axios.get("http://localhost:8080/api/v1/inventory"),
+            axios.get("https://api.lumiereapp.ca/api/v1/topbyproductname"),
+            axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
             axios.get("https://api.lumiereapp.ca/api/v1/products")
         ])
         .then((responses) => {

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { styled } from "@mui/system";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import * as XLSX from "xlsx";
 
 const StyledImage = styled("img")({
   width: "200px",
@@ -15,6 +16,8 @@ const StyledImage = styled("img")({
 });
 
 
+
+
 const ProductWastage = () => {
   const [wasteProducts, setWasteProducts] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -22,6 +25,91 @@ const ProductWastage = () => {
   const [totalWasteQuantities, setTotalWasteQuantities] = useState(null);
   const [xLabels, setXLabels] = useState([]);
   const [series, setSeries] = useState([]);
+
+  const ExportReport = () => {
+    const handleExport = () => {
+      // Combine the data into an array of objects
+      const exportData = xLabels.map((label, index) => ({
+        category: label,
+        totalStockQuantity: totalStockQuantities[index],
+        totalWasteQuantity: totalWasteQuantities[index],
+      }));
+    
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+    
+      // Convert the data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+    
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Waste Report');
+    
+      // Generate the XLSX file
+      const fileData = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    
+      // Convert the array buffer to a Blob
+      const blob = new Blob([fileData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+      // Create a temporary anchor element to trigger the download
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'waste_report.xlsx';
+    
+      // Click the anchor to trigger the download
+      document.body.appendChild(link);
+      link.click();
+    
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    };
+    // const handleExport = () => {
+    //   const wb = XLSX.utils.book_new();
+    //   wb.SheetNames.push("Product Wastage");
+    //   const wsData = [
+    //     ["Category", "Total Stock Quantity", "Total Waste Quantity"],
+    //     ...data.map(({ category, totalStockQuantity, totalWasteQuantity }) => [
+    //       category,
+    //       totalStockQuantity,
+    //       totalWasteQuantity,
+    //     ]),
+    //   ];
+    //   const ws = XLSX.utils.aoa_to_sheet(wsData);
+    //   wb.Sheets["Product Wastage"] = ws;
+    //   const wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+    //   const filename = "product_wastage_report.xlsx";
+    //   const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+    //   saveAs(blob, filename);
+    // };
+  
+    // const s2ab = (s) => {
+    //   const buf = new ArrayBuffer(s.length);
+    //   const view = new Uint8Array(buf);
+    //   for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+    //   return buf;
+    // };
+  
+    // const saveAs = (blob, filename) => {
+    //   const link = document.createElement("a");
+    //   if (typeof link.download === "string") {
+    //     document.body.appendChild(link);
+    //     link.download = filename;
+    //     link.href = URL.createObjectURL(blob);
+    //     link.click();
+    //     document.body.removeChild(link);
+    //   } else {
+    //     window.open(URL.createObjectURL(blob), "_blank");
+    //   }
+    // };
+  
+    return (
+      <Box sx={{ mt: 5, display: 'flex', justifyContent: 'center' }}>
+          <Button variant="contained" onClick={handleExport}>
+            Export Report
+          </Button>
+          </Box>
+    );
+  };
 
   useEffect(() => {
     const fetchWastageData = async () => {
@@ -33,7 +121,6 @@ const ProductWastage = () => {
           const top5Waste = response.data.flatMap(
             (category) => category.top5Waste
           );
-          console.log("top5Waste", top5Waste);
           setWasteProducts(top5Waste);
         } else {
           console.error("Failed to fetch data:", response.status);
@@ -47,9 +134,7 @@ const ProductWastage = () => {
         );
 
         if (inventoryResponse.status === 200 && wasteResponse.status === 200) {
-          console.log("Inventory data:", inventoryResponse.data);
-          console.log("Wastage data:", wasteResponse.data);
-
+         
           // Combine inventory and wastage data
           const combinedData = wasteResponse.data.map((wasteItem) => {
             const correspondingInventoryItem = inventoryResponse.data.find(
@@ -69,7 +154,6 @@ const ProductWastage = () => {
               };
             }
           });
-          console.log("combinedData:", combinedData);
 
           const totalStockQuantities = combinedData.map(
             (item) => item.totalStockQuantity
@@ -130,6 +214,7 @@ const ProductWastage = () => {
             totalWasteQuantities &&
             xLabels &&
             series && (
+              <>
               <BarChart
                 width={800}
                 height={300}
@@ -151,6 +236,8 @@ const ProductWastage = () => {
                 layout="horizontal" // Setting layout to horizontal
                 margin={{ top: 50, right: 30, left: 60, bottom: 20 }} // Adjusting margins
               />
+               <ExportReport />
+              </>
             )}
         </CardContent>
       </Card>

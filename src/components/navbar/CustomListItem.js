@@ -1,10 +1,10 @@
 import React from 'react';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, SvgIcon, useTheme } from '@mui/material';
 import { Link } from "react-router-dom";
-import QuickScan from '../../../assets/icons/QuickScan.svg'
-import Dashboard from '../../../assets/icons/Dashboard.svg'
-import Inventory from '../../../assets/icons/Inventory.svg'
-import Analytics from '../../../assets/icons/Analytics.svg'
+import QuickScan from '../../assets/icons/QuickScan.svg'
+import Dashboard from '../../assets/icons/Dashboard.svg'
+import Inventory from '../../assets/icons/Inventory.svg'
+import Analytics from '../../assets/icons/Analytics.svg'
 
 export default function CustomListItem({ variant, endpoint, onClick }) {
     const theme = useTheme();
@@ -28,15 +28,16 @@ export default function CustomListItem({ variant, endpoint, onClick }) {
                 aria-label={text}
                 component={Link}
                 to={endpoint}
+                sx={{fontSize: '30px'}}
             >
-                <ListItemButton onClick={onClick}>
-                    <ListItemIcon>
+                <ListItemButton onClick={onClick} sx={{fontSize: '30px', color:'red'}}>
+                    <ListItemIcon >
                         {variant === 'quickscan' && <SvgIcon component={QuickScan} />}
                         {variant === 'dashboard' && <SvgIcon component={Dashboard} />}
                         {variant === 'inventory' && <SvgIcon component={Inventory} />}
                         {variant === 'analytics' && <SvgIcon component={Analytics} />}
                     </ListItemIcon>
-                    <ListItemText secondary={text} />
+                    <ListItemText secondary={text} sx={{fontSize: '30px'}}/>
                 </ListItemButton>
             </ListItem>
         </>

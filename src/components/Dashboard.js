@@ -1,10 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Typography, Grid, Box, Card, CardContent } from "@mui/material";
-import StockQuantityChart from "./StockQuantityChart";
+import { Typography, Grid, Box, Card, CardContent, SvgIcon, useTheme } from "@mui/material";
+import StockQuantityChart from "./dashboard/StockQuantityChart";
+import DashInfoPiece from "./dashboard/DashInfoPiece";
+import Bell from '../assets/icons/Bell.svg'
+import CustomCardcontent from "./dashboard/CustomCardContent";
+import DashOverviewPiece from "./dashboard/DashOverviewPiece";
+import DashCard from "./dashboard/DashCard";
 
 const Dashboard = () => {
+  const theme = useTheme();
+
   const [totalInventoryResults, setTotalInventoryResults] = useState("");
   const [totalInventoryValueResults, setTotalInventoryValueResults] =
     useState("");
@@ -102,176 +109,103 @@ const Dashboard = () => {
 
   return (
     <>
-      <Grid container direction="column" alignItems="left">
-        <Card>
-          <CardContent>
-            <Typography variant="h1">Dashboard</Typography>
-            <Grid container spacing={10}>
-              <Grid item xs={2}>
-                <Box>
-                  <Typography>Total Inventory</Typography>
-                  <Typography>
-                    {totalInventoryResults.toLocaleString()}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box>
-                  <Typography>Total Inventory Value</Typography>
-                  <Typography>
-                    ${totalInventoryValueResults.toLocaleString()}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box>
-                  <Typography>Total Sales</Typography>
-                  <Typography>{totalSaleResults.toLocaleString()}</Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+      <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Dashboard</Typography>
+      <Grid container alignItems="left" sx={{ pr: '30px', pb: 0, pl: '40px' }} spacing={'24px'}>
+        <Grid item xs={12} lg={8} sx={{ p: 0 }}>
+          <Card sx={{ p: 0 }}>
+            <CustomCardcontent className="dashboard-overview">
 
-        <Card>
-          <CardContent>
-            <Typography variant="h2">Inventory Overview</Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Total of Retail Products</Typography>
-                  <Typography>{totalSaleResults.toLocaleString()}</Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Total of In-Store Products</Typography>
-                  {totalInternalUseProducts.toLocaleString()}
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Nearly Expired</Typography>
-                  <Typography>
-                    {nearlyExpiredProducts.toLocaleString()}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Expired Products</Typography>
-                  <Typography>{expiredProducts.toLocaleString()}</Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+              <DashInfoPiece
+                text="Total Inventory"
+                resultsName={totalInventoryResults}
+                type="number"
+              />
 
-        <Card>
-          <CardContent>
-            <Typography variant="h2">Sales Overview</Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Hair Care</Typography>
-                  <Typography>
-                    {totalInventoryByCategory["Hair Care"]
-                      ? totalInventoryByCategory["Hair Care"].toLocaleString()
-                      : ""}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Make-Up</Typography>
-                  <Typography>
-                    {totalInventoryByCategory["Make Up"]
-                      ? totalInventoryByCategory["Make Up"].toLocaleString()
-                      : ""}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Skin Care</Typography>
-                  <Typography>
-                    {totalInventoryByCategory["Skin Care"]
-                      ? totalInventoryByCategory["Skin Care"].toLocaleString()
-                      : ""}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box>
-                  <Typography>Body Care</Typography>
-                  <Typography>
-                    {totalInventoryByCategory["Body Care"]
-                      ? totalInventoryByCategory["Body Care"].toLocaleString()
-                      : ""}
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-        {totalInventoryStock && (<StockQuantityChart totalInventoryStock={totalInventoryStock}/>)}
+              <DashInfoPiece
+                text="Total Inventory Value"
+                resultsName={totalInventoryValueResults}
+                type="currency"
+              />
+
+              <DashInfoPiece
+                text="Total Sales"
+                resultsName={totalSaleResults}
+                type="number"
+              />
+
+            </CustomCardcontent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} lg={4} >
+          <Card className="dashboard-notification" sx={{ p: 0, display: "flex", alignItems: "center", height: '100%' }}>
+            <CustomCardcontent>
+
+              <Typography sx={{ display: "flex", alignItems: "center" }}>
+                <SvgIcon component={Bell} sx={{ width: '27.19px', height: '35px', color: theme.palette.secondary.dark, mr: '16px' }} />
+                The Dandelion is almost expired
+              </Typography>
+
+            </CustomCardcontent>
+          </Card>
+        </Grid>
+
+        <DashCard title="Inventory Overview">
+          <DashOverviewPiece
+            title="Total of Retail Products"
+            variant="retail"
+            resultsName={totalSaleResults}
+          />
+          <DashOverviewPiece
+            title="Total of In-Store Products"
+            variant="inStore"
+            resultsName={totalInternalUseProducts}
+          />
+          <DashOverviewPiece
+            title="Nearly Expired"
+            variant="nearlyExpired"
+            resultsName={nearlyExpiredProducts}
+          />
+          <DashOverviewPiece
+            title="Expired Products"
+            variant="expired"
+            resultsName={expiredProducts}
+          />
+        </DashCard>
+
+        <DashCard title="Sales Overview">
+          <DashOverviewPiece
+            title="Hair Care"
+            variant="hairCare"
+            resultsName={totalInventoryByCategory}
+          />
+          <DashOverviewPiece
+            title="Make-Up"
+            variant="makeUp"
+            resultsName={totalInventoryByCategory}
+          />
+          <DashOverviewPiece
+            title="Skin Care"
+            variant="skinCare"
+            resultsName={totalInventoryByCategory}
+          />
+          <DashOverviewPiece
+            title="Body Care"
+            variant="bodyCare"
+            resultsName={totalInventoryByCategory}
+          />
+        </DashCard>
+
+        <DashCard title="Total Products">
+          {totalInventoryStock && (<StockQuantityChart totalInventoryStock={totalInventoryStock} />)}
+        </DashCard>
+
+        <DashCard title="Top Trend Products">
+
+        </DashCard>
+
       </Grid>
 
-      {/* <h1>Dashboard</h1>
-        <div>
-          <div>
-            <p>Total Inventory</p>
-            <p>{totalInventoryResults.toLocaleString()}</p>
-          </div>
-          <div>
-            <p>Total Inventory Value</p>
-            <p>${totalInventoryValueResults.toLocaleString()}</p>
-          </div>
-          <div>
-            <p>Total Sales</p>
-            <p>{totalSaleResults.toLocaleString()}</p>
-          </div>
-        </div>
-
-        <section>
-          <h2>Inventory Overview</h2>
-          <div>
-            <p>Total of Retail Products</p>
-            <p>{totalSaleResults.toLocaleString()}</p>
-          </div>
-          <div>
-            <p>Total of In-Store Products</p>
-            <p></p>
-          </div>
-          <div>
-            <p>Nearly Expired</p>
-            <p>{nearlyExpiredProducts.toLocaleString()}</p>
-          </div>
-          <div>
-            <p>Expired Products</p>
-            <p>{expiredProducts.toLocaleString()}</p>
-          </div>
-        </section>
-        
-        <section>
-          <h2>Sales Overview</h2>
-          <div>
-            <p>Hair Care</p>
-            <p>{totalInventoryByCategory["Hair Care"] ? totalInventoryByCategory["Hair Care"].toLocaleString() : ''}</p>
-          </div>
-          <div>
-            <p>Make-Up</p>
-            <p>{totalInventoryByCategory["Make Up"] ? totalInventoryByCategory["Make Up"].toLocaleString() : ''}</p>
-          </div>
-          <div>
-            <p>Skin Care</p>
-            <p>{totalInventoryByCategory["Skin Care"] ? totalInventoryByCategory["Skin Care"].toLocaleString() : ''}</p>
-          </div>
-          <div>
-            <p>Body Care</p>
-            <p>{totalInventoryByCategory["Body Care"] ? totalInventoryByCategory["Body Care"].toLocaleString() : ''}</p>
-          </div>
-        </section> */}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Box, Drawer, List, IconButton, SvgIcon, useMediaQuery } from "@mui/material/";
-import CustomListItem from "./mui_customization/base_components/CustomListItem";
+import CustomListItem from "./navbar/CustomListItem";
 import Close from '../assets/icons/Close.svg'
 import Hamburger from '../assets/icons/Hamburger.svg'
 
@@ -61,6 +61,7 @@ const NavBar = () => {
               sx: {
                 marginTop: "55px", // Set margin top to start below the menu icon
                 width: "100%", // Set width to 100% for full width
+                backgroundColor: '#fcfcfc'
               },
             }}
           >

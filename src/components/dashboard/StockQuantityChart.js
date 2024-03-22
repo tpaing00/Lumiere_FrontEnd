@@ -20,17 +20,20 @@ const StockQuantityChart = ({totalInventoryStock}) => {
 
   return (
     <>
-      <Typography variant="h2">Total Products</Typography>
-      <Grid container spacing={0}>
-        <Grid item xs={12} md={6} align="center">
-          <PieChart width={400} height={400}>
+      
+        {/* <Grid item xs={12} md={6} align="center"> */}
+        <Grid item xs={6} sx={{ display: 'flex', padding: '16px 34px 39px 16px', border: '1px solid black' }}>
+          <Card sx={{border: '1px solid red', width:'100%'}}>
+          <PieChart width={100} height={100}>
             <Pie
+              width={100}
+              height={100}
               data={pieData}
               dataKey="value"
               cx="50%"
               cy="50%"
-              outerRadius={150}
-              innerRadius={110}
+              outerRadius={80}
+              innerRadius={60}
               startAngle={90}
               endAngle={-360}
               label={({ cx, cy }) => (
@@ -40,7 +43,8 @@ const StockQuantityChart = ({totalInventoryStock}) => {
                     y={cy - 20}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize={28}
+                    fontSize="24px"
+                    fontFamily="Roboto Condensed"
                   >
                     {totalQuantity}
                   </text>
@@ -49,7 +53,8 @@ const StockQuantityChart = ({totalInventoryStock}) => {
                     y={cy + 20}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize={22}
+                    fontSize="24px"
+                    fontFamily="Roboto Condensed"
                   >
                     Products
                   </text>
@@ -76,8 +81,9 @@ const StockQuantityChart = ({totalInventoryStock}) => {
               }}
             />
           </PieChart>
+          </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} lg={6}>
           <Grid container spacing={0}>
             {data.map((item, index) => {
               const otherCategoriesQuantity =
@@ -138,7 +144,7 @@ const StockQuantityChart = ({totalInventoryStock}) => {
             })}
           </Grid>
         </Grid>
-      </Grid>
+      
     </>
   );
 };

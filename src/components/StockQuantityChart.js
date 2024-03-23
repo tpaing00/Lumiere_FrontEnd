@@ -1,6 +1,14 @@
-import React from "react";
-import { Typography, Grid, Card, CardContent } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Box,
+  Button,
+} from "@mui/material";
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
+import * as XLSX from "xlsx";
 
 const StockQuantityChart = ({ totalInventoryStock }) => {
   const data = totalInventoryStock;
@@ -17,16 +25,73 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
       "Body Care": "#000000",
       "Make Up": "#F5B02C",
     };
-    
+
     return colorMap[category] || "#CCCCCC";
   };
-
 
   const pieData = data.map((item, index) => ({
     name: item._id,
     value: item.totalStockQuantity,
-    fill: getColor(item._id)
+    fill: getColor(item._id),
   }));
+
+  const [xLabels] = useState([
+    "Hair Care",
+    "Skin Care",
+    "Body Care",
+    "Make Up",
+  ]);
+
+  const ExportReport = () => {
+    const handleExport = () => {
+      // Combine the data into an array of objects
+      const exportData = xLabels.map((label, index) => ({
+        Category: label,
+        Total_Stock_Quantity: totalInventoryStock[index].totalStockQuantity,
+      }));
+
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+
+      // Convert the data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Total Stock Quantity");
+
+      // Generate the XLSX file
+      const fileData = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      // Convert the array buffer to a Blob
+      const blob = new Blob([fileData], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      // Create a temporary anchor element to trigger the download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Total_Stock_Quantity.xlsx";
+
+      // Click the anchor to trigger the download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    };
+
+    return (
+      <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+        <Button variant="contained" onClick={handleExport}>
+          Export Report
+        </Button>
+      </Box>
+    );
+  };
 
   return (
     <>
@@ -97,6 +162,7 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
                 }}
               />
             </PieChart>
+            <ExportReport />
           </Card>
         </Grid>
 
@@ -160,7 +226,6 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
             })}
           </Grid>
         </Grid>
-
       </Grid>
     </>
   );

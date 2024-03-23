@@ -1,6 +1,15 @@
-import React from "react";
-import { Typography, Grid, Card, CardContent, Avatar } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Avatar,
+  Box,
+  Button,
+} from "@mui/material";
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
+import * as XLSX from "xlsx";
 
 const StockQuantityChartByCategory = ({
   selectedCategory,
@@ -21,7 +30,7 @@ const StockQuantityChartByCategory = ({
       "Body Care": "#000000",
       "Make Up": "#F5B02C",
     };
-    
+
     return colorMap[category] || "#CCCCCC";
   };
 
@@ -32,7 +41,7 @@ const StockQuantityChartByCategory = ({
   const pieData = [
     { name: foundCategory._id, value: foundCategory.totalStockQuantity },
     { name: "Other", value: otherCategoriesQuantity },
-    {fill: getColor(foundCategory._id)}
+    { fill: getColor(foundCategory._id) },
   ];
 
   const foundCategoryData = totalInventoryStockWithData.find((item) => {
@@ -41,6 +50,65 @@ const StockQuantityChartByCategory = ({
     }
   }).data;
   console.log(foundCategoryData);
+
+  const [xLabels] = useState([`${selectedCategory}`, "Other"]);
+
+  const ExportReport = () => {
+    const handleExport = () => {
+      // Combine the data into an array of objects
+      const exportData = [
+        {
+          Category: selectedCategory,
+          Total_Stock_Quantity: foundCategory.totalStockQuantity,
+        },
+        { Category: "Other", Total_Stock_Quantity: otherCategoriesQuantity },
+      ];
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+
+      // Convert the data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Total Stock By Category"
+      );
+
+      // Generate the XLSX file
+      const fileData = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      // Convert the array buffer to a Blob
+      const blob = new Blob([fileData], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      // Create a temporary anchor element to trigger the download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Total_Stock_By_Category.xlsx";
+
+      // Click the anchor to trigger the download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    };
+
+    return (
+      <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+        <Button variant="contained" onClick={handleExport}>
+          Export Report
+        </Button>
+      </Box>
+    );
+  };
 
   return (
     <Card>
@@ -87,6 +155,7 @@ const StockQuantityChartByCategory = ({
               </Pie>
               <Tooltip />
             </PieChart>
+            <ExportReport />
           </Grid>
           <Grid item container spacing={1} xs={6} lg={6}>
             {foundCategoryData.slice(0, 5).map((product, index) => (
@@ -129,7 +198,6 @@ const StockQuantityChartByCategory = ({
                         <Typography variant="body2" color="text.secondary">
                           Barcode Number: {product.product.barcodeNumber}
                         </Typography>
-                        {/* Add more product info as needed */}
                       </Grid>
                     </Grid>
                   </CardContent>

@@ -10,7 +10,7 @@ import {
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
 import * as XLSX from "xlsx";
 
-const StockQuantityChart = ({ totalInventoryStock }) => {
+const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
   const data = totalInventoryStock;
   console.log(data);
   const totalQuantity = data.reduce(
@@ -96,25 +96,27 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
   return (
     <>
       {/* <Grid item xs={12} md={6} align="center"> */}
-      <Grid container spacing={0}>
-        <Grid
-          item
-          xs={6}
-          sx={{
-            display: "flex",
-            padding: "16px 34px 39px 16px",
-            border: "1px solid black",
-          }}
-        >
-          <Card sx={{ border: "1px solid red", width: "100%" }}>
-            <PieChart width={300} height={300}>
+      <Card sx={{ width: "100%" }}>
+        <Grid container spacing={0}>
+          <Grid
+            item
+            xs={6}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* <Card sx={{ width: "100%" }}> */}
+            <PieChart width={selectedCategory ? 500 : 300} height={selectedCategory ? 450 : 300}>
               <Pie
                 data={pieData}
                 dataKey="value"
                 cx="50%"
                 cy="50%"
-                outerRadius={130}
-                innerRadius={100}
+                outerRadius={selectedCategory ? 200 : 140}
+                innerRadius={selectedCategory ? 160 : 100}
                 startAngle={90}
                 endAngle={-360}
                 label={({ cx, cy }) => (
@@ -125,6 +127,7 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fontSize="24px"
+                      fontWeight="bold"
                       fontFamily="Roboto Condensed"
                     >
                       {totalQuantity}
@@ -135,6 +138,7 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fontSize="24px"
+                      fontWeight="bold"
                       fontFamily="Roboto Condensed"
                     >
                       Products
@@ -162,71 +166,93 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
                 }}
               />
             </PieChart>
-            <ExportReport />
-          </Card>
-        </Grid>
+            {selectedCategory && <ExportReport />}
+            {/* </Card> */}
+          </Grid>
 
-        <Grid item xs={12} lg={6}>
-          <Grid container spacing={0}>
-            {data.map((item, index) => {
-              const otherCategoriesQuantity =
-                totalQuantity - item.totalStockQuantity;
-              const percentage =
-                (item.totalStockQuantity / totalQuantity) * 100;
-              const pieData = [
-                { name: item._id, value: item.totalStockQuantity },
-                { name: "Other", value: otherCategoriesQuantity },
-              ];
-              return (
-                <Grid key={index} item xs={6} md={6} align="center">
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h3" align="center">
-                        {item._id}
-                      </Typography>
-                      <PieChart width={200} height={200}>
-                        <Pie
-                          data={pieData}
-                          dataKey="value"
-                          cx="50%"
-                          cy="50%"
-                          outerRadius={50}
-                          innerRadius={40}
-                          startAngle={90}
-                          endAngle={-360}
-                          label={({ cx, cy }) => (
-                            <text
-                              x={cx}
-                              y={cy}
-                              textAnchor="middle"
-                              dominantBaseline="middle"
-                              fontSize={14}
-                            >
-                              {`${percentage.toFixed(0)}%`}
-                            </text>
-                          )}
-                          labelLine={false}
+          <Grid
+            item
+            xs={12}
+            lg={6}
+            sx={{ padding: 2 }}
+          >
+            <Grid container spacing={0}>
+              {data.map((item, index) => {
+                const otherCategoriesQuantity =
+                  totalQuantity - item.totalStockQuantity;
+                const percentage =
+                  (item.totalStockQuantity / totalQuantity) * 100;
+                const pieData = [
+                  { name: item._id, value: item.totalStockQuantity },
+                  { name: "Other", value: otherCategoriesQuantity },
+                ];
+                return (
+                  <Grid
+                    key={index}
+                    item
+                    xs={6}
+                    md={6}
+                    align="center"
+                  >
+                    <Card
+                      sx={{
+                        boxShadow: (theme) =>
+                          `4px 4px 8px ${getColor(item._id)}`,
+                        margin: 1,
+                      }}
+                    >
+                      <CardContent>
+                        <Typography variant="h3" align="center">
+                          {item._id}
+                        </Typography>
+                        <PieChart width={110} height={140}>
+                          <Pie
+                            data={pieData}
+                            dataKey="value"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={50}
+                            innerRadius={40}
+                            startAngle={90}
+                            endAngle={-360}
+                            label={({ cx, cy }) => (
+                              <text
+                                x={cx}
+                                y={cy}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                fontSize={14}
+                              >
+                                {`${percentage.toFixed(0)}%`}
+                              </text>
+                            )}
+                            labelLine={false}
+                          >
+                            {pieData.map((entry, i) => (
+                              <Cell
+                                key={`cell-${i}`}
+                                fill={i === 0 ? getColor(item._id) : "#CCCCCC"}
+                              />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                        <Typography
+                          variant="body1"
+                          align="center"
+                          sx={{ fontSize: "16px" }}
                         >
-                          {pieData.map((entry, i) => (
-                            <Cell
-                              key={`cell-${i}`}
-                              fill={i === 0 ? getColor(item._id) : "#CCCCCC"}
-                            />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                      <Typography variant="body1" align="center">
-                        Quantity: {item.totalStockQuantity} Products
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
+                          Quantity: {item.totalStockQuantity} Products
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Card>
     </>
   );
 };

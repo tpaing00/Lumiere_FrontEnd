@@ -4,7 +4,7 @@ import axios from "axios";
 import CategoryNav from "./CategoryNav";
 import StockQuantityChart from "./StockQuantityChart";
 import StockQuantityChartByCategory from "./StockQuantityChartByCategory";
-import { Box } from '@mui/material';
+import { Typography, Grid, Box, Card, CardContent, SvgIcon, useTheme } from "@mui/material";
 
 const TotalInventory = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -50,7 +50,8 @@ const TotalInventory = () => {
 
   return (
     <>
-      <h1>Total Inventory</h1>
+      {/* <h1>Total Inventory</h1> */}
+      <Typography variant="h1" >Total Inventory</Typography>
      
       <Box sx={{ mb: 5, mt: 8 }} >
         <CategoryNav
@@ -60,7 +61,7 @@ const TotalInventory = () => {
       </Box>
  
       {selectedCategory === "All" && totalInventoryStock && (
-        <StockQuantityChart totalInventoryStock={totalInventoryStock} />
+        <StockQuantityChart totalInventoryStock={totalInventoryStock} selectedCategory={selectedCategory}/>
       )}
       {selectedCategory !== "All" && totalInventoryStockWithData && (
         <StockQuantityChartByCategory

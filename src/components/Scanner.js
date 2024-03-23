@@ -93,7 +93,7 @@ function Scanner() {
                 min={7}
                 value={barcode}
                 onChange={(e) => setBarcode(e.target.value)}
-                label="Barcode Number"
+                placeholder="Barcode Number"
                 sx={{ width: "400px", mt: 5  , background: "white"}}
                 InputLabelProps={{
                   sx: { color: "gray" } // Set label color to white

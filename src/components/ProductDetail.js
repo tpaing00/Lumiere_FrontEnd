@@ -4,7 +4,16 @@ import { format, addDays, subDays } from "date-fns";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import ActivityHistory from "./ActivityHistory";
-import { Typography, Grid, Card, CardContent, CardMedia } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Box,
+  Button,
+  Pagination,
+} from "@mui/material";
 
 const ProductDetail = () => {
   const location = useLocation();
@@ -21,6 +30,10 @@ const ProductDetail = () => {
   const [saleResults, setSaleResults] = useState("");
   // const [showActivityHistory, setshowActivityHistory] = useState(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
+
+  // To set pagination for image
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1;
 
   useEffect(() => {
     axios
@@ -126,150 +139,207 @@ const ProductDetail = () => {
     }
   }, []);
 
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visiblePhoto =
+    (wasteId === undefined || wasteId === ""
+      ? productResults.photo
+      : wasteProductResults.photo) || [];
+
   return (
     <>
-      <Typography variant="h1" sx={{ padding: "10px 0 10px 0" }}>
+      <Box sx={{ p: 4 }}>
+        {/* <Typography variant="h1" sx={{ padding: "10px 0 10px 0" }}>
         Product Detail
-      </Typography>
-      <Typography
-        sx={{
-          backgroundColor: "#DAEDF5",
-          display: "inline-block",
-          marginRight: "20px",
-          padding: "10px",
-          borderRadius: "100px",
-        }}
-      >
-        {wasteId === undefined || wasteId === ""
-          ? inventoryResults.addToInventory
-          : wasteProductResults.addToInventory}
-      </Typography>
-      <Typography
-        sx={{
-          backgroundColor: "#DAEDF5",
-          display: "inline-block",
-          padding: "10px",
-          borderRadius: "100px",
-        }}
-      >
-        {wasteId === undefined || wasteId === ""
-          ? productResults.category
-          : wasteProductResults.category}
-      </Typography>
-      <Typography sx={{ padding: "10px 0 10px 0" }}>
-        {`Brand: ${
-          wasteId === undefined || wasteId === ""
-            ? productResults.brandName
-            : wasteProductResults.brandName
-        }`}
-      </Typography>
-      <Typography variant="h1">
-        {wasteId === undefined || wasteId === ""
-          ? productResults.productName
-          : wasteProductResults.productName}
-      </Typography>
-
-      <Grid item xs={12}>
-        <Grid container spacing={2}>
+      </Typography> */}
+        <Typography
+          sx={{
+            backgroundColor: "#DAEDF5",
+            display: "inline-block",
+            marginRight: "20px",
+            padding: "11px",
+            borderRadius: "100px",
+          }}
+        >
           {wasteId === undefined || wasteId === ""
-            ? productResults.photo &&
-              productResults.photo.map((photoUrl, index) => (
-                <Grid item key={index}>
-                  <img
-                    src={photoUrl}
-                    alt={`Product Image ${index + 1}`}
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                </Grid>
-              ))
-            : wasteProductResults.photo &&
-              wasteProductResults.photo.map((photoUrl, index) => (
-                <Grid item key={index}>
-                  <img
-                    src={photoUrl}
-                    alt={`Product Image ${index + 1}`}
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                </Grid>
-              ))}
-        </Grid>
-      </Grid>
+            ? inventoryResults.addToInventory
+            : wasteProductResults.addToInventory}
+        </Typography>
+        <Typography
+          sx={{
+            backgroundColor: "#DAEDF5",
+            display: "inline-block",
+            padding: "11px",
+            borderRadius: "100px",
+          }}
+        >
+          {wasteId === undefined || wasteId === ""
+            ? productResults.category
+            : wasteProductResults.category}
+        </Typography>
+        <Typography sx={{ padding: "10px 0 10px 0" }}>
+          {`Brand: ${
+            wasteId === undefined || wasteId === ""
+              ? productResults.brandName
+              : wasteProductResults.brandName
+          }`}
+        </Typography>
+        <Typography variant="h2">
+          {wasteId === undefined || wasteId === ""
+            ? productResults.productName
+            : wasteProductResults.productName}
+        </Typography>
 
-      <Card>
-        <CardContent>
-          <Grid container spacing={5}>
-            <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
-              <Typography variant="h2">Product Information</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              p: 4,
+              mt: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Grid container spacing={1} justifyContent="center">
+              {visiblePhoto
+                .slice(startIndex, endIndex)
+                .map((photoUrl, index) => (
+                  <Grid item key={index}>
+                    <img
+                      src={photoUrl}
+                      alt={`Product Image ${startIndex + index + 1}`}
+                      style={{ width: "288px", height: "300px" }}
+                    />
+                  </Grid>
+                ))}
             </Grid>
-            <Grid item xs={4}>
-              <Typography>Stock</Typography>
-              <Typography>
-                {wasteId === undefined || wasteId === ""
-                  ? inventoryResults.stockQuantity
-                  : wasteProductResults.wasteQuantity}
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Unit Price</Typography>
-              <Typography>
-                $
-                {wasteId === undefined || wasteId === ""
-                  ? productResults.unitPrice
-                  : wasteProductResults.unitPrice}
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Total Value</Typography>
-              <Typography>
-                $
-                {wasteId === undefined || wasteId === ""
-                  ? inventoryResults.totalValue
-                  : wasteProductResults.totalValue}
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Barcode Number</Typography>
-              <Typography>
-                {wasteId === undefined || wasteId === ""
-                  ? inventoryResults.barcodeNumber
-                  : wasteProductResults.barcodeNumber}
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Expiry Date</Typography>
-              <Typography>{formattedExpiryDate}</Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Period After Opening</Typography>
-              <Typography>
-                {wasteId === undefined || wasteId === ""
-                  ? productResults.periodAfterOpening
-                  : wasteProductResults.periodAfterOpening}
-                M
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography>Notes</Typography>
-              <Typography>
-                {wasteId === undefined || wasteId === ""
-                  ? productResults.message
-                  : wasteProductResults.message}
-              </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      {userListResults &&
-        inventoryResults &&
-        internalUseListResults &&
-        saleResults && (
-          <ActivityHistory
-            inventoryResults={inventoryResults}
-            internalUseListResults={internalUseListResults}
-            userListResults={userListResults}
-            saleResults={saleResults}
-          />
-        )}
+            <Pagination
+              count={visiblePhoto.length}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
+
+          <Card>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
+                  <Typography variant="h2" sx={{ mb: 4 }}>
+                    Product Information
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
+                  <Grid
+                    container
+                    spacing={5}
+                    sx={{
+                      borderTop: "1px solid #ccc",
+                      borderBottom: "1px solid #ccc",
+                      alignItems: "center",
+                      justifyContent: "space-evenly",
+                      pb: 3,
+                    }}
+                  >
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: "14px" }}>Stock</Typography>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
+                        {wasteId === undefined || wasteId === ""
+                          ? inventoryResults.stockQuantity
+                          : wasteProductResults.wasteQuantity}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Unit Price
+                      </Typography>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
+                        $
+                        {wasteId === undefined || wasteId === ""
+                          ? productResults.unitPrice
+                          : wasteProductResults.unitPrice}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Total Value
+                      </Typography>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
+                        $
+                        {wasteId === undefined || wasteId === ""
+                          ? inventoryResults.totalValue
+                          : wasteProductResults.totalValue}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Barcode Number
+                      </Typography>
+                      <Typography>
+                        {wasteId === undefined || wasteId === ""
+                          ? inventoryResults.barcodeNumber
+                          : wasteProductResults.barcodeNumber}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Expiry Date
+                      </Typography>
+                      <Typography>{formattedExpiryDate}</Typography>
+                    </Grid>
+                    <Grid item xs={6} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Period After Opening
+                      </Typography>
+                      <Typography>
+                        {wasteId === undefined || wasteId === ""
+                          ? productResults.periodAfterOpening
+                          : wasteProductResults.periodAfterOpening}
+                        M
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography sx={{ fontSize: "14px" }}>Notes</Typography>
+                  <Typography>
+                    {wasteId === undefined || wasteId === ""
+                      ? productResults.message
+                      : wasteProductResults.message}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Box>
+        {userListResults &&
+          inventoryResults &&
+          internalUseListResults &&
+          saleResults && (
+            <ActivityHistory
+              inventoryResults={inventoryResults}
+              internalUseListResults={internalUseListResults}
+              userListResults={userListResults}
+              saleResults={saleResults}
+            />
+          )}
+      </Box>
     </>
   );
 };

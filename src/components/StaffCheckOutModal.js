@@ -53,7 +53,7 @@ const StaffCheckOutModal = ({
       setError("Please enter a valid quantity within the available stock.");
       return false;
     }
-    
+
     // Validate reason
     if (reason === "Select") {
       setError("Please select a reason for checkout.");
@@ -79,7 +79,7 @@ const StaffCheckOutModal = ({
       return false;
     }
 
-    
+
     // Validate expirationReminder and notifyPeriod
     if (!expirationReminder || notifyPeriod === "Select") {
       setError("Please select a notify period for expiration reminder.");
@@ -151,13 +151,16 @@ const StaffCheckOutModal = ({
 
           {error && <Typography sx={{ color: "warning" }}>{error}</Typography>}
 
+          <InputLabel variant="standard" id="quantity-label" sx={{ mt: 1 }}>
+            Quantity:
+          </InputLabel>
           <TextField
+            id="quantity"
             type="number"
             name="quantity"
             value={quantity}
             InputProps={{ inputProps: { min: 1, max: stockQuantity } }}
             onChange={(e) => setQuantity(e.target.value)}
-            label="Quantity:"
             fullWidth
           />
 
@@ -206,7 +209,7 @@ const StaffCheckOutModal = ({
                     name="expirationReminder"
                     value={expirationReminder}
                     id="expirationReminder"
-                    // checked={expirationReminder}
+                  // checked={expirationReminder}
                   />
                 }
                 aria-label="Expiration Reminder:"
@@ -214,7 +217,7 @@ const StaffCheckOutModal = ({
             </Grid>
           </Grid>
 
-          <InputLabel variant="standard" id="notifyPeriod-label" sx={{ mt: 1 }}>
+          <InputLabel variant="standard" id="notifyPeriod-label" sx={{ mt: '8px' }}>
             Notify when the end of Period-After-Open is*:
           </InputLabel>
           <Select
@@ -233,14 +236,14 @@ const StaffCheckOutModal = ({
           </Select>
 
           <Box className="form-control" sx={{ mt: 3 }}>
-            <Button
+            {/* <Button
               variant="outlined"
               type="reset"
               sx={{ mr: 3 }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
+            </Button> */}
             <Button variant="contained" onClick={handleProceed}>
               Proceed
             </Button>

@@ -1,18 +1,18 @@
 import React from 'react';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, SvgIcon, useTheme } from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, SvgIcon, Typography, useTheme } from '@mui/material';
 import { Link } from "react-router-dom";
-import QuickScan from '../../assets/icons/QuickScan.svg'
-import Dashboard from '../../assets/icons/Dashboard.svg'
-import Inventory from '../../assets/icons/Inventory.svg'
-import Analytics from '../../assets/icons/Analytics.svg'
+import DashboardSecondaryDark from '../../assets/icons/DashboardSecondaryDark.svg'
+import InventorySecondaryDark from '../../assets/icons/InventorySecondaryDark.svg'
+import AnalyticsSecondaryDark from '../../assets/icons/AnalyticsSecondaryDark.svg'
+import DashboardActive from '../../assets/icons/DashboardActive.svg'
+import InventoryActive from '../../assets/icons/InventoryActive.svg'
+import AnalyticsActive from '../../assets/icons/AnalyticsActive.svg'
 
-export default function CustomListItem({ variant, endpoint, onClick }) {
+export default function CustomListItem({ variant, endpoint, isSelected, handleItemClick }) {
     const theme = useTheme();
 
     let text = "";
     switch (variant) {
-        case "quickscan": text = "Quick Scan";
-            break;
         case "dashboard": text = "Dashboard";
             break;
         case "inventory": text = "Inventory";
@@ -26,19 +26,29 @@ export default function CustomListItem({ variant, endpoint, onClick }) {
         <>
             <ListItem
                 aria-label={text}
+                role="listitem"
                 component={Link}
                 to={endpoint}
-                sx={{fontSize: '30px'}}
+                sx={{
+                    p: '16px 30px',
+                    m: 0,
+                    borderLeft: isSelected ? '5px solid #75500b' : theme.palette,
+                    color: isSelected ? '#75500b' : 'none',
+                }}
+                selected={isSelected}
+                onClick={() => handleItemClick(variant)}
             >
-                <ListItemButton onClick={onClick} sx={{fontSize: '30px', color:'red'}}>
-                    <ListItemIcon >
-                        {variant === 'quickscan' && <SvgIcon component={QuickScan} />}
-                        {variant === 'dashboard' && <SvgIcon component={Dashboard} />}
-                        {variant === 'inventory' && <SvgIcon component={Inventory} />}
-                        {variant === 'analytics' && <SvgIcon component={Analytics} />}
-                    </ListItemIcon>
-                    <ListItemText secondary={text} sx={{fontSize: '30px'}}/>
-                </ListItemButton>
+                {variant === 'dashboard' && <SvgIcon component={isSelected ? DashboardActive : DashboardSecondaryDark} sx={{ mr: '8px' }} />}
+                {variant === 'inventory' && <SvgIcon component={isSelected ? InventoryActive : InventorySecondaryDark} sx={{ mr: '8px' }} />}
+                {variant === 'analytics' && <SvgIcon component={isSelected ? AnalyticsActive : AnalyticsSecondaryDark} sx={{ mr: '8px' }} />}
+                <Typography sx={{
+                    fontSize: '20px',
+                    color: isSelected ? '#75500b' : theme.palette.secondary.dark,
+                    p: 0
+                }}
+                >
+                    {text}</Typography>
+
             </ListItem>
         </>
     )

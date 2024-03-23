@@ -2,11 +2,13 @@ import React from "react";
 import { Typography, Grid, IconButton, Box } from "@mui/material";
 import { SvgIcon } from "@mui/material";
 
-import AllCategoriesIcon from '../assets/icons/All.svg';
-import HairCareIcon from '../assets/icons/HairCare.svg';
-import SkinCareIcon from '../assets/icons/Face-Icon.svg';
-import BodyCareIcon from '../assets/icons/BodyCare.svg';
-import MakeUpIcon from '../assets/icons/Make-Up-Icon.svg';
+
+import All from "../assets/icons/All.svg";
+import HairCare from "../assets/icons/HairCare.svg";
+import SkinCare from "../assets/icons/SkinCare.svg";
+import BodyCare from "../assets/icons/BodyCare.svg";
+import MakeUp from "../assets/icons/MakeUp.svg";
+
 
 const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
   return (
@@ -24,7 +26,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
               onClick={() => handleCategoryChange("All")}
               color={selectedCategory === "All" ? "primary" : "default"}
             >
-              <AllCategoriesIcon />
+              <SvgIcon component={All} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -39,7 +41,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
               onClick={() => handleCategoryChange("Hair Care")}
               color={selectedCategory === "Hair Care" ? "primary" : "default"}
             >
-              <SvgIcon component={HairCareIcon} viewBox="0 0 24 24" />
+              <SvgIcon component={HairCare} viewBox="0 0 24 24" />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -54,7 +56,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
               onClick={() => handleCategoryChange("Skin Care")}
               color={selectedCategory === "Skin Care" ? "primary" : "default"}
             >
-              <SkinCareIcon />
+              <SvgIcon component={SkinCare} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -69,7 +71,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
               onClick={() => handleCategoryChange("Make Up")}
               color={selectedCategory === "Makeup" ? "primary" : "default"}
             >
-              <MakeUpIcon />
+              <SvgIcon component={MakeUp} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -84,7 +86,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
               onClick={() => handleCategoryChange("Body Care")}
               color={selectedCategory === "Body Care" ? "primary" : "default"}
             >
-              <BodyCareIcon />
+              <BodyCare />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>

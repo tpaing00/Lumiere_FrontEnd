@@ -1,41 +1,69 @@
 import React from "react";
 import { useState } from "react";
-import { Box, Drawer, List, IconButton, SvgIcon, useMediaQuery } from "@mui/material/";
+import { Box, Drawer, List, IconButton, SvgIcon, useMediaQuery, useTheme, Button } from "@mui/material/";
 import CustomListItem from "./navbar/CustomListItem";
 import Close from '../assets/icons/Close.svg'
 import Hamburger from '../assets/icons/Hamburger.svg'
+import LogoDesktop from '../assets/logo/logoDesktop.svg'
+import CustomButton from "./mui_customization/base_components/CustomButton";
+import { Link } from "react-router-dom";
+import QuickScanWhite from '../assets/icons/QuickScanWhite.svg'
 
 const NavBar = () => {
+  const theme = useTheme();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
   };
 
+  const handleItemClick = (variant) => {
+    setSelectedItem(variant);
+    handleDrawerToggle();
+  };
+
   const drawerContent = (
-    <List>
-      <CustomListItem
-        variant="quickscan"
-        endpoint="/"
-        onClick={handleDrawerToggle}
-      />
-      <CustomListItem
-        variant="dashboard"
-        endpoint="/dashboard"
-        onClick={handleDrawerToggle}
-      />
-      <CustomListItem
-        variant="inventory"
-        endpoint="/inventory"
-        onClick={handleDrawerToggle}
-      />
-      <CustomListItem
-        variant="analytics"
-        endpoint="/analytics"
-        onClick={handleDrawerToggle}
-      />
-    </List>
+    <>
+      <Box component={LogoDesktop} sx={{ width: '100%', height: 98.31, p: 0, m: 'auto' }} />
+      <List>
+
+        <Button
+          component={Link}
+          to="/"
+          onClick={handleDrawerToggle}
+          fullWidth={false}
+          variant="floating"
+          sx={{ p: '19px', width: '163px', height: '56px', borderRadius: '12px', m: '8px 16px'}}
+        >
+          <SvgIcon component={QuickScanWhite} sx={{mr: '8px'}} />
+          Quick Scan
+        </Button>
+
+        <CustomListItem
+          variant="dashboard"
+          endpoint="/dashboard"
+          onClick={handleDrawerToggle}
+          isSelected={selectedItem === 'dashboard'}
+          handleItemClick={handleItemClick}
+        />
+        <CustomListItem
+          variant="inventory"
+          endpoint="/inventory"
+          onClick={handleDrawerToggle}
+          isSelected={selectedItem === 'inventory'}
+          handleItemClick={handleItemClick}
+        />
+        <CustomListItem
+          variant="analytics"
+          endpoint="/analytics"
+          onClick={handleDrawerToggle}
+          isSelected={selectedItem === 'analytics'}
+          handleItemClick={handleItemClick}
+        />
+      </List>
+    </>
   );
 
   return (
@@ -69,7 +97,7 @@ const NavBar = () => {
           </Drawer>
         </Box>
       ) : (
-        <Box component="nav">{drawerContent}</Box>
+        <Box component="nav" sx={{ backgroundColor: theme.palette.environment.white, p: '20px 0' }}>{drawerContent}</Box>
       )}
     </>
   );

@@ -14,7 +14,16 @@ const StockQuantityChartByCategory = ({
     0
   );
 
-  const colors = ["#F26419", "#000000", "#F5B02C", "#87BBD7"];
+  const getColor = (category) => {
+    const colorMap = {
+      "Hair Care": "#87BBD7",
+      "Skin Care": "#F26419",
+      "Body Care": "#000000",
+      "Make Up": "#F5B02C",
+    };
+    
+    return colorMap[category] || "#CCCCCC";
+  };
 
   const foundCategory = data.find((item) => item._id === selectedCategory);
   const otherCategoriesQuantity =
@@ -23,7 +32,7 @@ const StockQuantityChartByCategory = ({
   const pieData = [
     { name: foundCategory._id, value: foundCategory.totalStockQuantity },
     { name: "Other", value: otherCategoriesQuantity },
-    { fill: colors[0] },
+    {fill: getColor(foundCategory._id)}
   ];
 
   const foundCategoryData = totalInventoryStockWithData.find((item) => {
@@ -72,7 +81,7 @@ const StockQuantityChartByCategory = ({
                 {pieData.map((entry, i) => (
                   <Cell
                     key={`cell-${i}`}
-                    fill={i === 0 ? `${colors[0]}` : "#CCCCCC"}
+                    fill={i === 0 ? getColor(foundCategory._id) : "#CCCCCC"}
                   />
                 ))}
               </Pie>

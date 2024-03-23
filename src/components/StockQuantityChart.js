@@ -10,8 +10,6 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
     0
   );
 
-  const colors = ["#F26419", "#000000", "#F5B02C", "#87BBD7"];
-
   const getColor = (category) => {
     const colorMap = {
       "Hair Care": "#87BBD7",

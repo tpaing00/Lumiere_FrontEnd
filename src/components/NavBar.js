@@ -137,7 +137,7 @@ const NavBar = () => {
       ) : (
         <Box
           component="nav"
-          sx={{ backgroundColor: theme.palette.environment.white, p: "20px 0" }}
+          sx={{ backgroundColor: theme.palette.environment.white, p: "10px 0" }}
         >
           {drawerContent}
         </Box>

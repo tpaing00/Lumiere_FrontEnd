@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Box } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Box, List, ListItem, Typography } from "@mui/material";
 import ProductWastage from "./ProductWastage";
 import TopTrendProduct from "./TopTrendProduct";
 import TotalInventory from "./TotalInventory";
@@ -13,39 +14,73 @@ const Analytics = () => {
 
   return (
     <>
-    <Box sx={{ marginTop: '40px' }}>
-      <nav >
-          
-            <Button
-              sx={{ width: '180px' }}
-              variant={activeComponent === "TotalInventory" ? "contained" : "outlined"}
-              onClick={() => handleClick("TotalInventory")}
-            >
-              Total Inventory
-            </Button>
-          
+      <Box sx={{ p: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "left",}}>
+          <List sx={{ display: "flex", listStyleType: "none" }}>
+            <ListItem sx={{ mr: 1 }}>
+              <Link
+                to="#"
+                onClick={() => handleClick("TotalInventory")}
+                style={{
+                  textDecoration: "none",
+                  color:
+                    activeComponent === "TotalInventory" ? "white" : "inherit",
+                  backgroundColor:
+                    activeComponent === "TotalInventory"
+                      ? "#003C5C"
+                      : "inherit",
+                  padding: "10px 40px",
+                }}
+              >
+                <Typography sx={{ fontSize: "14px" }} noWrap>Total Inventory</Typography>
+              </Link>
+            </ListItem>
 
-            <Button
-              sx={{ width: '180px' }}
-              variant={activeComponent === "TopTrendProduct" ? "contained" : "outlined"}
-              onClick={() => handleClick("TopTrendProduct")}
-            >
-              Top Trend Products
-            </Button>
-            <Button
-              sx={{ width: '180px' }}
-              variant={activeComponent === "ProductWastage" ? "contained" : "outlined"}
-              onClick={() => handleClick("ProductWastage")}
-            >
-              Product Wastage
-            </Button>
-      </nav>
+            <ListItem sx={{ mr: 1 }}>
+              <Link
+                to="#"
+                onClick={() => handleClick("TopTrendProduct")}
+                style={{
+                  textDecoration: "none",
+                  color:
+                    activeComponent === "TopTrendProduct" ? "white" : "inherit",
+                  backgroundColor:
+                    activeComponent === "TopTrendProduct"
+                      ? "#003C5C"
+                      : "inherit",
+                  padding: "10px 40px",
+                }}
+              >
+                <Typography sx={{ fontSize: "14px" }} noWrap>Top Trend Products</Typography>
+              </Link>
+            </ListItem>
+
+            <ListItem sx={{ mr: 1 }}>
+              <Link
+                to="#"
+                onClick={() => handleClick("ProductWastage")}
+                style={{
+                  textDecoration: "none",
+                  color:
+                    activeComponent === "ProductWastage" ? "white" : "inherit",
+                  backgroundColor:
+                    activeComponent === "ProductWastage"
+                      ? "#003C5C"
+                      : "inherit",
+                  padding: "10px 40px",
+                }}
+              >
+                <Typography sx={{ fontSize: "14px" }} noWrap>Product Wastage</Typography>
+              </Link>
+            </ListItem>
+          </List>
+        </Box>
+        <Box sx={{ p: 1 }}>
+          {activeComponent === "TotalInventory" && <TotalInventory />}
+          {activeComponent === "ProductWastage" && <ProductWastage />}
+          {activeComponent === "TopTrendProduct" && <TopTrendProduct />}
+        </Box>
       </Box>
-      <div>
-        {activeComponent === "TotalInventory" && <TotalInventory />}
-        {activeComponent === "ProductWastage" && <ProductWastage />}
-        {activeComponent === "TopTrendProduct" && <TopTrendProduct />}
-      </div>
     </>
   );
 };

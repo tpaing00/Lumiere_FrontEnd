@@ -30,7 +30,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
                 boxShadow:'0px 2px 4px rgba(0,0,0,0.1)'
               }}
             >
-              <SvgIcon component={AllCategoriesIcon} style={{ fill: selectedCategory === "All" ? theme.palette.primary.contrastText : theme.palette.text.body }} />
+              <SvgIcon component={All} style={{ fill: selectedCategory === "All" ? theme.palette.primary.contrastText : theme.palette.text.body }} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -51,7 +51,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
                 
               }}
             >
-              <SvgIcon component={HairCareIcon} viewBox="0 0 24 24" />
+              <SvgIcon component={HairCare} viewBox="0 0 24 24" />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -72,7 +72,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
                 
               }}
             >
-              <SvgIcon component={SkinCareIcon} />
+              <SvgIcon component={SkinCare} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -93,7 +93,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
                 
               }}
             >
-              <SvgIcon component={MakeUpIcon} />
+              <SvgIcon component={MakeUp} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>
@@ -114,7 +114,7 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
                 
               }}
             >
-              <SvgIcon component={BodyCareIcon} />
+              <SvgIcon component={BodyCare} />
             </IconButton>
           </Grid>
           <Grid item style={{ marginTop: "auto" }}>

@@ -228,11 +228,11 @@ const Notification = ({ inPopup }) => {
             )}
 
             {loading ? (
-                <Box sx={{ maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '16px' }}>
+                <Box sx={{ width: '444px', maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '16px' }}>
                     <Typography>Loading...</Typography>
                 </Box>
             ) : (
-                <Box className="notification-list">
+                <Box className="notification-list" sx={{ width: '444px', maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '16px' }}>
                     {/* Show only the first few notifications in the popup */}
                     {inPopup
                         ? notifications.slice(0, 10).map((notification, index) => {

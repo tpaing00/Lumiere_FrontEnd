@@ -2,13 +2,11 @@ import React from "react";
 import { Typography, Grid, IconButton, Box } from "@mui/material";
 import { SvgIcon } from "@mui/material";
 
-
-import All from "../assets/icons/All.svg";
-import HairCare from "../assets/icons/HairCare.svg";
-import SkinCare from "../assets/icons/SkinCare.svg";
-import BodyCare from "../assets/icons/BodyCare.svg";
-import MakeUp from "../assets/icons/MakeUp.svg";
-
+import AllCategoriesIcon from '../assets/icons/All.svg';
+import HairCareIcon from '../assets/icons/HairCare.svg';
+import SkinCareIcon from '../assets/icons/Face-Icon.svg';
+import BodyCareIcon from '../assets/icons/BodyCare.svg';
+import MakeUpIcon from '../assets/icons/Make-Up-Icon.svg';
 
 const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
   return (

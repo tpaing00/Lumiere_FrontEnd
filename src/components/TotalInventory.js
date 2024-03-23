@@ -61,7 +61,7 @@ const TotalInventory = () => {
       </Box>
  
       {selectedCategory === "All" && totalInventoryStock && (
-        <StockQuantityChart totalInventoryStock={totalInventoryStock} />
+        <StockQuantityChart totalInventoryStock={totalInventoryStock} selectedCategory={selectedCategory}/>
       )}
       {selectedCategory !== "All" && totalInventoryStockWithData && (
         <StockQuantityChartByCategory

@@ -10,7 +10,7 @@ import {
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
 import * as XLSX from "xlsx";
 
-const StockQuantityChart = ({ totalInventoryStock }) => {
+const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
   const data = totalInventoryStock;
   console.log(data);
   const totalQuantity = data.reduce(
@@ -106,71 +106,76 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
               flexDirection: "column",
               // padding: "16px 34px 39px 16px",
               // border: "1px solid black",
-              alignItems: "center", 
+              alignItems: "center",
               justifyContent: "center",
             }}
           >
             {/* <Card sx={{ width: "100%" }}> */}
-              <PieChart width={300} height={300}>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={130}
-                  innerRadius={100}
-                  startAngle={90}
-                  endAngle={-360}
-                  label={({ cx, cy }) => (
-                    <>
-                      <text
-                        x={cx}
-                        y={cy - 20}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fontSize="24px"
-                        fontFamily="Roboto Condensed"
-                      >
-                        {totalQuantity}
-                      </text>
-                      <text
-                        x={cx}
-                        y={cy + 20}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fontSize="24px"
-                        fontFamily="Roboto Condensed"
-                      >
-                        Products
-                      </text>
-                    </>
-                  )}
-                  labelLine={false}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value, name, props) => {
-                    const { payload } = props;
-                    const totalStockQuantity = data.reduce(
-                      (acc, curr) => acc + curr.totalStockQuantity,
-                      0
-                    );
-                    const percentage = (
-                      (payload.value / totalStockQuantity) *
-                      100
-                    ).toFixed(0);
-                    return `${percentage}%`;
-                  }}
-                />
-              </PieChart>
-              <ExportReport />
+            <PieChart width={300} height={300}>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={130}
+                innerRadius={100}
+                startAngle={90}
+                endAngle={-360}
+                label={({ cx, cy }) => (
+                  <>
+                    <text
+                      x={cx}
+                      y={cy - 20}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize="24px"
+                      fontFamily="Roboto Condensed"
+                    >
+                      {totalQuantity}
+                    </text>
+                    <text
+                      x={cx}
+                      y={cy + 20}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize="24px"
+                      fontFamily="Roboto Condensed"
+                    >
+                      Products
+                    </text>
+                  </>
+                )}
+                labelLine={false}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value, name, props) => {
+                  const { payload } = props;
+                  const totalStockQuantity = data.reduce(
+                    (acc, curr) => acc + curr.totalStockQuantity,
+                    0
+                  );
+                  const percentage = (
+                    (payload.value / totalStockQuantity) *
+                    100
+                  ).toFixed(0);
+                  return `${percentage}%`;
+                }}
+              />
+            </PieChart>
+            {selectedCategory && <ExportReport />}
             {/* </Card> */}
           </Grid>
 
-          <Grid item xs={12} lg={6} sx={{ padding: 2 }}>
+          <Grid
+            item
+            xs={12}
+            lg={6}
+            sx={{ padding: 2 }}
+          >
             <Grid container spacing={0}>
               {data.map((item, index) => {
                 const otherCategoriesQuantity =
@@ -182,8 +187,20 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
                   { name: "Other", value: otherCategoriesQuantity },
                 ];
                 return (
-                  <Grid key={index} item xs={6} md={6} align="center" >
-                    <Card>
+                  <Grid
+                    key={index}
+                    item
+                    xs={6}
+                    md={6}
+                    align="center"
+                  >
+                    <Card
+                      sx={{
+                        boxShadow: (theme) =>
+                          `4px 4px 8px ${getColor(item._id)}`,
+                        margin: 1,
+                      }}
+                    >
                       <CardContent>
                         <Typography variant="h3" align="center">
                           {item._id}
@@ -220,7 +237,11 @@ const StockQuantityChart = ({ totalInventoryStock }) => {
                           </Pie>
                           <Tooltip />
                         </PieChart>
-                        <Typography variant="body1" align="center" sx={{ fontSize: "16px" }}>
+                        <Typography
+                          variant="body1"
+                          align="center"
+                          sx={{ fontSize: "16px" }}
+                        >
                           Quantity: {item.totalStockQuantity} Products
                         </Typography>
                       </CardContent>

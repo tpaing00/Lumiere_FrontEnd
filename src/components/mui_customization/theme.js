@@ -106,6 +106,19 @@ const theme = createTheme({
     },
     fontFamily: 'Outfit',
   },
+  overrides: {
+    MuiAppBar: {
+      colorInherit: {
+        backgroundColor: '#fcfcfc',
+        color: '#132f3e',
+      },
+    },
+  },
+  props: {
+    MuiAppBar: {
+      color: 'inherit',
+    },
+  },
   components: {
     MuiButton: {
       defaultProps: {
@@ -217,6 +230,39 @@ const theme = createTheme({
             },
           },
         },
+        {
+          props: { variant: 'tab' },
+          style: {
+            backgroundColor: 'transparent',
+            border: 'none',
+            boxShadow: 'none',
+            color: '#6a6a6a',
+            fontWeight: '600',
+            fontSize: '14px',
+            textDecoration: 'none',
+            borderRadius: 'none',
+            '&:hover': {
+              backgroundColor: 'transparent',
+              border: 'none',
+              borderBottom: '5px solid #75500b',
+              boxShadow: 'none',
+              borderRadius: 'none',
+              disableElevation: true,
+            },
+            '&:active': {
+              backgroundColor: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+              borderRadius: 'none',
+            },
+            '&:disabled': {
+              backgroundColor: 'transparent',
+              border: 'none',
+              color: '#6a6a6a',
+              borderRadius: 'none',
+            },
+          },
+        },
       ],
     },
     MuiCard: {
@@ -260,6 +306,13 @@ const theme = createTheme({
           fontWeight: 'normal',
           martingTop: '16px'
         },
+      },
+    },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          
+        }
       },
     },
     MuiPaper: {
@@ -306,18 +359,18 @@ const theme = createTheme({
     },
     MuiOutlinedInput: {
       styleOverrides: {
-       input: {
-         border: '1px solid #919191',
-         borderRadius: '4px',
-         padding: '12px 16px',
-         width: '100%',
-         '&::placeholder': {
-           color: '6a6a6a',
+        input: {
+          border: '1px solid #919191',
+          borderRadius: '4px',
+          padding: '12px 16px',
+          width: '100%',
+          '&::placeholder': {
+            color: '6a6a6a',
           },
           '&:focused': {
-           border: '2x solid #003c5c',
-           color: '#292929',
-         },
+            border: '2x solid #003c5c',
+            color: '#292929',
+          },
         },
 
       },

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Typography, ButtonGroup, Button } from '@mui/material';
+import { Typography, ButtonGroup, Button, useTheme } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { Box } from '@mui/system';
+import { CustomTypography } from '../components/mui_customization/base_components/CustomTypography'
 
 const Notification = ({ inPopup }) => {
+    const theme = useTheme();
     const navigate = useNavigate();
 
     const [notifications, setNotifications] = useState([]);
@@ -14,9 +17,9 @@ const Notification = ({ inPopup }) => {
 
     const handleViewDetail = (inventoryId, barcodeNumber) => {
         navigate("/productdetail", {
-          state: { inventoryId, barcodeNumber },
+            state: { inventoryId, barcodeNumber },
         });
-      };
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,14 +39,14 @@ const Notification = ({ inPopup }) => {
                 setLoading(false); // Update loading state
             }
         };
-    
+
         fetchData();
     }, []); // No dependencies for initial fetch
-    
+
     // Function to generate notifications based on filter option
     const generateNotifications = (productsData, notificationsData) => {
         const allNotifications = [];
-    
+
         // Iterate over low stock notifications and generate notifications
         notificationsData.lowStockResults.forEach(notification => {
             const productData = findProductByBarcode(productsData, notification.barcodeNumber);
@@ -56,7 +59,7 @@ const Notification = ({ inPopup }) => {
                 barcodeNumber: productData.barcodeNumber
             });
         });
-    
+
         // Iterate over expiry notifications and generate notifications
         notificationsData.expiryResults.forEach(notification => {
             const productData = findProductByBarcode(productsData, notification.barcodeNumber);
@@ -70,13 +73,13 @@ const Notification = ({ inPopup }) => {
                 barcodeNumber: productData.barcodeNumber
             });
         });
-    
+
         // Apply filtering based on filterOption
         const filteredNotifications = applyFilter(allNotifications, filterOption);
         setNotifications(filteredNotifications);
     };
-    
-    
+
+
 
     // Function to apply filtering based on filterOption
     const applyFilter = (notifications, filterOption) => {
@@ -88,7 +91,7 @@ const Notification = ({ inPopup }) => {
             return notifications; // Return all notifications if filterOption is 'all'
         }
     };
-    
+
     // Function to find product by barcode
     const findProductByBarcode = (productsData, barcodeNumber) => {
         // Check if productsData is empty
@@ -98,10 +101,10 @@ const Notification = ({ inPopup }) => {
                 productPhoto: 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' // Default photo URL
             };
         }
-    
+
         // Find the product by barcode number
         const product = productsData.find(product => product.barcodeNumber === barcodeNumber);
-    
+
         // Check if product is found
         if (!product) {
             return {
@@ -109,11 +112,11 @@ const Notification = ({ inPopup }) => {
                 productPhoto: 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' // Default photo URL
             };
         }
-    
+
         return {
             productName: product.productName,
             productPhoto: product.photo.length > 0 ? product.photo[0] : 'https://images.pexels.com/photos/3735657/pexels-photo-3735657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', // Default photo URL
-            barcodeNumber: product.barcodeNumber 
+            barcodeNumber: product.barcodeNumber
         };
     };
     const handleFilterNotifications = async (filterType) => {
@@ -121,7 +124,9 @@ const Notification = ({ inPopup }) => {
             setLoading(true); // Set loading state while fetching data
             const notificationResponse = await axios.get('https://api.lumiereapp.ca/api/v1/activeNotificationList');
             generateNotifications(products, notificationResponse.data);
-    
+
+            setFilterOption(filterType);
+
             if (filterType === 'lowStock') {
                 setNotifications(notificationResponse.data.lowStockResults.map(notification => {
                     const productData = findProductByBarcode(products, notification.barcodeNumber);
@@ -180,63 +185,100 @@ const Notification = ({ inPopup }) => {
             setLoading(false); // Update loading state
         }
     };
-    
-    
-    
+
+    const buttonBorder = "5px solid #75500b";
+
     return (
         <>
             {/* Conditionally render heading and filter options based on inPopup */}
             {!inPopup && (
                 <>
-                    <Typography variant="h1">Notifications</Typography>
-                    <ButtonGroup variant="contained" aria-label="filter notifications">
-                        <Button onClick={() => handleFilterNotifications('all')}>All</Button>
-                        <Button onClick={() => handleFilterNotifications('lowStock')}>Low-Stock</Button>
-                        <Button onClick={() => handleFilterNotifications('expiration')}>Expired</Button>
-                    </ButtonGroup>
+                    <Box sx={{ maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '16px' }}>
+
+                        <Typography variant="h1" sx={{ margin: 0, mb: '24px' }}>Notifications</Typography>
+                        <ButtonGroup variant="tab" aria-label="filter notifications" fullWidth disableElevation disableRipple
+                            sx={{
+                                border: 'none',
+                                borderRadius: 0,
+
+                                '& > button:nth-of-type(1)': {
+                                    color: filterOption === 'all' ? '#75500b' : '#6a6a6a',
+                                    borderBottom: filterOption === 'all' ? buttonBorder : 'none',
+                                    borderRadius: 0,
+                                },
+                                '& > button:nth-of-type(2)': {
+                                    color: filterOption === 'lowStock' ? '#75500b' : '#6a6a6a',
+                                    borderBottom: filterOption === 'lowStock' ? buttonBorder : 'none',
+                                    borderRadius: 0,
+                                },
+                                '& > button:nth-of-type(3)': {
+                                    color: filterOption === 'expiration' ? '#75500b' : '#6a6a6a',
+                                    borderBottom: filterOption === 'expiration' ? buttonBorder : 'none',
+                                    borderRadius: 0,
+                                }
+                            }}
+                        >
+                            <Button onClick={() => handleFilterNotifications('all')} sx={{ m: 0, p: '16px' }}>
+                                All</Button>
+                            <Button onClick={() => handleFilterNotifications('lowStock')} sx={{ m: 0, p: '16px' }}>Low-Stock</Button>
+                            <Button onClick={() => handleFilterNotifications('expiration')} sx={{ m: 0, p: '16px' }}>Expired</Button>
+                        </ButtonGroup>
+                    </Box>
                 </>
             )}
-            
+
             {loading ? (
-                <p>Loading...</p>
+                <Box sx={{ maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '16px' }}>
+                    <Typography>Loading...</Typography>
+                </Box>
             ) : (
-                <div className="notification-list">
-                {/* Show only the first few notifications in the popup */}
-                {inPopup
-                    ? notifications.slice(0, 10).map((notification, index) => {
-                        
-                        return (
-                            <div key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item">
-                                <h2>{notification.type}</h2>
-                                <p>{notification.message}</p>
-                                <img
-                                    src={notification.productPhoto}
-                                    alt={notification.productName}
-                                    className="notification-image"
-                                    style={{ width: '100px', height: '100px' }}
-                                />
-                            </div>
-                        );
-                    })
-                    : notifications.map((notification, index) => {
-                        return (
-                            <div key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item">
-                                <h2>{notification.type}</h2>
-                                <p>{notification.message}</p>
-                                <img
-                                    src={notification.productPhoto}
-                                    alt={notification.productName}
-                                    className="notification-image"
-                                    style={{ width: '100px', height: '100px' }}
-                                />
-                            </div>
-                        );
-                    })
-                }
-            </div>
-            
+                <Box className="notification-list">
+                    {/* Show only the first few notifications in the popup */}
+                    {inPopup
+                        ? notifications.slice(0, 10).map((notification, index) => {
+
+                            return (
+                              
+                                <Box sx={{width: '444px', p: '16px'}} >
+                                    <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item" fullWidth>
+                                        <Typography component="h2" sx={{fontSize: '14px', fontWeight: 600}}>{notification.type}</Typography>
+                                        <Box display="flex" alignItems="center">
+                                        <img
+                                            src={notification.productPhoto}
+                                            alt={notification.productName}
+                                            className="notification-image"
+                                            style={{ width: '60px', height: '60px' }}
+                                        />
+                                        <Typography sx={{fontSize: '14px'}}>{notification.message}</Typography>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            );
+                        })
+                        : notifications.map((notification, index) => {
+                            return (
+                                <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item"
+                                    sx={{ maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '12px 16px' }}
+                                >
+                                    <Typography component="h2" sx={{ fontSize: '16px', fontWeight: 700, mb: '8px' }}>{notification.type}</Typography>
+                                    <Box display="flex" alignItems="center">
+                                        <img
+                                            src={notification.productPhoto}
+                                            alt={notification.productName}
+                                            className="notification-image"
+                                            style={{ width: '100px', height: '100px' }}
+                                        />
+                                        <Typography sx={{ ml: '16px' }}>{notification.message}</Typography>
+                                    </Box>
+                                </Box>
+                            );
+                        })
+                    }
+                </Box>
+
 
             )}
+
         </>
     );
 }

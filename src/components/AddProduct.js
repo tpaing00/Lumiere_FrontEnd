@@ -13,6 +13,8 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Card,
+  CardContent,
   Container,
   FormControlLabel,
   Grid,
@@ -24,6 +26,7 @@ import {
   Switch,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -32,8 +35,12 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import { DocumentScannerOutlined } from "@mui/icons-material";
 import { format, addDays } from "date-fns";
 import CustomSelect from "./mui_customization/base_components/CustomSelect";
+import { ThemeContext } from "@emotion/react";
 
 const AddProduct = () => {
+
+  const theme = useTheme();
+
   // State to hold all selected image files
   const [allImages, setAllImages] = useState([]);
 
@@ -287,589 +294,428 @@ const AddProduct = () => {
 
   return (
     <>
-      <Container component="main" maxWidth="lg" sx={{ mt: 3 }} >
+
+      <Container component="main" maxWidth="1146px" sx={{ mt: 3 }} >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Typography
-            component="h1"
-            align="left"
-            variant="h1"
-          >
-            Register new Product
-          </Typography>
 
-          {error && (
-            <Typography paragraph={true} sx={{ color: "red" }}>
-              {" "}
-              {error}{" "}
-            </Typography>
-          )}
+          <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Register New Product</Typography>
 
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            id="form-register-product"
-            sx={{ mt: 3 }}
-          >
-            <Box className="register-inventory">
-              <Grid container spacing={3}>
-                <Grid item xs={6}>
-                  <CustomSelect
-                    id="addToInventory"
-                    name="addToInventory"
-                    className="dropdown"
-                    value={formData.addToInventory}
-                    onChange={handleChange}
-                    labelText="Add to inventory"
-                    array={inventoryTypeData}
-                  />
+          <Card sx={{ borderRadius: '12px', m: '30px 40px 0 40px' }}>
 
-                </Grid>
+            <CardContent sx={{ p: '28px 40px', m: 0 }}>
 
-                <Grid item xs={6}>
-                  <InputLabel variant="standard" id="category-label">
-                    Add Product Category
-                  </InputLabel>
-                  <Select
-                    id="category"
-                    name="category"
-                    className="dropdown"
-                    value={formData.category}
-                    onChange={handleChange}
-                    fullWidth
-                  >
-                    {productCategoryData.map((type) => (
-                      <MenuItem key={type.value} value={type.value}>
-                        {type.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Grid>
-              </Grid>
-            </Box>
+              {error && (
+                <Typography paragraph={true} sx={{ color: "red" }}>
+                  {" "}
+                  {error}{" "}
+                </Typography>
+              )}
 
-            <Box className="register-product-information">
-              <Accordion defaultExpanded>
-                <AccordionSummary
-                  expandIcon={<RemoveIcon />}
-                  aria-controls="register-product-content"
-                  id="register-product-header"
-                >
-                  <Typography component="h2" align="left" variant="h3">
-                    Product Information
-                  </Typography>
-                </AccordionSummary>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                id="form-register-product"
+              >
+                <Box className="register-inventory">
+                  <Grid container spacing="24px">
+                    <Grid item xs={6} lg={3}>
+                      <CustomSelect
+                        id="addToInventory"
+                        name="addToInventory"
+                        className="dropdown"
+                        value={formData.addToInventory}
+                        onChange={handleChange}
+                        labelText="Inventory"
+                        array={inventoryTypeData}
+                      />
 
-                <AccordionDetails>
-                  <Grid container spacing={10}>
-                    <Grid container item spacing={3} xs={7} className="register-product-info">
-                      <Grid item xs={12}>
-                        <InputLabel variant="standard" id="productName-label">
-                          Product Name
-                        </InputLabel>
-                        <TextField
-                          id="productName"
-                          onChange={handleChange}
-                          name="productName"
-                          value={formData.productName}
-                          placeholder="Product name"
-                          fullWidth
-                        />
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <InputLabel variant="standard" id="brandName-label">
-                          Brand
-                        </InputLabel>
-                        <TextField
-                          id="brandName"
-                          onChange={handleChange}
-                          name="brandName"
-                          value={formData.brandName}
-                          placeholder="Brand"
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <InputLabel variant="standard" id="location-label">
-                          Location
-                        </InputLabel>
-                        <TextField
-                          id="location"
-                          onChange={handleChange}
-                          name="location"
-                          value={formData.location}
-                          placeholder="Location"
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <InputLabel variant="standard" id="stockQuantity-label">
-                          Stock
-                        </InputLabel>
-                        <TextField
-                          type="number"
-                          id="stockQuantity"
-                          onChange={handleChange}
-                          name="stockQuantity"
-                          value={formData.stockQuantity}
-                          fullWidth
-                        />
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <InputLabel variant="standard" id="barcodeNumber-label">
-                          Barcode Number
-                        </InputLabel>
-                        <TextField
-                          id="barcodeNumber"
-                          onChange={handleChange}
-                          name="barcodeNumber"
-                          value={formData.barcodeNumber}
-                          fullWidth
-                          placeholder="12 digits"
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton
-                                  onClick={handleScan}
-                                  style={{ transform: "rotate(90deg)" }}
-                                >
-                                  <DocumentScannerOutlined />
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <InputLabel variant="standard" id="unitPrice-label">
-                          Unit price
-                        </InputLabel>
-                        <TextField
-                          id="unitPrice"
-                          type="number"
-                          onChange={handleChange}
-                          name="unitPrice"
-                          value={formData.unitPrice}
-                          placeholder="$"
-                          label="Unit price"
-                          fullWidth
-                        />
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <InputLabel variant="standard" id="expiryDate-label">
-                          Expiry date
-                        </InputLabel>
-                        <TextField
-                          id="expiryDate"
-                          onChange={handleChange}
-                          name="expiryDate"
-                          value={formData.expiryDate}
-                          fullWidth
-                          type="date"
-                        />
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <InputLabel
-                          variant="standard"
-                          id="periodAfterOpening-label"
-                        >
-                          Period After Opening (PAO)
-                        </InputLabel>
-                        <Select
-                          id="periodAfterOpening"
-                          name="periodAfterOpening"
-                          className="dropdown"
-                          value={formData.periodAfterOpening}
-                          onChange={handleChange}
-                          fullWidth
-                        >
-                          {periodAfterOpeningData.map((type) => (
-                            <MenuItem
-                              key={type.value}
-                              value={type.value}
-                              fullWidth
-                            >
-                              {type.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <InputLabel variant="standard" id="message-label">
-                          Notes
-                        </InputLabel>
-                        <TextField
-                          id="message"
-                          onChange={handleChange}
-                          name="message"
-                          value={formData.message}
-                          multiline
-                          rows={4}
-                          placeholder=""
-                          fullWidth
-                        />
-                      </Grid>
                     </Grid>
 
-                    <Grid item xs={5} className="register-product-images">
-                      <Typography component="h2" align="left" variant="h3" sx={{ mb: 2 }}>
-                        Product Images
-                      </Typography>
+                    <Grid item xs={6} lg={3}>
 
-                      <Box sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2 }}>
-                        <Grid container spacing={1}>
-                          {/* Render existing images */}
-                          {existingProductData && existingProductData.photo && existingProductData.photo.map((image, index) => (
-                            <Grid item key={index}>
-                              <img src={image} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
-                            </Grid>
-                          ))}
-                          {/* Render newly uploaded images */}
-                          {images && images.length > 0 && Array.from(images).map((image, index) => (
-                            <Grid item key={index}>
-                              <img src={URL.createObjectURL(image)} alt={`Newly Uploaded Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
-                            </Grid>
-                          ))}
-                        </Grid>
+                      <CustomSelect
+                        id="category"
+                        name="category"
+                        className="dropdown"
+                        value={formData.category}
+                        onChange={handleChange}
+                        labelText="Product Category"
+                        array={productCategoryData}
+                      />
 
-                        <TextField
-                          type="file"
-                          id="productImages"
-                          name="productImages"
-                          multiple
-                          onChange={handleFileChange}
-                        />
-                      </Box>
+                      {/* <InputLabel variant="standard" id="category-label">
+                        Product Category
+                      </InputLabel>
+                      <Select
+                        id="category"
+                        name="category"
+                        className="dropdown"
+                        value={formData.category}
+                        onChange={handleChange}
+                        fullWidth
+                      >
+                        {productCategoryData.map((type) => (
+                          <MenuItem key={type.value} value={type.value}>
+                            {type.label}
+                          </MenuItem>
+                        ))}
+                      </Select> */}
                     </Grid>
                   </Grid>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
+                </Box>
 
-            <Box className="register-notification-settings">
-              <Accordion defaultExpanded>
-                <AccordionSummary
-                  expandIcon={<RemoveIcon />}
-                  aria-controls="notification-settings-content"
-                  id="notification-settings-header"
-                >
-                  <Typography component="h2" align="left" variant="h3">
-                    Notification Settings
-                  </Typography>
-                </AccordionSummary>
+                <Box className="register-product-information" sx={{ mt: '24px' }}>
+                  <Accordion defaultExpanded>
+                    <AccordionSummary
+                      expandIcon={<RemoveIcon />}
+                      aria-controls="register-product-content"
+                      id="register-product-header"
+                    >
+                      <Typography component="h2" align="left" variant="h3" sx={{ color: theme.palette.secondary.dark }}>
+                        Product Information
+                      </Typography>
+                    </AccordionSummary>
 
-                <AccordionDetails>
-                  <Box className="low-stock-settings">
-                    <Grid container item xs={12} spacing={1}>
-                      <Grid item xs={6}>
-                        <Typography
-                          sx={{ display: "flex", alignItems: "center" }}
-                        >
-                          <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} />
-                          Low Stock Alert
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              onChange={(e) => {
-                                handleChange(e);
-                                setIsLowStockAlertChecked(e.target.checked);
-                              }}
-                              name="isLowStockAlert"
-                              value={formData.isLowStockAlert}
-                              id="isLowStockAlert"
+                    <AccordionDetails>
+                      <Grid container spacing="16px">
+                        <Grid container item spacing={"24px"} xs={12} lg={7} className="register-product-info">
+                          <Grid item xs={12}>
+                            <InputLabel variant="standard" id="productName-label">
+                              Product Name
+                            </InputLabel>
+                            <TextField
+                              id="productName"
+                              onChange={handleChange}
+                              name="productName"
+                              value={formData.productName}
+                              placeholder="Product name"
+                              fullWidth
                             />
-                          }
-                          aria-label="Set Low Stock Alert"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <InputLabel
-                          variant="standard"
-                          id="lowStockThreshold-label"
-                        >
-                          Notify when stock is below
-                        </InputLabel>
-                        <Select
-                          id="lowStockThreshold"
-                          name="lowStockThreshold"
-                          className="dropdown"
-                          value={formData.lowStockThreshold}
-                          onChange={handleChange}
-                          disabled={isLowStockThresholdDisabled}
-                          fullWidth
-                        >
-                          {lowStockThresholdData.map((type) => (
-                            <MenuItem
-                              key={type.value}
-                              value={type.value}
+                          </Grid>
+
+                          <Grid item xs={12} lg={6}>
+                            <InputLabel variant="standard" id="brandName-label">
+                              Brand
+                            </InputLabel>
+                            <TextField
+                              id="brandName"
+                              onChange={handleChange}
+                              name="brandName"
+                              value={formData.brandName}
+                              placeholder="Brand"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} lg={6}>
+                            <InputLabel variant="standard" id="location-label">
+                              Location
+                            </InputLabel>
+                            <TextField
+                              id="location"
+                              onChange={handleChange}
+                              name="location"
+                              value={formData.location}
+                              placeholder="Location"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <InputLabel variant="standard" id="stockQuantity-label">
+                              Stock
+                            </InputLabel>
+                            <TextField
+                              type="number"
+                              id="stockQuantity"
+                              onChange={handleChange}
+                              name="stockQuantity"
+                              value={formData.stockQuantity}
+                              fullWidth
+                            />
+                          </Grid>
+
+                          <Grid item xs={6}>
+                            <InputLabel variant="standard" id="barcodeNumber-label">
+                              Barcode Number
+                            </InputLabel>
+                            <TextField
+                              id="barcodeNumber"
+                              onChange={handleChange}
+                              name="barcodeNumber"
+                              value={formData.barcodeNumber}
+                              fullWidth
+                              placeholder="12 digits"
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      onClick={handleScan}
+                                      style={{ transform: "rotate(90deg)" }}
+                                    >
+                                      <DocumentScannerOutlined />
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={6}>
+                            <InputLabel variant="standard" id="unitPrice-label">
+                              Unit price
+                            </InputLabel>
+                            <TextField
+                              id="unitPrice"
+                              type="number"
+                              onChange={handleChange}
+                              name="unitPrice"
+                              value={formData.unitPrice}
+                              placeholder="$"
+                              fullWidth
+                            />
+                          </Grid>
+
+                          <Grid item xs={6}>
+                            <InputLabel variant="standard" id="expiryDate-label">
+                              Expiry date
+                            </InputLabel>
+                            <TextField
+                              id="expiryDate"
+                              onChange={handleChange}
+                              name="expiryDate"
+                              value={formData.expiryDate}
+                              fullWidth
+                              type="date"
+                            />
+                          </Grid>
+
+                          <Grid item xs={12}>
+                            <InputLabel
+                              variant="standard"
+                              id="periodAfterOpening-label"
+                            >
+                              Period After Opening (PAO)
+                            </InputLabel>
+                            <Select
+                              id="periodAfterOpening"
+                              name="periodAfterOpening"
+                              className="dropdown"
+                              value={formData.periodAfterOpening}
+                              onChange={handleChange}
                               fullWidth
                             >
-                              {type.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Grid>
-                    </Grid>
-                  </Box>
-
-                  <Box className="expiration-reminder-settings" sx={{ mt: 3 }}>
-                    <Grid container item xs={12} spacing={1}>
-                      <Grid item xs={6}>
-                        <Typography
-                          sx={{ display: "flex", alignItems: "center" }}
-                        >
-                          <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} />
-                          Expiration Reminder
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              onChange={(e) => {
-                                handleChange(e);
-                                setIsExpirationReminderChecked(
-                                  e.target.checked
-                                );
-                              }}
-                              name="isExpirationReminder"
-                              value={formData.isExpirationReminder}
-                              id="isExpirationReminder"
+                              {periodAfterOpeningData.map((type) => (
+                                <MenuItem
+                                  key={type.value}
+                                  value={type.value}
+                                  fullWidth
+                                >
+                                  {type.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <InputLabel variant="standard" id="message-label">
+                              Notes
+                            </InputLabel>
+                            <TextField
+                              id="message"
+                              onChange={handleChange}
+                              name="message"
+                              value={formData.message}
+                              multiline
+                              rows={4}
+                              placeholder=""
+                              fullWidth
                             />
-                          }
-                          aria-label="Set Expiration Reminder"
-                        />
+                          </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} lg={5} className="register-product-images" sx={{ mt: 1 }}>
+                          <Typography component="h3" align="left" variant="body2" sx={{ mb: 2, display: { lg: 'none' }, fontSize: '16px' }}>
+                            Photos
+                          </Typography>
+
+                          <Box aria-label="Add product photos" sx={{ border: '3px dashed lightgrey', height: '300px', display: "flex", alignItems: "center", p: 2, ml: { lg: '48px' }, mt: { lg: 1.5 } }}>
+                            <Grid container spacing={1}>
+                              {/* Render existing images */}
+                              {existingProductData && existingProductData.photo && existingProductData.photo.map((image, index) => (
+                                <Grid item key={index}>
+                                  <img src={image} alt={`Product Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
+                                </Grid>
+                              ))}
+                              {/* Render newly uploaded images */}
+                              {images && images.length > 0 && Array.from(images).map((image, index) => (
+                                <Grid item key={index}>
+                                  <img src={URL.createObjectURL(image)} alt={`Newly Uploaded Image ${index + 1}`} style={{ width: '100px', height: 'auto' }} />
+                                </Grid>
+                              ))}
+                            </Grid>
+
+                            <TextField
+                              type="file"
+                              id="productImages"
+                              name="productImages"
+                              multiple
+                              onChange={handleFileChange}
+
+                            />
+                          </Box>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={12}>
-                        <InputLabel
-                          variant="standard"
-                          id="expirationReminderTime-label"
-                        >
-                          Notify when expiry date is
-                        </InputLabel>
-                        <Select
-                          id="expirationReminderTime"
-                          name="expirationReminderTime"
-                          className="dropdown"
-                          value={formData.expirationReminderTime}
-                          onChange={handleChange}
-                          disabled={isExpirationReminderTimeDisabled}
-                          fullWidth
-                        >
-                          {expirationReminderTimeData.map((type) => (
-                            <MenuItem
-                              key={type.value}
-                              value={type.value}
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+
+                <Box className="register-notification-settings">
+                  <Accordion defaultExpanded>
+                    <AccordionSummary
+                      expandIcon={<RemoveIcon />}
+                      aria-controls="notification-settings-content"
+                      id="notification-settings-header"
+                    >
+                      <Typography component="h2" align="left" variant="h3" sx={{ color: theme.palette.secondary.dark }}>
+                        Notification Settings
+                      </Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                      <Grid container>
+                        <Grid item xs={12} lg={7}>
+                          <Box className="low-stock-settings">
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <Typography
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} />
+                                Low Stock Alert
+                              </Typography>
+
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                      setIsLowStockAlertChecked(e.target.checked);
+                                    }}
+                                    name="isLowStockAlert"
+                                    value={formData.isLowStockAlert}
+                                    id="isLowStockAlert"
+                                  />
+                                }
+                                aria-label="Set Low Stock Alert"
+                              />
+
+                            </Box>
+                            <InputLabel
+                              variant="standard"
+                              id="lowStockThreshold-label"
+                              sx={{ mt: '13px' }}
+                            >
+                              Notify when stock is below
+                            </InputLabel>
+                            <Select
+                              id="lowStockThreshold"
+                              name="lowStockThreshold"
+                              className="dropdown"
+                              value={formData.lowStockThreshold}
+                              onChange={handleChange}
+                              disabled={isLowStockThresholdDisabled}
                               fullWidth
                             >
-                              {type.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
+                              {lowStockThresholdData.map((type) => (
+                                <MenuItem
+                                  key={type.value}
+                                  value={type.value}
+                                  fullWidth
+                                >
+                                  {type.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
 
-            <Box
-              className="register-buttons"
-              aria-label="Form options"
-              sx={{ mt: 3, p: 3 }}
-            >
-              <Button variant="outlined" type="reset" sx={{ mr: 3 }}>
-                Cancel
-              </Button>
-              <Button variant="contained" type="submit">
-                Register
-              </Button>
-            </Box>
-          </Box>
+                          </Box>
+
+                          <Box className="expiration-reminder-settings" sx={{ mt: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <Typography
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                <NotificationsNoneOutlinedIcon sx={{ mr: 1 }} />
+                                Expiration Reminder
+                              </Typography>
+
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                      setIsExpirationReminderChecked(
+                                        e.target.checked
+                                      );
+                                    }}
+                                    name="isExpirationReminder"
+                                    value={formData.isExpirationReminder}
+                                    id="isExpirationReminder"
+                                  />
+                                }
+                                aria-label="Set Expiration Reminder"
+                              />
+                            </Box>
+
+                            <InputLabel
+                              variant="standard"
+                              id="expirationReminderTime-label"
+                              sx={{ mt: '13px' }}
+                            >
+                              Notify when expiry date is
+                            </InputLabel>
+                            <Select
+                              id="expirationReminderTime"
+                              name="expirationReminderTime"
+                              className="dropdown"
+                              value={formData.expirationReminderTime}
+                              onChange={handleChange}
+                              disabled={isExpirationReminderTimeDisabled}
+                              fullWidth
+                            >
+                              {expirationReminderTimeData.map((type) => (
+                                <MenuItem
+                                  key={type.value}
+                                  value={type.value}
+                                  fullWidth
+                                >
+                                  {type.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </AccordionDetails>
+                  </Accordion>
+                  <Box className="register-buttons"
+                    aria-label="Form options"
+                    sx={{ display: 'flex', justifyContent: 'flex-start' }}
+                  >
+                    <Button variant="outlined" type="reset" sx={{ mr: 3 }}>
+                      Cancel
+                    </Button>
+                    <Button variant="contained" type="submit">
+                      Register
+                    </Button>
+                  </Box>
+                </Box>
+
+
+              </Box>
+            </CardContent>
+          </Card>
         </LocalizationProvider>
       </Container>
     </>
   );
-
-  // return (
-  //   <>
-  //     <h1>Register New Product</h1>
-  //     {error && <p style={{ color: "red" }}>{error}</p>}
-  //     <form id="form-register-product" onSubmit={handleSubmit}>
-  //       <div className="register-inventory">
-  //         <label htmlFor="addToInventory">Add to Inventory</label>
-  //         <select
-  //           name="addToInventory"
-  //           className="dropdown"
-  //           value={formData.addToInventory}
-  //           onChange={handleChange}
-  //         >
-  //           {inventoryTypeData.map((type) => (
-  //             <option key={type.value} value={type.value}>
-  //               {type.label}
-  //             </option>
-  //           ))}
-  //         </select>
-  //         <label htmlFor="category">Add Product Category</label>
-  //         <select
-  //           name="category"
-  //           className="dropdown"
-  //           value={formData.category}
-  //           onChange={handleChange}
-  //         >
-  //           {productCategoryData.map((type) => (
-  //             <option key={type.value} value={type.value}>
-  //               {type.label}
-  //             </option>
-  //           ))}
-  //         </select>
-  //       </div>
-
-  //       <div className="register-product-information">
-  //         <h2>Product Information</h2>
-
-  //         <label htmlFor="productName">Product Name</label>
-  //         <input
-  //           type="text"
-  //           onChange={handleChange}
-  //           name="productName"
-  //           value={formData.productName}
-  //         />
-
-  //         <label htmlFor="brandName">Brand</label>
-  //         <input
-  //           type="text"
-  //           onChange={handleChange}
-  //           name="brandName"
-  //           value={formData.brandName}
-  //         />
-
-  //         <label htmlFor="stockQuantity">Stock</label>
-  //         <input
-  //           type="number"
-  //           min="0"
-  //           onChange={handleChange}
-  //           name="stockQuantity"
-  //           value={formData.stockQuantity}
-  //         />
-
-  //         <label htmlFor="barcodeNumber">Barcode Number</label>
-  //         <input
-  //           type="text"
-  //           min="0"
-  //           onChange={handleChange}
-  //           name="barcodeNumber"
-  //           value={formData.barcodeNumber}
-  //         />
-  //         <button onClick={handleScan}>Scan</button>
-  //         <label htmlFor="unitPrice">Unit price</label>
-  //         <input
-  //           type="number"
-  //           min="0"
-  //           onChange={handleChange}
-  //           name="unitPrice"
-  //           value={formData.unitPrice}
-  //           placeholder="$"
-  //         />
-
-  //         {/* <label htmlFor="totalValue">Total Value</label>
-  //                   <input type="number" min="0" onChange={handleChange} name="totalValue" value={formData.totalValue} placeholder="$" disabled /> */}
-
-  //         <label htmlFor="expiryDate">Expiry Date</label>
-  //         <input
-  //           type="date"
-  //           onChange={handleChange}
-  //           name="expiryDate"
-  //           value={formData.expiryDate}
-  //         />
-
-  //         <label htmlFor="periodAfterOpening">Period After Opening (PAO)</label>
-  //         <select
-  //           name="periodAfterOpening"
-  //           className="dropdown"
-  //           value={formData.periodAfterOpening}
-  //           onChange={handleChange}
-  //         >
-  //           {periodAfterOpeningData.map((type) => (
-  //             <option key={type.value} value={type.value}>
-  //               {type.label}
-  //             </option>
-  //           ))}
-  //         </select>
-  //       </div>
-
-  //       <div className="register-notification-settings">
-  //         <h2>Notification Settings</h2>
-
-  //         <label htmlFor="isLowStockAlert">Low Stock Alert</label>
-  //         <input
-  //           type="checkbox"
-  //           onChange={(e) => {
-  //             handleChange(e);
-  //             setIsLowStockAlertChecked(e.target.checked);
-  //           }}
-  //           name="isLowStockAlert"
-  //           value={formData.isLowStockAlert}
-  //         />
-
-  //         <label htmlFor="lowStockThreshold">Notify when stock is below</label>
-  //         <select
-  //           name="lowStockThreshold"
-  //           className="dropdown"
-  //           value={formData.lowStockThreshold}
-  //           onChange={handleChange}
-  //           disabled={isLowStockThresholdDisabled}
-  //         >
-  //           {lowStockThresholdData.map((type) => (
-  //             <option key={type.value} value={type.value}>
-  //               {type.label}
-  //             </option>
-  //           ))}
-  //         </select>
-
-  //         <label htmlFor="isExpirationReminder">Low Stock Alert</label>
-  //         <input
-  //           type="checkbox"
-  //           onChange={(e) => {
-  //             handleChange(e);
-  //             setIsExpirationReminderChecked(e.target.checked);
-  //           }}
-  //           name="isExpirationReminder"
-  //           value={formData.isExpirationReminder}
-  //         />
-
-  //         {/* conditional on the boolean above - useReducer */}
-  //         <label htmlFor="expirationReminderTime">
-  //           Notify when expiry date is
-  //         </label>
-  //         <select
-  //           name="expirationReminderTime"
-  //           className="dropdown"
-  //           value={formData.expirationReminderTime}
-  //           onChange={handleChange}
-  //           disabled={isExpirationReminderTimeDisabled}
-  //         >
-  //           {expirationReminderTimeData.map((type) => (
-  //             <option key={type.value} value={type.value}>
-  //               {type.label}
-  //             </option>
-  //           ))}
-  //         </select>
-  //       </div>
-  //       <div className="register-buttons">
-  //         <button type="reset">CANCEL</button>
-  //         <button type="submit">REGISTER</button>
-  //       </div>
-  //     </form>
-  //   </>
-  // );
 };
 
 export default AddProduct;

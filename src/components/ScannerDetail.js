@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import StaffCheckOutModal from "./StaffCheckOutModal";
 import RetailCheckOutModal from "./RetailCheckOutModal";
+import { SvgIcon } from "@mui/material";
+
+import InventoryActive from "../assets/icons/InventoryActive.svg";
 
 import {
   Typography,
@@ -121,6 +124,11 @@ const ScannerDetail = () => {
   return (
     <Container component="main" maxWidth="lg">
       <Box sx={{ mt: 3 }}>
+        <Typography component="body1" align="left" variant="body1">
+          Lumiere &gt; Quick Scan &gt; <strong>Scan Result</strong>
+        </Typography>
+      </Box>
+      <Box sx={{ mt: 3 }}>
         <Typography component="h1" align="left" variant="h2">
           Scan Result
         </Typography>
@@ -128,90 +136,108 @@ const ScannerDetail = () => {
       <Box sx={{ mt: 3 }}>
         {internalInventory.length > 0 && (
           <div>
-            <Typography variant="h3">
+            <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom:'10px' }}>
+              <SvgIcon component={InventoryActive} />{"  "}
               {internalInventory[0].addToInventory}
             </Typography>
             <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
               <CardContent>
-                <Grid container spacing={2}>
+                <Grid container spacing={0} xs={12}>
                   {/* Column 1 - Product Image */}
-                  <Grid item xs={4}>
+                  <Grid item xs={4} sm={2} textAlign={"left"}>
                     <img
                       src={productResults[0].photo[0]}
                       className="smallPhoto"
                       alt="Product Photo"
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                        maxWidth: "100px",
+                      }}
                     />
                   </Grid>
                   {/* Column 2 - Product Details */}
-                  <Grid item xs={5}>
-                    <Grid container direction="column" spacing={1}>
+                  <Grid item xs={8} sm={6} textAlign={"left"}>
+                    <Grid container direction="column" spacing={2}>
                       {/* Row 1 - Barcode Number & Category */}
-                      <Grid item container xs={4} spacing={1}>
-                        <Grid item>
+                      <Grid item container spacing={2}>
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          marginTop={"auto"}
+                          marginBottom={"auto"}
+                          >
                           <Typography>
                             {productResults[0].barcodeNumber}
                           </Typography>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={6} sm={6} textAlign={'right'}>
                           <Typography
                             sx={{
                               backgroundColor: "#DAEDF5",
                               display: "inline-block",
                               padding: "10px",
-                              borderRadius: "100px",
-                            }}
-                          >
+                              borderRadius: "100px"
+                            }}>
                             {productResults[0].category}
                           </Typography>
                         </Grid>
                       </Grid>
-                      <Grid item xs>
+                      {/* Row 2 - Product Name */}
+                      <Grid item>
                         <Typography>
                           <strong>{productResults[0].productName}</strong>
                         </Typography>
                       </Grid>
-                      {/* Row 2 - Stock Quantity & Unit Price */}
-                      <Grid item container xs={4} spacing={1}>
-                        <Grid item>
-                          <Typography>
-                            <strong>Stock Quantity:</strong>{" "}
-                            {internalInventory[0].stockQuantity}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography>
-                            <strong>Unit Price:</strong>{" "}
-                            {productResults[0].unitPrice}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography>
-                            <strong>Expiry Date:</strong>{" "}
-                            {formatDate(internalInventory[0].expiryDate)}
-                          </Typography>
-                        </Grid>
-                      </Grid>
                     </Grid>
                   </Grid>
-                  {/* Column 3 - Edit and Staff Checkout Buttons */}
-                  <Grid item xs={2}>
-                    <Grid container direction="column" spacing={1}>
-                      <Grid item>
-                        <Button onClick={handleEdit} fullWidth>
-                          Edit
-                        </Button>
+                  <Box
+                    width="100%"
+                    display="flex"
+                    justifyContent="center"
+                    marginLeft="auto"
+                    marginRight="auto"
+                    marginTop={'20px'}>
+                    <Grid
+                      item
+                      container
+                      spacing={0}
+                      xs={8}
+                      display="flex"
+                      justifyContent="center">
+                      {/* Row 1 - Labels */}
+                      <Grid item xs={4} sm={4}>
+                        <Typography>
+                          <strong>Stock:</strong>
+                        </Typography>
                       </Grid>
-                      <Grid item>
-                        <Button
-                          onClick={handleStaffCheckOut}
-                          disabled={internalInventory[0].stockQuantity === 0}
-                          fullWidth
-                        >
-                          Staff Checkout
-                        </Button>
+                      <Grid item xs={4} sm={4}>
+                        <Typography>
+                          <strong>Unit Price:</strong>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={4} sm={4}>
+                        <Typography>
+                          <strong>Expiry Date:</strong>
+                        </Typography>
+                      </Grid>
+                      {/* Row 2 - Values */}
+                      <Grid item xs={4} sm={4}>
+                        <Typography>
+                          {internalInventory[0].stockQuantity}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={4} sm={4}>
+                        <Typography>{productResults[0].unitPrice}</Typography>
+                      </Grid>
+                      <Grid item xs={4} sm={4}>
+                        <Typography>
+                          {formatDate(internalInventory[0].expiryDate)}
+                        </Typography>
                       </Grid>
                     </Grid>
-                  </Grid>
+                  </Box>
                 </Grid>
               </CardContent>
             </Card>
@@ -247,6 +273,7 @@ const ScannerDetail = () => {
             </Card> */}
           </div>
         )}
+
         {showInternalModal && (
           <Modal open={showInternalModal} onClose={handleCloseModal}>
             <Grid container justifyContent="center" alignItems="center">
@@ -264,7 +291,10 @@ const ScannerDetail = () => {
         )}
         {internalInventory.length === 0 && (
           <div>
-            <Typography variant="h3">Internal Use</Typography>
+            <Typography variant="h3">
+              {" "}
+              <SvgIcon component={InventoryActive} /> Internal Use
+            </Typography>
             <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
               <CardContent>
                 <Typography variant="h5">
@@ -277,88 +307,115 @@ const ScannerDetail = () => {
             </Card>
           </div>
         )}
-        {retailInventory.length > 0 && (
-          <div>
-            <Typography variant="h3">
-              {retailInventory[0].addToInventory}
-            </Typography>
-            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
-              <CardContent>
-                <Grid container spacing={2}>
-                  {/* Column 1 - Product Image */}
-                  <Grid item xs={4}>
-                    <img
-                      src={productResults[0].photo[0]}
-                      className="smallPhoto"
-                      alt="Product Photo"
-                    />
-                  </Grid>
-                  {/* Column 2 - Product Details */}
-                  <Grid item xs={5}>
-                    <Grid container direction="column" spacing={1}>
-                      {/* Row 1 - Barcode Number & Category */}
-                      <Grid item container xs={4} spacing={1}>
-                        <Grid item>
-                          <Typography>
-                            {productResults[0].barcodeNumber}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography>{productResults[0].category}</Typography>
-                        </Grid>
-                      </Grid>
-                      <Grid item xs>
-                        <Typography>
-                          <strong>{productResults[0].productName}</strong>
-                        </Typography>
-                      </Grid>
-                      {/* Row 2 - Stock Quantity & Unit Price */}
-                      <Grid item container xs={4} spacing={1}>
-                        <Grid item>
-                          <Typography>
-                            <strong>Stock Quantity:</strong>{" "}
-                            {retailInventory[0].stockQuantity}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography>
-                            <strong>Unit Price:</strong>{" "}
-                            {productResults[0].unitPrice}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography>
-                            <strong>Expiry Date:</strong>{" "}
-                            {formatDate(retailInventory[0].expiryDate)}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  {/* Column 3 - Edit and Staff Checkout Buttons */}
-                  <Grid item xs={2}>
-                    <Grid container direction="column" spacing={1}>
-                      <Grid item>
-                        <Button onClick={handleEdit} fullWidth>
-                          Edit
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          onClick={handleRetailCheckOut}
-                          disabled={retailInventory[0].stockQuantity === 0}
-                          fullWidth
-                        >
-                          Retail Checkout
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Grid>
+       {retailInventory.length > 0 && (
+  <div style={{marginTop:'20px'}}>
+    <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom:'10px', marginTop:'5px'}}>
+      <SvgIcon component={InventoryActive} /> {" "}{retailInventory[0].addToInventory}
+    </Typography>
+    <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
+      <CardContent>
+        <Grid container spacing={0} xs={12}>
+          {/* Column 1 - Product Image */}
+          <Grid item xs={4} sm={2} textAlign={"left"}>
+            <img
+              src={productResults[0].photo[0]}
+              className="smallPhoto"
+              alt="Product Photo"
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                maxWidth: "100px",
+              }}
+            />
+          </Grid>
+          {/* Column 2 - Product Details */}
+          <Grid item xs={8} sm={6} textAlign={"left"}>
+            <Grid container direction="column" spacing={2}>
+              {/* Row 1 - Barcode Number & Category */}
+              <Grid item container spacing={2}>
+                <Grid
+                  item
+                  xs={6}
+                  sm={6}
+                  marginTop={"auto"}
+                  marginBottom={"auto"}>
+                  <Typography>
+                    {productResults[0].barcodeNumber}
+                  </Typography>
                 </Grid>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+                <Grid item xs={6} sm={6} textAlign={'right'}>
+                  <Typography
+                    sx={{
+                      backgroundColor: "#DAEDF5",
+                      display: "inline-block",
+                      padding: "10px",
+                      borderRadius: "100px"
+                    }}>
+                    {productResults[0].category}
+                  </Typography>
+                </Grid>
+              </Grid>
+              {/* Row 2 - Product Name */}
+              <Grid item>
+                <Typography>
+                  <strong>{productResults[0].productName}</strong>
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="center"
+            marginLeft="auto"
+            marginRight="auto"
+            marginTop={'20px'}>
+            <Grid
+              item
+              container
+              spacing={0}
+              xs={8}
+              display="flex"
+              justifyContent="center">
+              {/* Row 1 - Labels */}
+              <Grid item xs={4} sm={4}>
+                <Typography>
+                  <strong>Stock:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <Typography>
+                  <strong>Unit Price:</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <Typography>
+                  <strong>Expiry Date:</strong>
+                </Typography>
+              </Grid>
+              {/* Row 2 - Values */}
+              <Grid item xs={4} sm={4}>
+                <Typography>
+                  {retailInventory[0].stockQuantity}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <Typography>{productResults[0].unitPrice}</Typography>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <Typography>
+                  {formatDate(retailInventory[0].expiryDate)}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      </CardContent>
+    </Card>
+  </div>
+)}
+
+
         {showRetailModal && (
           <Modal open={showRetailModal} onClose={handleRetailCloseModal}>
             <Grid container justifyContent="center" alignItems="center">
@@ -376,7 +433,10 @@ const ScannerDetail = () => {
         )}
         {retailInventory.length === 0 && (
           <div>
-            <Typography variant="h3">Retail</Typography>
+            <Typography variant="h3">
+              {" "}
+              <SvgIcon component={InventoryActive} /> Retail
+            </Typography>
             <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
               <CardContent>
                 <Typography variant="h5">

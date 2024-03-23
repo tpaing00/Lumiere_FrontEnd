@@ -8,6 +8,7 @@ import Bell from '../assets/icons/Bell.svg'
 import CustomCardcontent from "./dashboard/CustomCardContent";
 import DashOverviewPiece from "./dashboard/DashOverviewPiece";
 import DashCard from "./dashboard/DashCard";
+import DashboardTopTrendProducts from "./DashboardTopTrendProducts.js";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -200,8 +201,8 @@ const Dashboard = () => {
           {totalInventoryStock && (<StockQuantityChart totalInventoryStock={totalInventoryStock} />)}
         </DashCard>
 
-        <DashCard title="Top Trend Products">
-
+        <DashCard title="Top Trend Product">
+          <DashboardTopTrendProducts />
         </DashCard>
 
       </Grid>

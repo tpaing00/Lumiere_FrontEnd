@@ -196,106 +196,138 @@ const ProductDetail = () => {
 
         <Box
           sx={{
-            p: 4,
             display: "flex",
-            flexDirection: "column",
+            flexDirection: { xs: "column", lg: "row" },
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Grid container spacing={1} justifyContent="center">
-            {visiblePhoto.slice(startIndex, endIndex).map((photoUrl, index) => (
-              <Grid item key={index}>
-                <img
-                  src={photoUrl}
-                  alt={`Product Image ${startIndex + index + 1}`}
-                  style={{ width: "288px", height: "300px" }}
-                />
-              </Grid>
-            ))}
-          </Grid>
-          <Pagination
-            count={visiblePhoto.length}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-          />
-        </Box>
+          <Box
+            sx={{
+              p: 4,
+              mt: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Grid container spacing={1} justifyContent="center">
+              {visiblePhoto
+                .slice(startIndex, endIndex)
+                .map((photoUrl, index) => (
+                  <Grid item key={index}>
+                    <img
+                      src={photoUrl}
+                      alt={`Product Image ${startIndex + index + 1}`}
+                      style={{ width: "288px", height: "300px" }}
+                    />
+                  </Grid>
+                ))}
+            </Grid>
+            <Pagination
+              count={visiblePhoto.length}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
 
-        <Card>
-          <CardContent>
-            <Grid container spacing={5}>
-              <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
-                <Typography variant="h2">Product Information</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography sx={{ fontSize: "14px" }}>Stock</Typography>
-                <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
-                  {wasteId === undefined || wasteId === ""
-                    ? inventoryResults.stockQuantity
-                    : wasteProductResults.wasteQuantity}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography sx={{ fontSize: "14px" }}>Unit Price</Typography>
-                <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
-                  $
-                  {wasteId === undefined || wasteId === ""
-                    ? productResults.unitPrice
-                    : wasteProductResults.unitPrice}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography sx={{ fontSize: "14px" }}>Total Value</Typography>
-                <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
-                  $
-                  {wasteId === undefined || wasteId === ""
-                    ? inventoryResults.totalValue
-                    : wasteProductResults.totalValue}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={6} md={3}>
-                    <Typography sx={{ fontSize: "14px" }}>
-                      Barcode Number
-                    </Typography>
-                    <Typography>
-                      {wasteId === undefined || wasteId === ""
-                        ? inventoryResults.barcodeNumber
-                        : wasteProductResults.barcodeNumber}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6} md={3}>
-                    <Typography sx={{ fontSize: "14px" }}>
-                      Expiry Date
-                    </Typography>
-                    <Typography>{formattedExpiryDate}</Typography>
-                  </Grid>
-                  <Grid item xs={6} md={3}>
-                    <Typography sx={{ fontSize: "14px" }}>
-                      Period After Opening
-                    </Typography>
-                    <Typography>
-                      {wasteId === undefined || wasteId === ""
-                        ? productResults.periodAfterOpening
-                        : wasteProductResults.periodAfterOpening}
-                      M
-                    </Typography>
+          <Card>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
+                  <Typography variant="h2" sx={{ mb: 4 }}>
+                    Product Information
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
+                  <Grid
+                    container
+                    spacing={5}
+                    sx={{
+                      borderTop: "1px solid #ccc",
+                      borderBottom: "1px solid #ccc",
+                      alignItems: "center",
+                      justifyContent: "space-evenly",
+                      pb: 3,
+                    }}
+                  >
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: "14px" }}>Stock</Typography>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
+                        {wasteId === undefined || wasteId === ""
+                          ? inventoryResults.stockQuantity
+                          : wasteProductResults.wasteQuantity}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Unit Price
+                      </Typography>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
+                        $
+                        {wasteId === undefined || wasteId === ""
+                          ? productResults.unitPrice
+                          : wasteProductResults.unitPrice}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Total Value
+                      </Typography>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
+                        $
+                        {wasteId === undefined || wasteId === ""
+                          ? inventoryResults.totalValue
+                          : wasteProductResults.totalValue}
+                      </Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
+                <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Barcode Number
+                      </Typography>
+                      <Typography>
+                        {wasteId === undefined || wasteId === ""
+                          ? inventoryResults.barcodeNumber
+                          : wasteProductResults.barcodeNumber}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Expiry Date
+                      </Typography>
+                      <Typography>{formattedExpiryDate}</Typography>
+                    </Grid>
+                    <Grid item xs={6} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Period After Opening
+                      </Typography>
+                      <Typography>
+                        {wasteId === undefined || wasteId === ""
+                          ? productResults.periodAfterOpening
+                          : wasteProductResults.periodAfterOpening}
+                        M
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography sx={{ fontSize: "14px" }}>Notes</Typography>
+                  <Typography>
+                    {wasteId === undefined || wasteId === ""
+                      ? productResults.message
+                      : wasteProductResults.message}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                <Typography sx={{ fontSize: "14px" }}>Notes</Typography>
-                <Typography>
-                  {wasteId === undefined || wasteId === ""
-                    ? productResults.message
-                    : wasteProductResults.message}
-                </Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Box>
         {userListResults &&
           inventoryResults &&
           internalUseListResults &&

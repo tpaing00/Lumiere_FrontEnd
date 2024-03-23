@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import {
   Typography,
   Grid,
@@ -7,8 +7,9 @@ import {
   Avatar,
   Box,
   Button,
+  Pagination,
 } from "@mui/material";
-import { PieChart, Pie, Tooltip, Cell } from "recharts";
+import { PieChart, Pie, Tooltip, Cell, Stack } from "recharts";
 import * as XLSX from "xlsx";
 
 const StockQuantityChartByCategory = ({
@@ -49,9 +50,23 @@ const StockQuantityChartByCategory = ({
       return item.data;
     }
   }).data;
-  console.log(foundCategoryData);
 
-  const [xLabels] = useState([`${selectedCategory}`, "Other"]);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 4;
+
+  useEffect(() => {
+    setPage(1); 
+  }, [selectedCategory]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const paginatedData = foundCategoryData.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -158,52 +173,64 @@ const StockQuantityChartByCategory = ({
             <ExportReport />
           </Grid>
           <Grid item container spacing={1} xs={6} lg={6}>
-            {foundCategoryData.slice(0, 5).map((product, index) => (
-              <Grid key={index} item xs={12} lg={12}>
-                <Card sx={{ width: "60%", margin: "auto" }}>
-                  <CardContent>
-                    <Grid container spacing={1} xs={12} lg={12}>
-                      <Grid item container spacing={1} xs={6} lg={6}>
-                        <Avatar
-                          sx={{ width: 80, height: 80, marginRight: 2 }}
-                          alt={product.product.productName}
-                          src={product.product.photo[0]}
-                        />
-                      </Grid>
-                      <Grid
-                        item
-                        container
-                        spacing={1}
-                        xs={6}
-                        lg={6}
-                        sx={{ display: "flex", flexDirection: "column" }}
-                      >
-                        <Typography
-                          gutterBottom
-                          variant="body1"
-                          component="div"
+            <Typography variant="h3" gutterBottom sx={{ margin: "auto" }}>
+              List of Products
+            </Typography>
+            {/* <Stack spacing={2}> */}
+              {paginatedData.map((product, index) => (
+                <Grid key={index} item xs={12} lg={12}>
+                  <Card sx={{ width: "70%", margin: "auto" }}>
+                    <CardContent>
+                      <Grid container spacing={1} xs={12} lg={12}>
+                        <Grid item container spacing={1} xs={6} lg={6}>
+                          <Avatar
+                            sx={{ width: 80, height: 80, marginRight: 2 }}
+                            alt={product.product.productName}
+                            src={product.product.photo[0]}
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          container
+                          spacing={1}
+                          xs={6}
+                          lg={6}
+                          sx={{ display: "flex", flexDirection: "column" }}
                         >
-                          {product.product.brandName}
-                        </Typography>
-                        <Typography
-                          gutterBottom
-                          variant="body1"
-                          component="div"
-                        >
-                          {product.product.productName}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Quantity: {product.stockQuantity}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Barcode Number: {product.product.barcodeNumber}
-                        </Typography>
+                          <Typography
+                            gutterBottom
+                            variant="body1"
+                            component="div"
+                          >
+                            {product.product.brandName}
+                          </Typography>
+                          <Typography
+                            gutterBottom
+                            variant="body1"
+                            component="div"
+                          >
+                            {product.product.productName}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            Quantity: {product.stockQuantity}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            Barcode Number: {product.product.barcodeNumber}
+                          </Typography>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+              <Pagination
+                count={Math.ceil(foundCategoryData.length / itemsPerPage)}
+                page={page}
+                onChange={handleChangePage}
+                color="primary"
+                sx={{ margin: "auto" }}
+              />
+            {/* </Stack> */}
           </Grid>
         </Grid>
       </CardContent>

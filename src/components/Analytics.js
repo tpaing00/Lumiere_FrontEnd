@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Button, Box } from "@mui/material";
 import ProductWastage from "./ProductWastage";
 import TopTrendProduct from "./TopTrendProduct";
 import TotalInventory from "./TotalInventory";
@@ -13,26 +13,34 @@ const Analytics = () => {
 
   return (
     <>
-      <nav>
-        <ul>
-          <li>
-            <Link to="#" onClick={() => handleClick("TotalInventory")}>
+    <Box sx={{ marginTop: '40px' }}>
+      <nav >
+          
+            <Button
+              sx={{ width: '180px' }}
+              variant={activeComponent === "TotalInventory" ? "contained" : "outlined"}
+              onClick={() => handleClick("TotalInventory")}
+            >
               Total Inventory
-            </Link>
-          </li>
+            </Button>
+          
 
-          <li>
-            <Link to="#" onClick={() => handleClick("TopTrendProduct")}>
+            <Button
+              sx={{ width: '180px' }}
+              variant={activeComponent === "TopTrendProduct" ? "contained" : "outlined"}
+              onClick={() => handleClick("TopTrendProduct")}
+            >
               Top Trend Products
-            </Link>
-          </li>
-          <li>
-            <Link to="#" onClick={() => handleClick("ProductWastage")}>
+            </Button>
+            <Button
+              sx={{ width: '180px' }}
+              variant={activeComponent === "ProductWastage" ? "contained" : "outlined"}
+              onClick={() => handleClick("ProductWastage")}
+            >
               Product Wastage
-            </Link>
-          </li>
-        </ul>
+            </Button>
       </nav>
+      </Box>
       <div>
         {activeComponent === "TotalInventory" && <TotalInventory />}
         {activeComponent === "ProductWastage" && <ProductWastage />}

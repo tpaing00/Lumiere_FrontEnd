@@ -61,7 +61,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          {loggedIn && <Header />}
+          {loggedIn && <Header loggedIn={loggedIn} handleLogout={handleLogout}/>}
           <RootContainer>
             {loggedIn && <NavBar />}
             <ContentContainer>
@@ -118,10 +118,11 @@ const App = () => {
             </ContentContainer>
           </RootContainer>
         </BrowserRouter>
-        <Footer loggedIn={loggedIn} onLogout={handleLogout} />
+        {/* <Footer loggedIn={loggedIn} onLogout={handleLogout} /> */}
       </ThemeProvider>
     </>
   );
 };
 
 export default App;
+

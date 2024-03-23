@@ -244,13 +244,13 @@ const handleViewDetail = (inventoryId, barcodeNumber) => {
                     data: totalWasteQuantities,
                     label: "Wasted",
                     stack: "total",
-                    color: "#82ca9d",
+                    color: "#AA230E",
                   },
                   {
                     data: totalStockQuantities,
                     label: "Total Product",
                     stack: "total",
-                    color: "#8884d8",
+                    color: "#CCCCCC",
                   },
                 ]}
                 yAxis={[{ data: xLabels, scaleType: "band" }]} // X-axis now takes the category labels

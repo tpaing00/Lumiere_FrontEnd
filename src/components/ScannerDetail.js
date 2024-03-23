@@ -5,6 +5,8 @@ import RetailCheckOutModal from "./RetailCheckOutModal";
 import { SvgIcon } from "@mui/material";
 
 import InventoryActive from "../assets/icons/InventoryActive.svg";
+import EditIcon from "../assets/icons/Edit.svg";
+
 
 import {
   Typography,
@@ -239,6 +241,27 @@ const ScannerDetail = () => {
                     </Grid>
                   </Box>
                 </Grid>
+                <Grid item xs={2} spacing={0} marginTop={'20px'}>
+                    <Grid container direction="column" spacing={0}>
+                      <Grid item textAlign={"center"}>
+                        <Button 
+                          variant="outlined" 
+                          onClick={handleEdit} fullWidth>
+                            <SvgIcon component={EditIcon} style={{fill:"none"}}/>Edit
+                        </Button>
+                      </Grid>
+                      <Grid item textAlign={"center"} marginTop={'-10px'}>
+                        <Button
+                          variant="contained"
+                          onClick={handleRetailCheckOut}
+                          disabled={retailInventory[0].stockQuantity === 0}
+                          fullWidth
+                        >
+                          Staff Checkout
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
               </CardContent>
             </Card>
             {/* <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
@@ -308,7 +331,7 @@ const ScannerDetail = () => {
           </div>
         )}
        {retailInventory.length > 0 && (
-  <div style={{marginTop:'20px'}}>
+  <div style={{marginTop:'50px'}}>
     <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom:'10px', marginTop:'5px'}}>
       <SvgIcon component={InventoryActive} /> {" "}{retailInventory[0].addToInventory}
     </Typography>
@@ -410,6 +433,27 @@ const ScannerDetail = () => {
             </Grid>
           </Box>
         </Grid>
+        <Grid item xs={2} spacing={0} marginTop={'20px'}>
+                    <Grid container direction="column" spacing={0}>
+                      <Grid item textAlign={"center"}>
+                        <Button 
+                          variant="outlined" 
+                          onClick={handleEdit} fullWidth>
+                            <SvgIcon component={EditIcon} style={{fill:"none"}}/>Edit
+                        </Button>
+                      </Grid>
+                      <Grid item textAlign={"center"} marginTop={'-10px'}>
+                        <Button
+                          variant="contained"
+                          onClick={handleRetailCheckOut}
+                          disabled={retailInventory[0].stockQuantity === 0}
+                          fullWidth
+                        >
+                          Staff Checkout
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
       </CardContent>
     </Card>
   </div>

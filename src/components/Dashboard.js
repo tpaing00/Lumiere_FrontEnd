@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Typography, Grid, Box, Card, CardContent, SvgIcon, useTheme } from "@mui/material";
-import StockQuantityChart from "./dashboard/StockQuantityChart";
+import StockQuantityChart from "./StockQuantityChart";
 import DashInfoPiece from "./dashboard/DashInfoPiece";
 import Bell from '../assets/icons/Bell.svg'
 import CustomCardcontent from "./dashboard/CustomCardContent";

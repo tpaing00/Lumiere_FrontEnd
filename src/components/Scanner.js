@@ -70,45 +70,49 @@ function Scanner() {
   };
 
   return (
-    <Box sx={{ mt: 3 }}>
-      <Typography component="h1" align="left" variant="h2">
-        Quick Scan
-      </Typography>
-      <Grid container justifyContent="center" sx={{ backgroundColor: '#f0f0f0' }}>
-        <Grid item xs={12} sm={8} md={6}>
-          <Box>
-            <Typography component="p">
-              Scan or enter barcode to find and checkout products.
-            </Typography>
-            {barcode && (
-              <Typography component="p">
-                {" "}
-                Detected Barcode: {barcode}{" "}
+   <>
+        <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>
+          Quick Scan
+        </Typography>
+        <Grid container justifyContent="center" sx={{ backgroundColor: "#6A6A6A", mt: 5,  pl: '10px', mb: '12px', minHeight: '80vh',  }}>
+          <Grid  container justifyContent="center" item xs={12} sm={8} md={6} sx={{ pt: '40px', pb: '40px', }}>
+            <Box>
+              <Typography component="p" sx={{textAlign: "center", color: "white", }}>
+                Scan or enter barcode to find and checkout products.
               </Typography>
-            )}
-            <Box id="barcode-scanner"></Box>
-            <TextField
-              type="text"
-              max={15}
-              min={7}
-              value={barcode}
-              onChange={(e) => setBarcode(e.target.value)}
-              label="Barcode Number"
-              sx={{ width: '400px' }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch}>
-                      <Search />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
+              {barcode && (
+                <Typography component="p" sx={{textAlign: "center", color: "white", mt: 2 }}>
+                  {" "}
+                  Detected Barcode: {barcode}{" "}
+                </Typography>
+              )}
+              <Box id="barcode-scanner" sx={{mt: 5 }}></Box>
+              <TextField
+                type="text"
+                max={15}
+                min={7}
+                value={barcode}
+                onChange={(e) => setBarcode(e.target.value)}
+                label="Barcode Number"
+                sx={{ width: "400px", mt: 5  , background: "white"}}
+                InputLabelProps={{
+                  sx: { color: "gray" } // Set label color to white
+                }}
+                InputProps={{
+                  sx: { color: "gray" },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearch}>
+                        <Search />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+        </> 
   );
 }
 

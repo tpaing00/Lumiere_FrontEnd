@@ -2,21 +2,19 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { styled } from "@mui/system";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { Card, CardContent, Typography, Box, Button } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button, Grid, Avatar} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import * as XLSX from "xlsx";
+import CategoryNav from "./CategoryNav";
 
 const StyledImage = styled("img")({
   width: "200px",
-  height: "200px",
+  height: "250px",
   background: "white",
   borderRadius: "20px",
   objectFit: "cover",
 });
-
-
-
 
 const ProductWastage = () => {
   const [wasteProducts, setWasteProducts] = useState([]);
@@ -25,6 +23,7 @@ const ProductWastage = () => {
   const [totalWasteQuantities, setTotalWasteQuantities] = useState(null);
   const [xLabels, setXLabels] = useState([]);
   const [series, setSeries] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -192,10 +191,29 @@ const ProductWastage = () => {
     fetchWastageData();
   }, []);
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filterProductsByCategory = (product) => {
+    
+    if (selectedCategory === "All") {
+        return true;
+    } else {
+        return product.category === selectedCategory;
+    }
+}
+
+const handleViewDetail = (inventoryId, barcodeNumber) => {
+  navigate("/productdetail", {
+    state: { inventoryId, barcodeNumber },
+  });
+};
+
   return (
     <>
       <Typography variant="h1">Product Wastage</Typography>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", mb: 10, }}>
         <Tabs variant="scrollable" scrollButtons="auto" value={0}>
           {wasteProducts.map((product, index) => (
             <Tab
@@ -207,13 +225,18 @@ const ProductWastage = () => {
           ))}
         </Tabs>
       </Box>
+      <div style={{ marginTop: '30px', margin:'auto', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '10px' }}>
+      <Box sx={{ mb: 5, mt: -0}} >
+            <CategoryNav
+                handleCategoryChange={handleCategoryChange}
+                selectedCategory={selectedCategory}
+            />
+
+      </Box>
 
       <Card sx={{ mt: 3 }}>
         <CardContent>
-          {totalStockQuantities &&
-            totalWasteQuantities &&
-            xLabels &&
-            series && (
+          {selectedCategory === "All" && totalStockQuantities && totalWasteQuantities && xLabels && series && (
               <>
               <BarChart
                 width={800}
@@ -239,8 +262,60 @@ const ProductWastage = () => {
                <ExportReport />
               </>
             )}
+            {selectedCategory !== "All" && (
+            <>
+            <Typography variant="h5" gutterBottom>
+                    Most 5 Wastage Products
+                </Typography>
+                <Grid container spacing={1} sx={{ justifyContent:"center" }}>
+            {wasteProducts.slice(0, 5).map((product, index) => { // Limit to first 5 products                
+                  
+                if (product) {
+                    const inventoryId = inventory[product.barcodeNumber];
+
+                    return (
+                        <Grid key={index} item xs={12} sm={6} md={5} lg={5} >
+                            <Card
+                                onClick={() => handleViewDetail(inventoryId, product.barcodeNumber)}
+                                style={{
+                                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Add shadow
+                                    cursor: 'pointer', 
+                                    margin: '8px',
+                                }}
+                            >
+                                <CardContent sx={{ display: 'flex' }}>
+                                    <Avatar
+                                        sx={{ width: 80, height: 80, marginRight: 2 }}
+                                        alt={product.productName}
+                                        src={product.photo[0]}
+                                    />
+                                    <div>
+                                        <Typography gutterBottom variant="body1" component="div">
+                                            {product.productName}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Category: {product.category}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Barcode Number: {product.barcodeNumber}
+                                        </Typography>
+                                        {/* Add more product info as needed */}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    );
+                } else {
+                    return null;
+                }
+            })}
+        </Grid>
+            </>
+            )}
         </CardContent>
       </Card>
+      </div>
+      
     </>
   );
 };

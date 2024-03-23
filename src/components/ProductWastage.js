@@ -10,10 +10,11 @@ import CategoryNav from "./CategoryNav";
 
 const StyledImage = styled("img")({
   width: "200px",
-  height: "250px",
+  height: "200px",
   background: "white",
-  borderRadius: "20px",
+  borderRadius: "30px",
   objectFit: "cover",
+  margin: '10px'
 });
 
 const ProductWastage = () => {
@@ -24,6 +25,7 @@ const ProductWastage = () => {
   const [xLabels, setXLabels] = useState([]);
   const [series, setSeries] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [filteredWasteProducts, setFilteredWasteProducts] = useState([]);
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -111,6 +113,10 @@ const ProductWastage = () => {
   };
 
   useEffect(() => {
+    setFilteredWasteProducts(wasteProducts.filter(product => product.category === selectedCategory));
+  }, [selectedCategory, wasteProducts]);
+
+  useEffect(() => {
     const fetchWastageData = async () => {
       try {
         const response = await axios.get(
@@ -181,6 +187,7 @@ const ProductWastage = () => {
           setTotalWasteQuantities(totalWasteQuantities);
           setXLabels(xLabels);
           setSeries(series);
+          
         } else {
           console.error("Failed to fetch data:", inventoryResponse.status);
         }
@@ -194,15 +201,6 @@ const ProductWastage = () => {
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
-
-  const filterProductsByCategory = (product) => {
-    
-    if (selectedCategory === "All") {
-        return true;
-    } else {
-        return product.category === selectedCategory;
-    }
-}
 
 const handleViewDetail = (inventoryId, barcodeNumber) => {
   navigate("/productdetail", {
@@ -268,8 +266,8 @@ const handleViewDetail = (inventoryId, barcodeNumber) => {
                     Most 5 Wastage Products
                 </Typography>
                 <Grid container spacing={1} sx={{ justifyContent:"center" }}>
-            {wasteProducts.slice(0, 5).map((product, index) => { // Limit to first 5 products                
-                  
+            {filteredWasteProducts.slice(0, 5).map((product, index) => { // Limit to first 5 products                
+                   
                 if (product) {
                     const inventoryId = inventory[product.barcodeNumber];
 

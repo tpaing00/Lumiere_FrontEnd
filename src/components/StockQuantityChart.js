@@ -104,21 +104,19 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              // padding: "16px 34px 39px 16px",
-              // border: "1px solid black",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
             {/* <Card sx={{ width: "100%" }}> */}
-            <PieChart width={300} height={300}>
+            <PieChart width={selectedCategory ? 500 : 300} height={selectedCategory ? 450 : 300}>
               <Pie
                 data={pieData}
                 dataKey="value"
                 cx="50%"
                 cy="50%"
-                outerRadius={130}
-                innerRadius={100}
+                outerRadius={selectedCategory ? 200 : 140}
+                innerRadius={selectedCategory ? 160 : 100}
                 startAngle={90}
                 endAngle={-360}
                 label={({ cx, cy }) => (
@@ -129,6 +127,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fontSize="24px"
+                      fontWeight="bold"
                       fontFamily="Roboto Condensed"
                     >
                       {totalQuantity}
@@ -139,6 +138,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fontSize="24px"
+                      fontWeight="bold"
                       fontFamily="Roboto Condensed"
                     >
                       Products

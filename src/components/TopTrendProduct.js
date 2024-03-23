@@ -69,6 +69,10 @@ const TopTrendProducts = () => {
         
         <div>
             <Box sx={{ width: '100%', marginBottom: '50px' }}>
+            
+            <Typography variant="h1">
+                Top Trend Products
+            </Typography>
             <Tabs variant="scrollable" scrollButtons="auto" value={0}>
                 {trendyProducts.map((trendyProduct, index) => {
                     const product = productData.find(product => product.productName === trendyProduct._id);
@@ -98,7 +102,7 @@ const TopTrendProducts = () => {
             </Tabs>
         </Box>
 
-            <div style={{  width: '80%', margin:'auto', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '10px' }}>
+            <div style={{  width: '100%', margin:'auto', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '10px' }}>
             <Box sx={{ mb: 5, mt: -0}} >
             <CategoryNav
                 handleCategoryChange={handleCategoryChange}

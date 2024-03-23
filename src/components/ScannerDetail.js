@@ -84,12 +84,11 @@ const ScannerDetail = () => {
 
   const handleRetailCheckOut = (event) => {
     event.preventDefault();
-    //alert("retailexp " + retailInventory[0].expiryDate);
     if (!isExpired(retailInventory[0].expiryDate)) {
       setShowRetailModal(true);
     } else {
       alert("Product is expired. Cannot check out.");
-    }
+    }   
   };
 
   const handleRetailCloseModal = () => {
@@ -142,7 +141,7 @@ const ScannerDetail = () => {
               <SvgIcon component={InventoryActive} />{"  "}
               {internalInventory[0].addToInventory}
             </Typography>
-            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
+            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" ,  mt: 3 }}>
               <CardContent>
                 <Grid container spacing={0} xs={12}>
                   {/* Column 1 - Product Image */}
@@ -253,8 +252,8 @@ const ScannerDetail = () => {
                       <Grid item textAlign={"center"} marginTop={'-10px'}>
                         <Button
                           variant="contained"
-                          onClick={handleRetailCheckOut}
-                          disabled={retailInventory[0].stockQuantity === 0}
+                          onClick={handleStaffCheckOut}
+                          disabled={internalInventory[0].stockQuantity === 0}
                           fullWidth
                         >
                           Staff Checkout
@@ -318,26 +317,29 @@ const ScannerDetail = () => {
               {" "}
               <SvgIcon component={InventoryActive} /> Internal Use
             </Typography>
-            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
+            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" ,  mt: 3 }}>
               <CardContent>
                 <Typography variant="h5">
                   No Products Match Your Search
                 </Typography>
-                <Button onClick={handleAddInternalInventory}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '15px' }} fullWidth >
+                <Button onClick={handleAddInternalInventory} variant="outlined" sx={{ m: 0 }}>
                   Register New Product
                 </Button>
+                </Box>
               </CardContent>
             </Card>
           </div>
         )}
-       {retailInventory.length > 0 && (
-  <div style={{marginTop:'50px'}}>
-    <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom:'10px', marginTop:'5px'}}>
+         <Box sx={{ mt: 3 }}>
+       {retailInventory.length > 0 && (        
+          <div>
+          <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom:'10px' }}>
       <SvgIcon component={InventoryActive} /> {" "}{retailInventory[0].addToInventory}
     </Typography>
-    <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
-      <CardContent>
-        <Grid container spacing={0} xs={12}>
+    <Card sx={{ borderRadius: 5, border: "1px solid #ccc" ,  mt: 3 }}>
+              <CardContent>
+                <Grid container spacing={0} xs={12}>
           {/* Column 1 - Product Image */}
           <Grid item xs={4} sm={2} textAlign={"left"}>
             <img
@@ -449,7 +451,7 @@ const ScannerDetail = () => {
                           disabled={retailInventory[0].stockQuantity === 0}
                           fullWidth
                         >
-                          Staff Checkout
+                          Retail Checkout
                         </Button>
                       </Grid>
                     </Grid>
@@ -457,9 +459,11 @@ const ScannerDetail = () => {
       </CardContent>
     </Card>
   </div>
+        
+  
 )}
 
-
+</Box>
         {showRetailModal && (
           <Modal open={showRetailModal} onClose={handleRetailCloseModal}>
             <Grid container justifyContent="center" alignItems="center">
@@ -481,14 +485,16 @@ const ScannerDetail = () => {
               {" "}
               <SvgIcon component={InventoryActive} /> Retail
             </Typography>
-            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
-              <CardContent>
+            <Card sx={{ borderRadius: 5, border: "1px solid #ccc" ,  mt: 3 }}>
+              <CardContent>              
                 <Typography variant="h5">
                   No Products Match Your Search
                 </Typography>
-                <Button onClick={handleAddRetailInventory}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '15px' }} fullWidth >
+                <Button onClick={handleAddRetailInventory} variant="outlined" sx={{ m: 0 }}>
                   Register New Product
                 </Button>
+                </Box>
               </CardContent>
             </Card>
           </div>

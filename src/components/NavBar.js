@@ -4,7 +4,7 @@ import { Box, Drawer, List, IconButton, SvgIcon, useMediaQuery, useTheme, Button
 import CustomListItem from "./navbar/CustomListItem";
 import Close from '../assets/icons/Close.svg'
 import Hamburger from '../assets/icons/Hamburger.svg'
-import LogoDesktop from '../assets/logo/LogoDesktop.svg'
+import LogoDesktop from '../assets/logo/logoDesktop.svg'
 import CustomButton from "./mui_customization/base_components/CustomButton";
 import { Link } from "react-router-dom";
 import QuickScanWhite from '../assets/icons/QuickScanWhite.svg'

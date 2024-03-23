@@ -319,7 +319,24 @@ const AddProduct = () => {
                 <Box className="register-inventory">
                   <Grid container spacing="24px">
                     <Grid item xs={6} lg={3}>
-                      <CustomSelect
+                    <InputLabel variant="standard" id="addToInventory-label">
+                        Product Category
+                      </InputLabel>
+                      <Select
+                        id="addToInventory"
+                        name="addToInventory"
+                        className="dropdown"
+                        value={formData.addToInventory}
+                        onChange={handleChange}
+                        fullWidth
+                      >
+                        {inventoryTypeData.map((type) => (
+                          <MenuItem key={type.value} value={type.value}>
+                            {type.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {/* <CustomSelect
                         id="addToInventory"
                         name="addToInventory"
                         className="dropdown"
@@ -327,13 +344,11 @@ const AddProduct = () => {
                         onChange={handleChange}
                         labelText="Inventory"
                         array={inventoryTypeData}
-                      />
-
+                      /> */}
                     </Grid>
 
                     <Grid item xs={6} lg={3}>
-
-                      <CustomSelect
+                      {/* <CustomSelect
                         id="category"
                         name="category"
                         className="dropdown"
@@ -341,9 +356,9 @@ const AddProduct = () => {
                         onChange={handleChange}
                         labelText="Product Category"
                         array={productCategoryData}
-                      />
+                      /> */}
 
-                      {/* <InputLabel variant="standard" id="category-label">
+                      <InputLabel variant="standard" id="category-label">
                         Product Category
                       </InputLabel>
                       <Select
@@ -359,7 +374,7 @@ const AddProduct = () => {
                             {type.label}
                           </MenuItem>
                         ))}
-                      </Select> */}
+                      </Select>
                     </Grid>
                   </Grid>
                 </Box>

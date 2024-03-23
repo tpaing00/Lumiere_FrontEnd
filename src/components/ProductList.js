@@ -21,11 +21,18 @@ import {
   TextField,
   Typography,
   TablePagination,
+  Pagination,
+  Card,
+  CardContent,
+  useTheme,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import CustomSearch from "./mui_customization/base_components/CustomSearch";
 
 const ProductList = () => {
+
+  const theme = useTheme();
+
   const navigate = useNavigate();
   const [inventoryData, setInventoryData] = useState([]);
   const [productData, setProductData] = useState([]);
@@ -43,7 +50,7 @@ const ProductList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
-  
+
   useEffect(() => {
     Promise.all([
       axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
@@ -63,7 +70,7 @@ const ProductList = () => {
 
         // Calculate total count of rows here
         const totalCount = (inventoryResponse ? inventoryResponse.length : 0) +
-        (wastesResponse ? wastesResponse.length : 0);    
+          (wastesResponse ? wastesResponse.length : 0);
         setTotalRows(totalCount);
       })
       .catch((error) => {
@@ -178,7 +185,7 @@ const ProductList = () => {
     });
   };
 
-  const renderTableData = () => { 
+  const renderTableData = () => {
     // Check if both inventoryData and productData are available
     if (
       inventoryData.length === 0 ||
@@ -270,27 +277,27 @@ const ProductList = () => {
       // Return true if all criteria are met
       return inventoryMatch && categoryMatch && statusMatch && searchMatch;
     });
-    
+
     const startIndex = page * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const slicedData = filteredData.slice(startIndex, endIndex);
     // Render table rows
-    const renderStatusStyle = (status) => {
-      switch (status) {
-        case "In Stock":
-          return { color: "green" };
-        case "Low Stock":
-          return { color: "orange" };
-        case "Expired":
-          return { color: "red" };
-        case "Out of Stock":
-          return { color: "purple" };
-        case "Wasted":
-          return { color: "gray" };
-        default:
-          return {};
-      }
-    };
+    // const renderStatusStyle = (status) => {
+    //   switch (status) {
+    //     case "In Stock":
+    //       return { color: "green" };
+    //     case "Low Stock":
+    //       return { color: "orange" };
+    //     case "Expired":
+    //       return { color: "red" };
+    //     case "Out of Stock":
+    //       return { color: "purple" };
+    //     case "Wasted":
+    //       return { color: "gray" };
+    //     default:
+    //       return {};
+    //   }
+    // };
 
     const handleViewDetail = (inventoryId, barcodeNumber, wasteId) => {
       //alert("inventoryId " + inventoryId+  "barcodeNumber " +  barcodeNumber+  "wasteId" + wasteId)
@@ -303,7 +310,7 @@ const ProductList = () => {
       handleMenuClose(index);
       const confirmation = window.confirm(`Are you sure you want to Report ${row.productName} as Wasted?`);
       if (confirmation) {
-        try {         
+        try {
           const formData = {
             barcodeNumber: row.barcodeNumber,
             productName: row.productName,
@@ -321,7 +328,7 @@ const ProductList = () => {
             message:
               row.message !== undefined && row.message !== "" ? row.message : "",
           };
-  
+
           //POST request to the API
           axios
             .post("https://api.lumiereapp.ca/api/v1/waste", formData)
@@ -338,7 +345,7 @@ const ProductList = () => {
           console.error("Error fetching results:", error);
         }
       }
-      
+
     };
 
     const handleDelete = async (row, index) => {
@@ -379,7 +386,7 @@ const ProductList = () => {
               });
           }
         }
-        
+
       } catch (error) {
         console.error("Error deleting product:", error);
       }
@@ -392,7 +399,8 @@ const ProductList = () => {
         <TableCell>{row.category}</TableCell>
         <TableCell>{formatDate(row.dateAdded)}</TableCell>
         <TableCell>{formatDate(row.expiryDate)}</TableCell>
-        <TableCell style={renderStatusStyle(row.status)}>{row.status}</TableCell>
+        {/* <TableCell style={renderStatusStyle(row.status)}>{row.status}</TableCell> */}
+        <TableCell>{row.status}</TableCell>
         <TableCell>{row.addToInventory}</TableCell>
         <TableCell>
           <IconButton
@@ -404,7 +412,7 @@ const ProductList = () => {
           >
             <MoreVert />
           </IconButton>
-  
+
           <Menu
             id={`menu-${index}`}
             anchorEl={anchorEl[index]}
@@ -422,70 +430,7 @@ const ProductList = () => {
         </TableCell>
       </TableRow>
     ));
-    // return filteredData.map((row, index) => (
-    //   <TableRow key={index}>
-    //     <TableCell>{row.productName}</TableCell>
-    //     <TableCell>{row.brandName}</TableCell>
-    //     <TableCell>{row.category}</TableCell>
-    //     <TableCell>{formatDate(row.dateAdded)}</TableCell>
-    //     <TableCell>{formatDate(row.expiryDate)}</TableCell>
-    //     <TableCell style={renderStatusStyle(row.status)}>
-    //       {row.status}
-    //     </TableCell>
-    //     <TableCell>{row.addToInventory}</TableCell>
-    //     <TableCell>
-    //       <IconButton
-    //         id="more"
-    //         aria-controls={`menu-${index}`}
-    //         aria-haspopup="true"
-    //         aria-expanded={open[index] ? "true" : undefined}
-    //         onClick={(event) => handleMenuClick(event, index)}
-    //       >
-    //         <MoreVert />
-    //       </IconButton>
 
-    //       <Menu
-    //         id={`menu-${index}`}
-    //         anchorEl={anchorEl[index]}
-    //         open={open[index]}
-    //         onClose={() => handleMenuClose(index)}
-    //         MenuListProps={{
-    //           "aria-labelledby": "basic-button",
-    //         }}
-    //       >
-    //         <MenuItem
-    //           onClick={() =>
-    //             handleViewDetail(
-    //               row.inventoryId,
-    //               row.barcodeNumber,
-    //               row.wasteId
-    //             )
-    //           }
-    //         >
-    //           View Detail
-    //         </MenuItem>
-    //         <MenuItem
-    //           onClick={() => handleStaffCheckOut(row, index)}
-    //           disabled={
-    //             row.status === "Out of Stock" ||
-    //             row.status === "Expired" ||
-    //             row.status === "Wasted" ||
-    //             row.addToInventory === "Retail"
-    //           }
-    //         >
-    //           Staff Check Out
-    //         </MenuItem>
-    //         <MenuItem
-    //           onClick={() => handleReportWasted(row, index)}
-    //           disabled={row.status !== "Expired" || row.status === "Wasted"}
-    //         >
-    //           Report Wasted
-    //         </MenuItem>
-    //         <MenuItem onClick={() => handleDelete(row, index)}>Delete</MenuItem>
-    //       </Menu>
-    //     </TableCell>
-    //   </TableRow>
-    // ));
   };
 
   // Handle the change of the dropdown value for addToInventory
@@ -538,145 +483,149 @@ const ProductList = () => {
   };
 
   return (
-    <Box component="main" sx={{ mt: 3 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={8}>
-          <Typography component="h1" variant="h1">
-            Product List
-          </Typography>
-        </Grid>
+    <>
+      <Box component="main" sx={{ mt: 3 }}>
+        <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Inventory</Typography>
 
-        <Grid item xs={4}>
-          <Button onClick={handleNewProduct} variant="outlined">
-            Register New Product
-          </Button>
-        </Grid>
-      </Grid>
+        <Card sx={{ borderRadius: '20px', m: '12px 40px 0 40px' }}>
 
-      <Grid container spacing={1} sx={{ display: "flex", mt: 5, mb: 3 }}>
-        <Grid item xs={2}>
-          <InputLabel variant="standard" id="filterInventory-label">
-            Filter by Inventory:
-          </InputLabel>
-          <Select
-            id="filterInventory"
-            name="filterInventory"
-            className="dropdown"
-            value={filterByInventory}
-            onChange={handleInventoryChange}
-            //onChange={(event) => setFilterByInventory(event.target.value)}
-            fullWidth
-          >
-            <MenuItem value="All">All</MenuItem>
-            {inventoryTypeData.map((type) => (
-              <MenuItem key={type.value} value={type.value}>
-                {type.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </Grid>
-        <Grid item xs={2}>
-          <InputLabel variant="standard" id="filterCategory-label">
-            Filter by Category:
-          </InputLabel>
-          <Select
-            id="filterCategory"
-            name="filterCategory"
-            className="dropdown"
-            value={filterByCategory}
-            onChange={handleCategoryChange}
-            fullWidth
-          >
-            <MenuItem value="All">All</MenuItem>
-            {productCategoryData.map((type) =>
-              type.label !== "Select" ? (
-                <MenuItem key={type.value} value={type.value}>
-                  {type.label}
-                </MenuItem>
-              ) : null
+          <CardContent sx={{ p: '24px', m: 0 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '15px' }} fullWidth >
+              <Typography variant="h2" sx={{ m: 0 }}>Product List</Typography>
+              <Button onClick={handleNewProduct} variant="outlined" sx={{ m: 0 }}>
+                Register New Product
+              </Button>
+            </Box>
+
+            <Grid container spacing={4} fullWidth>
+              <Grid container item spacing="16px" xs={7}>
+                <Grid item xs={3}>
+
+                  <Select
+                    id="filterInventory"
+                    name="filterInventory"
+                    className="dropdown"
+                    label="Filter by Inventory"
+                    value={filterByInventory}
+                    onChange={handleInventoryChange}
+                    //onChange={(event) => setFilterByInventory(event.target.value)}
+                    fullWidth
+                  >
+                    <MenuItem value="All">All</MenuItem>
+                    {inventoryTypeData.map((type) => (
+                      <MenuItem key={type.value} value={type.value}>
+                        {type.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+
+                <Grid item xs={3}>
+
+                  <Select
+                    id="filterCategory"
+                    name="filterCategory"
+                    className="dropdown"
+                    label="Filter by Category"
+                    value={filterByCategory}
+                    onChange={handleCategoryChange}
+                    fullWidth
+                  >
+                    <MenuItem value="All">All</MenuItem>
+                    {productCategoryData.map((type) =>
+                      type.label !== "Select" ? (
+                        <MenuItem key={type.value} value={type.value}>
+                          {type.label}
+                        </MenuItem>
+                      ) : null
+                    )}
+                  </Select>
+                </Grid>
+
+                <Grid item xs={3}>
+
+                  <Select
+                    id="sortByBrand"
+                    name="sortByBrand"
+                    className="dropdown"
+                    label="Sort by Brand"
+                    value={sortByBrand}
+                    onChange={handleBrandChange}
+                    fullWidth
+                  >
+                    <MenuItem value="None">None</MenuItem>
+                    <MenuItem value="asc">Ascending</MenuItem>
+                    <MenuItem value="desc">Descending</MenuItem>
+                  </Select>
+                </Grid>
+
+                <Grid item xs={3}>
+
+                  <Select
+                    id="filterStatus"
+                    name="filterStatus"
+                    className="dropdown"
+                    label="Filter by Status"
+                    value={filterByStatus}
+                    onChange={(e) => setFilterByStatus(e.target.value)}
+                    fullWidth
+                  >
+                    <MenuItem value="All">All</MenuItem>
+                    <MenuItem value="In Stock">In Stock</MenuItem>
+                    <MenuItem value="Low Stock">Low Stock</MenuItem>
+                    <MenuItem value="Expired">Expired</MenuItem>
+                    <MenuItem value="Out of Stock">Out of Stock</MenuItem>
+                    <MenuItem value="Wasted">Wasted</MenuItem>
+                  </Select>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={5}>
+
+                <CustomSearch
+                  id="searchInventory"
+                  name="searchInventory"
+                  labelText="Search"
+                  type="text"
+                  value={searchTerm}
+                  placeholder="Search"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+
+            <Table sx={{ mt: '32px' }} size="small">
+              <TableHead>
+                <TableRow>{renderTableHeader()}</TableRow>
+              </TableHead>
+              <TableBody>{renderTableData()}</TableBody>
+            </Table>
+
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={totalRows}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+
+            {showInternalModal && (
+              <StaffCheckOutModal
+                handleClose={handleCloseModal}
+                productData={selectedInventoryProduct}
+                inventoryId={selectedInventoryProduct.inventoryId}
+                stockQuantity={selectedInventoryProduct.stockQuantity}
+                handleReloadInternalData={handleReloadInternalData}
+              />
             )}
-          </Select>
-        </Grid>
 
-        <Grid item xs={2}>
-          <InputLabel variant="standard" id="sortByBrand-label">
-            Sort by Brand:
-          </InputLabel>
-          <Select
-            id="sortByBrand"
-            name="sortByBrand"
-            className="dropdown"
-            value={sortByBrand}
-            onChange={handleBrandChange}
-            fullWidth
-          >
-            <MenuItem value="None">None</MenuItem>
-            <MenuItem value="asc">Ascending</MenuItem>
-            <MenuItem value="desc">Descending</MenuItem>
-          </Select>
-        </Grid>
+          </CardContent>
+        </Card>
 
-        <Grid item xs={2}>
-          <InputLabel variant="standard" id="filterStatus-label">
-            Filter by Status:
-          </InputLabel>
-          <Select
-            id="filterStatus"
-            name="filterStatus"
-            className="dropdown"
-            value={filterByStatus}
-            onChange={(e) => setFilterByStatus(e.target.value)}
-            fullWidth
-          >
-            <MenuItem value="All">All</MenuItem>
-            <MenuItem value="In Stock">In Stock</MenuItem>
-            <MenuItem value="Low Stock">Low Stock</MenuItem>
-            <MenuItem value="Expired">Expired</MenuItem>
-            <MenuItem value="Out of Stock">Out of Stock</MenuItem>
-            <MenuItem value="Wasted">Wasted</MenuItem>
-          </Select>
-        </Grid>
-
-        <Grid item xs={4}>
-          <CustomSearch
-            id="searchInventory"
-            name="searchInventory"
-            labelText="Search"
-            type="text"
-            value={searchTerm}
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </Grid>
-      </Grid>
-
-      <Table>
-        <TableHead>
-          <TableRow>{renderTableHeader()}</TableRow>
-        </TableHead>
-        <TableBody>{renderTableData()}</TableBody>
-      </Table>
-
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={totalRows}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-
-      {showInternalModal && (
-        <StaffCheckOutModal
-          handleClose={handleCloseModal}
-          productData={selectedInventoryProduct}
-          inventoryId={selectedInventoryProduct.inventoryId}
-          stockQuantity={selectedInventoryProduct.stockQuantity}
-          handleReloadInternalData={handleReloadInternalData}
-        />
-      )}
-    </Box>
+      </Box>
+    </>
   );
 };
 

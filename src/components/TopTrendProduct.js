@@ -1,17 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, Grid, Avatar, IconButton, Tabs, Tab, Box } from '@mui/material';
-import { SvgIcon } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import CategoryNav from "./CategoryNav";
 
-import AllCategoriesIcon from '../assets/icons/All.svg';
-import HairCareIcon from '../assets/icons/HairCare.svg';
-import SkinCareIcon from '../assets/icons/Face-Icon.svg';
-import BodyCareIcon from '../assets/icons/BodyCare.svg';
-import MakeUpIcon from '../assets/icons/Make-Up-Icon.svg';
+
 
 const TopTrendProducts = () => {
-    const iconSize = '32px';
     const navigate = useNavigate();
     const [trendyProducts, setTrendyProducts] = useState([]);
     const [inventory, setInventoryData] = useState([]);
@@ -68,6 +63,7 @@ const TopTrendProducts = () => {
         }
     }
     
+    
 
     return (
         
@@ -103,105 +99,14 @@ const TopTrendProducts = () => {
         </Box>
 
             <div style={{  width: '80%', margin:'auto', backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '10px' }}>
-                
-            <Grid container spacing={4} justifyContent="center" alignItems="center" style={{ marginBottom: '10px', marginTop:'-80px' }}>
-            <Grid item spacing={2}>
-                <IconButton
-                    onClick={() => handleCategoryChange("All")}
-                    color={selectedCategory === "All" ? "primary" : "default"}
-                    style={{
-                        marginTop: '10px',
-                        background: 'white',
-                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Add shadow
-                        fontSize: iconSize,
-                    }}
-                    sx={{ color: 'black' }}
-                >
-                    <SvgIcon component={AllCategoriesIcon} viewBox="0 0 24 24" />
-                </IconButton>
-            </Grid>
-            <Grid item>
-                <IconButton
-                    onClick={() => handleCategoryChange("Hair Care")}
-                    color={selectedCategory === "Hair Care" ? "primary" : "default"}
-                    style={{
-                        background: 'white',
-                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                        padding: '10px', // Adjust padding as needed
-                        fontSize: iconSize,
-                    }}
-                >
-                     <SvgIcon
-                        component={HairCareIcon}
-                        viewBox="0 0 32 32"
-                        
-                    />
-                </IconButton>
-            </Grid>
-            <Grid item>
-            <IconButton
-                    onClick={() => handleCategoryChange("Skin Care")}
-                    color={selectedCategory === "Skin Care" ? "primary" : "default"}
-                    style={{
-                        background: 'white',
-                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                        padding: '12px', // Adjust padding as needed
-                        fontSize: '28px', // Increase icon size to accommodate padding
-                        fontSize: iconSize,
-                    }}
-                >
-                    <SvgIcon
-                        component={SkinCareIcon}
-                        viewBox="0 0 32 32" // Increase the viewBox size
-                        style={{ fontSize: '28px' }} // Adjust icon position
-                    />
-                </IconButton>
-            </Grid>
-            <Grid item>
-                <IconButton
-                    onClick={() => handleCategoryChange("Makeup")}
-                    color={selectedCategory === "Makeup" ? "primary" : "default"}
-                    style={{
-                        background: 'white',
-                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Add shadow
-                        fontSize: iconSize,
-                    }}
-                >
-                    <SvgIcon component={MakeUpIcon} viewBox="0 0 24 24" />
-                </IconButton>
-            </Grid>
-            <Grid item>
-                <IconButton
-                    onClick={() => handleCategoryChange("Body Care")}
-                    color={selectedCategory === "Body Care" ? "primary" : "default"}
-                    style={{
-                        background: 'white',
-                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Add shadow
-                        fontSize: iconSize,
-                    }}
-                >
-                    <SvgIcon component={BodyCareIcon} viewBox="0 0 24 24" />
-                </IconButton>
-            </Grid>
-        </Grid>
-        {/* Second Grid container for texts */}
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-            <Grid item spacing={2}>
-                <Typography variant="body2" align="center">All Categories</Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body2" align="center">Hair Care</Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body2" align="center">Skin Care</Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body2" align="center">Makeup</Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body2" align="center">Body Care</Typography>
-            </Grid>
-        </Grid>
+            <Box sx={{ mb: 5, mt: -0}} >
+            <CategoryNav
+                handleCategoryChange={handleCategoryChange}
+                selectedCategory={selectedCategory}
+            />
+
+      </Box>
+            
                 <Typography variant="h5" gutterBottom>
                     Most 5 Latest Trendy Products
                 </Typography>

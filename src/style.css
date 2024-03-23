@@ -71,3 +71,8 @@ canvas {
 .close-button:hover {
   color: red;
 }
+
+.css-opjwqe-MuiButtonGroup-root .MuiButtonGroup-firstButton, .css-opjwqe-MuiButtonGroup-root .MuiButtonGroup-middleButton {
+  border-right: none;
+  border-color: transparent;
+}

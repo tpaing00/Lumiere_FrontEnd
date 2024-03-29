@@ -9,7 +9,6 @@ import {
   Button,
   Grid,
   IconButton,
-  InputLabel,
   Menu,
   MenuItem,
   Select,
@@ -18,19 +17,23 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   Typography,
   TablePagination,
-  Pagination,
   Card,
   CardContent,
   useTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import CustomSearch from "./mui_customization/base_components/CustomSearch";
 
 const ProductList = () => {
-
   const theme = useTheme();
 
   const navigate = useNavigate();
@@ -50,33 +53,128 @@ const ProductList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [deleteRowIndex, setDeleteRowIndex] = useState(null);
+  const [productNameToDelete, setProductNameToDelete] = useState("");
+  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+  const [reportProduct, setReportProduct] = useState(null);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
-    Promise.all([
-      axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
-      axios.get("https://api.lumiereapp.ca/api/v1/products"),
-      axios.get("https://api.lumiereapp.ca/api/v1/notification"),
-      axios.get("https://api.lumiereapp.ca/api/v1/waste"),
-    ])
-      .then((responses) => {
-        const inventoryResponse = responses[0].data;
-        const productsResponse = responses[1].data;
-        const notificationsResponse = responses[2].data;
-        const wastesResponse = responses[3].data;
-        setInventoryData(inventoryResponse);
-        setProductData(productsResponse);
-        setNotificationData(notificationsResponse);
-        setWasteData(wastesResponse);
+    const fetchData = async () => {
+      try {
+        const [
+          inventoryResponse,
+          productsResponse,
+          notificationsResponse,
+          wastesResponse,
+        ] = await Promise.all([
+          axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
+          axios.get("https://api.lumiereapp.ca/api/v1/products"),
+          axios.get("https://api.lumiereapp.ca/api/v1/notification"),
+          axios.get("https://api.lumiereapp.ca/api/v1/waste"),
+        ]);
+
+        setInventoryData(inventoryResponse.data);
+        setProductData(productsResponse.data);
+        setNotificationData(notificationsResponse.data);
+        setWasteData(wastesResponse.data);
 
         // Calculate total count of rows here
-        const totalCount = (inventoryResponse ? inventoryResponse.length : 0) +
-          (wastesResponse ? wastesResponse.length : 0);
-        setTotalRows(totalCount);
-      })
-      .catch((error) => {
+        // const totalCount = (inventoryResponse.data ? inventoryResponse.data.length : 0) +
+        //   (wastesResponse.data ? wastesResponse.data.length : 0);
+        // setTotalRows(totalCount);
+        const filteredData = applyFilters(
+          inventoryResponse.data,
+          wastesResponse.data
+        );
+        setTotalRows(filteredData.length);
+        // Reset page to 0 whenever any of the filters change
+        setPage(0);
+      } catch (error) {
         console.error(error);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [
+    filterByInventory,
+    filterByCategory,
+    sortByBrand,
+    searchTerm,
+    filterByStatus,
+  ]);
+
+  const applyFilters = (inventoryResponse, wastesResponse) => {
+    // Apply filters to inventory data
+    const combinedData = inventoryResponse.map((inventoryRow) => {
+      const matchingProduct = productData.find(
+        (product) => product.barcodeNumber === inventoryRow.barcodeNumber
+      );
+      if (matchingProduct) {
+        const combined = {
+          ...inventoryRow,
+          ...matchingProduct,
+          dateAdded: formatDate(inventoryRow.dateAdded),
+          expiryDate: formatDate(inventoryRow.expiryDate),
+          status: calculateStatus(inventoryRow._id),
+          inventoryId: inventoryRow._id,
+          productId: matchingProduct._id,
+          wasteId: "",
+        };
+        delete combined._id;
+        return combined;
+      } else {
+        return inventoryRow;
+      }
+    });
+
+    // Merge waste data with inventory data
+    const wasteDataWithStatus = wastesResponse.map((item) => ({
+      ...item,
+      stockQuantity: 0,
+      status: "Wasted",
+      wasteId: item._id,
+    }));
+    const combinedWithWaste = combinedData.concat(wasteDataWithStatus);
+
+    // Apply sorting based on brand name
+    let sortedData = [...combinedWithWaste];
+    if (sortByBrand === "asc") {
+      sortedData.sort((a, b) =>
+        a.brandName && b.brandName ? a.brandName.localeCompare(b.brandName) : 0
+      );
+    } else if (sortByBrand === "desc") {
+      sortedData.sort((a, b) =>
+        a.brandName && b.brandName ? b.brandName.localeCompare(a.brandName) : 0
+      );
+    }
+
+    // Apply filters based on current filter values
+    const filteredData = sortedData.filter((row) => {
+      const inventoryMatch =
+        filterByInventory === "All" ||
+        (row.addToInventory && row.addToInventory === filterByInventory);
+      const categoryMatch =
+        filterByCategory === "All" ||
+        (row.category && row.category === filterByCategory);
+      const statusMatch =
+        filterByStatus === "All" ||
+        (row.status && row.status === filterByStatus);
+      const searchMatch =
+        searchTerm === "" ||
+        (row.productName &&
+          row.productName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (row.brandName &&
+          row.brandName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (row.category &&
+          row.category.toLowerCase().includes(searchTerm.toLowerCase()));
+      return inventoryMatch && categoryMatch && statusMatch && searchMatch;
+    });
+
+    return filteredData;
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -113,22 +211,6 @@ const ProductList = () => {
       return newOpen;
     });
   };
-  const handleSearch = async (keywords) => {
-    try {
-      const response = await axios.get(
-        `http://api.lumiereapp.ca/api/v1/search?keywords=${encodeURIComponent(
-          keywords
-        )}`
-      );
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
-
-  const getSearchTerm = (value) => {
-    setSearchTerm(value); // Update the local state
-    handleSearch(value); // Call the API with the entered keywords
-  };
 
   const handleCloseModal = () => {
     setShowInternalModal(false); // Close the modal
@@ -145,28 +227,40 @@ const ProductList = () => {
   };
 
   const handleReloadInternalData = () => {
-    // Reload all data from the API
-    Promise.all([
-      axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
-      axios.get("https://api.lumiereapp.ca/api/v1/products"),
-      axios.get("https://api.lumiereapp.ca/api/v1/notification"),
-      axios.get("https://api.lumiereapp.ca/api/v1/waste"),
-    ])
-      .then((responses) => {
+    // Fetch filtered data from the API
+    const fetchFilteredData = async () => {
+      try {
         const [
           inventoryResponse,
           productsResponse,
           notificationsResponse,
           wastesResponse,
-        ] = responses;
+        ] = await Promise.all([
+          axios.get("https://api.lumiereapp.ca/api/v1/inventory"),
+          axios.get("https://api.lumiereapp.ca/api/v1/products"),
+          axios.get("https://api.lumiereapp.ca/api/v1/notification"),
+          axios.get("https://api.lumiereapp.ca/api/v1/waste"),
+        ]);
+
+        // Apply filters to the data
+        const combinedData = applyFilters(
+          inventoryResponse.data,
+          wastesResponse.data
+        );
+
+        // Update totalRows state with the length of the filtered data
+        setTotalRows(combinedData.length);
+        // Update inventory, product, notification, and waste data states
         setInventoryData(inventoryResponse.data);
         setProductData(productsResponse.data);
         setNotificationData(notificationsResponse.data);
         setWasteData(wastesResponse.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
-      });
+      }
+    };
+
+    fetchFilteredData();
   };
 
   const renderTableHeader = () => {
@@ -196,241 +290,324 @@ const ProductList = () => {
       return null; // Return null if either array is empty
     }
 
-    const combinedData = inventoryData.map((inventoryRow) => {
-      // Find the matching product object from the productData array based on the barcodeNumber
-      const matchingProduct = productData.find(
-        (product) => product.barcodeNumber === inventoryRow.barcodeNumber
-      );
-      // Merge the properties of inventoryRow and matchingProduct into a new object
-      if (matchingProduct) {
-        const combined = {
-          ...inventoryRow,
-          ...matchingProduct,
-          dateAdded: formatDate(inventoryRow.dateAdded),
-          expiryDate: formatDate(inventoryRow.expiryDate),
-          status: calculateStatus(inventoryRow._id),
-          inventoryId: inventoryRow._id,
-          productId: matchingProduct._id,
-          wasteId: "",
-        };
-
-        // Remove the duplicate _id field if it exists
-        delete combined._id;
-        return combined;
-      } else {
-        return inventoryRow;
-      }
-    });
-    // Sort the combined data based on the selected option for brandName
-    let sortedData = [];
-    if (wasteData.length !== 0) {
-      const wasteDataWithStatus = wasteData.map((item) => ({
-        ...item,
-        stockQuantity: 0,
-        status: "Wasted",
-        wasteId: item._id,
-      }));
-      delete wasteDataWithStatus._id;
-      delete wasteDataWithStatus.wasteQuantity;
-      const combinedWithWaste = combinedData.concat(wasteDataWithStatus);
-      sortedData = [...combinedWithWaste];
-    } else {
-      sortedData = [...combinedData];
-    }
-
-    // Sort the filtered data based on the selected option for brandName
-    if (sortByBrand === "asc") {
-      sortedData.sort((a, b) =>
-        a.brandName && b.brandName ? a.brandName.localeCompare(b.brandName) : 0
-      ); // Sort by ascending order of brandName using string comparison
-    } else if (sortByBrand === "desc") {
-      sortedData.sort((a, b) =>
-        a.brandName && b.brandName ? b.brandName.localeCompare(a.brandName) : 0
-      ); // Sort by descending order of brandName using string comparison
-    }
-
-    // Filter the combined data based on the selected options
-    const filteredData = sortedData.filter((row) => {
-      // Check if the row matches the filter criteria for addToInventory, category, and status
-      const inventoryMatch =
-        filterByInventory === "All" ||
-        (row.addToInventory && row.addToInventory === filterByInventory);
-
-      const categoryMatch =
-        filterByCategory === "All" ||
-        (row.category && row.category === filterByCategory);
-
-      const statusMatch =
-        filterByStatus === "All" ||
-        (row.status && row.status === filterByStatus);
-
-      // Check if searchTerm exists in productName, brandName, or category, and convert all strings to lowercase for case-insensitive matching
-      const searchMatch =
-        searchTerm === "" ||
-        (row.productName &&
-          row.productName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (row.brandName &&
-          row.brandName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (row.category &&
-          row.category.toLowerCase().includes(searchTerm.toLowerCase()));
-
-      // Return true if all criteria are met
-      return inventoryMatch && categoryMatch && statusMatch && searchMatch;
-    });
+    const combinedData = applyFilters(inventoryData, wasteData);
 
     const startIndex = page * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
-    const slicedData = filteredData.slice(startIndex, endIndex);
-    // Render table rows
-    // const renderStatusStyle = (status) => {
-    //   switch (status) {
-    //     case "In Stock":
-    //       return { color: "green" };
-    //     case "Low Stock":
-    //       return { color: "orange" };
-    //     case "Expired":
-    //       return { color: "red" };
-    //     case "Out of Stock":
-    //       return { color: "purple" };
-    //     case "Wasted":
-    //       return { color: "gray" };
-    //     default:
-    //       return {};
-    //   }
-    // };
+    const slicedData = combinedData.slice(startIndex, endIndex);
+
+    const renderStatusStyle = (status) => {
+      switch (status) {
+        case "In Stock":
+          return { color: "#277C5E" };
+        case "Low Stock":
+          return { color: "#75500B" };
+        case "Expired":
+          return { color: "#292929" };
+        case "Out of Stock":
+          return { color: "#AA230E" };
+        case "Wasted":
+          return { color: "#6A6A6A" };
+        default:
+          return {};
+      }
+    };
 
     const handleViewDetail = (inventoryId, barcodeNumber, wasteId) => {
-      //alert("inventoryId " + inventoryId+  "barcodeNumber " +  barcodeNumber+  "wasteId" + wasteId)
       navigate("/productdetail", {
         state: { inventoryId, barcodeNumber, wasteId },
       });
     };
 
-    const handleReportWasted = async (row, index) => {
-      handleMenuClose(index);
-      const confirmation = window.confirm(`Are you sure you want to Report ${row.productName} as Wasted?`);
-      if (confirmation) {
-        try {
-          const formData = {
-            barcodeNumber: row.barcodeNumber,
-            productName: row.productName,
-            brandName: row.brandName,
-            unitPrice: row.unitPrice,
-            category: row.category,
-            photo: row.photo,
-            periodAfterOpening: row.periodAfterOpening,
-            totalValue: row.totalValue,
-            dateAdded: row.dateAdded,
-            addToInventory: row.addToInventory,
-            expiryDate: row.expiryDate,
-            wasteQuantity: row.stockQuantity,
-            inventoryId: row.inventoryId,
-            message:
-              row.message !== undefined && row.message !== "" ? row.message : "",
-          };
-
-          //POST request to the API
-          axios
-            .post("https://api.lumiereapp.ca/api/v1/waste", formData)
-            .then((response) => {
-              alert("Reported Waste successful!");
-              handleReloadInternalData();
-            })
-            .catch((error) => {
-              // Handle error
-              console.error("Error during report:", error);
-              alert("Error during report. Please try again.");
-            });
-        } catch (error) {
-          console.error("Error fetching results:", error);
-        }
+    const handleOpenReportDialog = (product) => {
+      setReportProduct(product);
+      setIsReportDialogOpen(true);
+    };
+    
+    const handleCloseReportDialog = () => {
+      setIsReportDialogOpen(false);
+    };
+    
+    const handleConfirmedReport = async () => {
+      handleCloseReportDialog();
+      try {
+        const formData = {
+          barcodeNumber: reportProduct.barcodeNumber,
+          productName: reportProduct.productName,
+          brandName: reportProduct.brandName,
+          unitPrice: reportProduct.unitPrice,
+          category: reportProduct.category,
+          photo: reportProduct.photo,
+          periodAfterOpening: reportProduct.periodAfterOpening,
+          totalValue: reportProduct.totalValue,
+          dateAdded: reportProduct.dateAdded,
+          addToInventory: reportProduct.addToInventory,
+          expiryDate: reportProduct.expiryDate,
+          wasteQuantity: reportProduct.stockQuantity,
+          inventoryId: reportProduct.inventoryId,
+          message: reportProduct.message !== undefined && reportProduct.message !== "" ? reportProduct.message : "",
+        };
+    
+        // POST request to report the product as wasted
+        const response = await axios.post("https://api.lumiereapp.ca/api/v1/waste", formData);
+        setIsSnackbarOpen(true);
+        setSnackbarMessage('Reported Waste successfully!');
+        handleReloadInternalData(); // Reload internal data after reporting
+      } catch (error) {
+        console.error("Error during report:", error);
       }
+    };
+    
+    // Inside renderTableData function
+    
+    const handleReportWasted = (row, index) => {
+      handleMenuClose(index);
+      setReportProduct(row); // Store the product to be reported
+      setIsReportDialogOpen(true); // Open the report dialog
+    };    
 
+    const handleOpenConfirmation = (index, productName) => {
+      setDeleteRowIndex(index);
+      setProductNameToDelete(productName);
+      setIsConfirmationOpen(true);
+    };
+
+    const handleCloseConfirmation = () => {
+      setIsConfirmationOpen(false);
+      setDeleteRowIndex(null);
+    };
+
+    const handleConfirmedDelete = async () => {
+      const row = slicedData[deleteRowIndex]; // Assuming 'rows' is the array of data
+      handleCloseConfirmation();
+
+      try {
+        if (row.wasteId !== "") {
+          await axios.delete(`https://api.lumiereapp.ca/api/v1/wastedelete`, {
+            data: { wasteId: row.wasteId },
+          });
+        } else {
+          await axios.delete(`https://api.lumiereapp.ca/api/v1/delete`, {
+            data: {
+              barcodeNumber: row.barcodeNumber,
+              addToInventory: row.addToInventory,
+            },
+          });
+        }
+        //alert("Product deleted successfully!");
+        setIsSnackbarOpen(true);
+        setSnackbarMessage('Product deleted successfully!');
+        handleReloadInternalData(); // Reload internal data after deletion
+      } catch (error) {
+        console.error("Error during delete:", error);
+      }
     };
 
     const handleDelete = async (row, index) => {
-      try {
-        handleMenuClose(index);
-        const confirmation = window.confirm(`Are you sure you want to delete ${row.productName}?`);
-        if (confirmation) {
-          if (row.wasteId !== "") {
-            await axios
-              .delete(`https://api.lumiereapp.ca/api/v1/wastedelete`, {
-                data: { wasteId: row.wasteId },
-              })
-              .then((response) => {
-                alert("Waste Product deleted successful!");
-                handleReloadInternalData();
-              })
-              .catch((error) => {
-                // Handle error
-                console.error("Error during delete:", error);
-                alert("Error during deleting. Please try again.");
-              });
-          } else {
-            await axios
-              .delete(`https://api.lumiereapp.ca/api/v1/delete`, {
-                data: {
-                  barcodeNumber: row.barcodeNumber,
-                  addToInventory: row.addToInventory,
-                },
-              })
-              .then((response) => {
-                alert("Product deleted successful!");
-                handleReloadInternalData();
-              })
-              .catch((error) => {
-                // Handle error
-                console.error("Error during delete:", error);
-                alert("Error during deleting. Please try again.");
-              });
-          }
-        }
-
-      } catch (error) {
-        console.error("Error deleting product:", error);
-      }
+      handleMenuClose(index);
+      handleOpenConfirmation(index, row.productName);
     };
 
     return slicedData.map((row, index) => (
-      <TableRow key={index}>
-        <TableCell>{row.productName}</TableCell>
-        <TableCell>{row.brandName}</TableCell>
-        <TableCell>{row.category}</TableCell>
-        <TableCell>{formatDate(row.dateAdded)}</TableCell>
-        <TableCell>{formatDate(row.expiryDate)}</TableCell>
-        {/* <TableCell style={renderStatusStyle(row.status)}>{row.status}</TableCell> */}
-        <TableCell>{row.status}</TableCell>
-        <TableCell>{row.addToInventory}</TableCell>
-        <TableCell>
-          <IconButton
-            id="more"
-            aria-controls={`menu-${index}`}
-            aria-haspopup="true"
-            aria-expanded={open[index] ? 'true' : undefined}
-            onClick={(event) => handleMenuClick(event, index)}
-          >
-            <MoreVert />
-          </IconButton>
+      <>
+        <TableRow key={index}>
+          <TableCell>{row.productName}</TableCell>
+          <TableCell>{row.brandName}</TableCell>
+          <TableCell>{row.category}</TableCell>
+          <TableCell>{formatDate(row.dateAdded)}</TableCell>
+          <TableCell>{formatDate(row.expiryDate)}</TableCell>
+          <TableCell style={renderStatusStyle(row.status)}>
+            {row.status}
+          </TableCell>
+          {/* <TableCell>{row.status}</TableCell> */}
+          <TableCell>{row.addToInventory}</TableCell>
+          <TableCell>
+            <IconButton
+              id="more"
+              aria-controls={`menu-${index}`}
+              aria-haspopup="true"
+              aria-expanded={open[index] ? "true" : undefined}
+              onClick={(event) => handleMenuClick(event, index)}
+            >
+              <MoreVert />
+            </IconButton>
 
-          <Menu
-            id={`menu-${index}`}
-            anchorEl={anchorEl[index]}
-            open={open[index]}
-            onClose={() => handleMenuClose(index)}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem onClick={() => handleViewDetail(row.inventoryId, row.barcodeNumber, row.wasteId)}>View Detail</MenuItem>
-            <MenuItem onClick={() => handleStaffCheckOut(row, index)} disabled={row.status === "Out of Stock" || row.status === "Expired" || row.status === "Wasted" || row.addToInventory === "Retail"}>Staff Check Out</MenuItem>
-            <MenuItem onClick={() => handleReportWasted(row, index)} disabled={row.status !== "Expired" || row.status === "Wasted"}>Report Wasted</MenuItem>
-            <MenuItem onClick={() => handleDelete(row, index)}>Delete</MenuItem>
-          </Menu>
-        </TableCell>
-      </TableRow>
+            <Menu
+              id={`menu-${index}`}
+              anchorEl={anchorEl[index]}
+              open={open[index]}
+              onClose={() => handleMenuClose(index)}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={() =>
+                  handleViewDetail(
+                    row.inventoryId,
+                    row.barcodeNumber,
+                    row.wasteId
+                  )
+                }
+              >
+                View Detail
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleStaffCheckOut(row, index)}
+                disabled={
+                  row.status === "Out of Stock" ||
+                  row.status === "Expired" ||
+                  row.status === "Wasted" ||
+                  row.addToInventory === "Retail"
+                }
+              >
+                Staff Check Out
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleReportWasted(row, index)}
+                disabled={row.status !== "Expired" || row.status === "Wasted"}
+              >
+                Report Wasted
+              </MenuItem>
+              <MenuItem onClick={() => handleDelete(row, index)}>
+                <Typography component="div" color={"#AA230E"}>
+                  Delete
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </TableCell>
+        </TableRow>
+        <Dialog
+          open={isConfirmationOpen}
+          onClose={handleCloseConfirmation}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={false}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "30vw", // Set width to 30% of the viewport width
+            height: 500,
+            zIndex: 1000, // Adjust z-index as needed
+          }}
+          PaperProps={{
+            sx: {
+              backgroundColor: "white",
+              color: "black", // Set the color of the text
+              padding: "16px", // Add padding to ensure text is spaced properly
+              boxShadow: "0 8px 20px 0 rgba(199, 191, 165, 0.15)",
+            },
+          }}
+          // Use slotProps.backdrop instead of BackdropProps
+          slotProps={{
+            backdrop: {
+              sx: { backgroundColor: "rgba(0, 0,0, 0)" }, // Change the color and opacity here
+            },
+          }}
+        >
+          <DialogTitle id="alert-dialog-title">
+            <Typography variant="h3" component="div">
+              Delete?
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete{" "}
+              <strong>{productNameToDelete}</strong>?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>           
+            <Button
+              onClick={handleConfirmedDelete}
+              variant="contained"
+              sx={{
+                backgroundColor: "#AA230E",
+                color: "white", // Set text color to white for better contrast
+                "&:hover": {
+                  backgroundColor: "#8a1c10", // Darken the color on hover if needed
+                },
+              }}
+              autoFocus
+            >
+              Delete
+            </Button>
+            <Button variant="outlined" onClick={handleCloseConfirmation}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={isReportDialogOpen}
+          onClose={handleCloseReportDialog}
+          aria-labelledby="report-dialog-title"
+          aria-describedby="report-dialog-description"
+          maxWidth={false}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "30vw", // Set width to 30% of the viewport width
+            height: 500,
+            zIndex: 1000, // Adjust z-index as needed
+          }}
+          PaperProps={{
+            sx: {
+              backgroundColor: "white",
+              color: "black", // Set the color of the text
+              padding: "16px", // Add padding to ensure text is spaced properly
+              boxShadow: "0 8px 20px 0 rgba(199, 191, 165, 0.15)",
+            },
+          }}
+          // Use slotProps.backdrop instead of BackdropProps
+          slotProps={{
+            backdrop: {
+              sx: { backgroundColor: "rgba(0, 0,0, 0)" }, // Change the color and opacity here
+            },
+          }}
+        >
+          <DialogTitle id="report-dialog-title">
+            <Typography variant="h3" component="div">
+              Confirm?
+            </Typography>
+            </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="report-dialog-description">
+              Are you sure you want to Report <strong>{reportProduct && reportProduct.productName}</strong> as Wasted?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseReportDialog}  variant="outlined" >
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmedReport} variant="contained" autoFocus>
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={6000} // Adjust the duration as needed
+          onClose={() => setIsSnackbarOpen(false)}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+            <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+          
+        </Snackbar>
+      </>
     ));
-
   };
 
   // Handle the change of the dropdown value for addToInventory
@@ -485,14 +662,29 @@ const ProductList = () => {
   return (
     <>
       <Box component="main" sx={{ mt: 3 }}>
-        <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Inventory</Typography>
+        <Typography variant="h1" sx={{ pl: "40px", mb: "12px" }}>
+          Inventory
+        </Typography>
 
-        <Card sx={{ borderRadius: '20px', m: '12px 40px 0 40px' }}>
-
-          <CardContent sx={{ p: '24px', m: 0 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '15px' }} fullWidth >
-              <Typography variant="h2" sx={{ m: 0 }}>Product List</Typography>
-              <Button onClick={handleNewProduct} variant="outlined" sx={{ m: 0 }}>
+        <Card sx={{ borderRadius: "20px", m: "12px 40px 0 40px" }}>
+          <CardContent sx={{ p: "24px", m: 0 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: "15px",
+              }}
+              fullWidth
+            >
+              <Typography variant="h2" sx={{ m: 0 }}>
+                Product List
+              </Typography>
+              <Button
+                onClick={handleNewProduct}
+                variant="outlined"
+                sx={{ m: 0 }}
+              >
                 Register New Product
               </Button>
             </Box>
@@ -500,7 +692,6 @@ const ProductList = () => {
             <Grid container spacing={4} fullWidth>
               <Grid container item spacing="16px" xs={7}>
                 <Grid item xs={3}>
-
                   <Select
                     id="filterInventory"
                     name="filterInventory"
@@ -521,7 +712,6 @@ const ProductList = () => {
                 </Grid>
 
                 <Grid item xs={3}>
-
                   <Select
                     id="filterCategory"
                     name="filterCategory"
@@ -543,7 +733,6 @@ const ProductList = () => {
                 </Grid>
 
                 <Grid item xs={3}>
-
                   <Select
                     id="sortByBrand"
                     name="sortByBrand"
@@ -560,7 +749,6 @@ const ProductList = () => {
                 </Grid>
 
                 <Grid item xs={3}>
-
                   <Select
                     id="filterStatus"
                     name="filterStatus"
@@ -581,7 +769,6 @@ const ProductList = () => {
               </Grid>
 
               <Grid item xs={5}>
-
                 <CustomSearch
                   id="searchInventory"
                   name="searchInventory"
@@ -594,7 +781,7 @@ const ProductList = () => {
               </Grid>
             </Grid>
 
-            <Table sx={{ mt: '32px' }} size="small">
+            <Table sx={{ mt: "32px" }} size="small">
               <TableHead>
                 <TableRow>{renderTableHeader()}</TableRow>
               </TableHead>
@@ -620,10 +807,8 @@ const ProductList = () => {
                 handleReloadInternalData={handleReloadInternalData}
               />
             )}
-
           </CardContent>
         </Card>
-
       </Box>
     </>
   );

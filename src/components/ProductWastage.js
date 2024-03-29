@@ -17,6 +17,7 @@ const StyledImage = styled("img")({
   margin: '10px'
 });
 
+
 const ProductWastage = () => {
   const [wasteProducts, setWasteProducts] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -64,44 +65,7 @@ const ProductWastage = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
     };
-    // const handleExport = () => {
-    //   const wb = XLSX.utils.book_new();
-    //   wb.SheetNames.push("Product Wastage");
-    //   const wsData = [
-    //     ["Category", "Total Stock Quantity", "Total Waste Quantity"],
-    //     ...data.map(({ category, totalStockQuantity, totalWasteQuantity }) => [
-    //       category,
-    //       totalStockQuantity,
-    //       totalWasteQuantity,
-    //     ]),
-    //   ];
-    //   const ws = XLSX.utils.aoa_to_sheet(wsData);
-    //   wb.Sheets["Product Wastage"] = ws;
-    //   const wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
-    //   const filename = "product_wastage_report.xlsx";
-    //   const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    //   saveAs(blob, filename);
-    // };
-  
-    // const s2ab = (s) => {
-    //   const buf = new ArrayBuffer(s.length);
-    //   const view = new Uint8Array(buf);
-    //   for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-    //   return buf;
-    // };
-  
-    // const saveAs = (blob, filename) => {
-    //   const link = document.createElement("a");
-    //   if (typeof link.download === "string") {
-    //     document.body.appendChild(link);
-    //     link.download = filename;
-    //     link.href = URL.createObjectURL(blob);
-    //     link.click();
-    //     document.body.removeChild(link);
-    //   } else {
-    //     window.open(URL.createObjectURL(blob), "_blank");
-    //   }
-    // };
+    
   
     return (
       <Box sx={{ mt: 5, display: 'flex', justifyContent: 'center' }}>
@@ -151,6 +115,7 @@ const ProductWastage = () => {
               correspondingInventoryItem &&
               correspondingInventoryItem._id === wasteItem.category
             ) {
+
               return {
                 category: correspondingInventoryItem._id,
                 totalStockQuantity:
@@ -166,6 +131,7 @@ const ProductWastage = () => {
           const totalWasteQuantities = combinedData.map(
             (item) => item.totalWasteQuantity
           );
+          
           const xLabels = combinedData.map((item) => item.category);
           const series = combinedData.flatMap((item) => [
             {

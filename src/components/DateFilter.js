@@ -28,7 +28,7 @@ const DateFilter = ({ handleDateFilterChange, selectedDateFilter }) => {
               }}
             >
               <Typography
-              color={selectedDateFilter === "Today" ? "white" : "default"}
+              color={selectedDateFilter === "Today" ? "#fcfcfc" : "#292929"}
               variant="body2"
               align="center"
               style={{
@@ -59,7 +59,7 @@ const DateFilter = ({ handleDateFilterChange, selectedDateFilter }) => {
 
               variant="body2"
               align="center"
-              color={selectedDateFilter === "1 Month" ? "white" : "default"}
+              color={selectedDateFilter === "1 Month" ? "#fcfcfc" : "#292929"}
               style={{
                 fontWeight:
                 selectedDateFilter === "1 Month" ? "bold" : "normal",
@@ -87,7 +87,7 @@ const DateFilter = ({ handleDateFilterChange, selectedDateFilter }) => {
               <Typography
               variant="body2"
               align="center"
-              color={selectedDateFilter === "1 Year" ? "white" : "default"}
+              color={selectedDateFilter === "1 Year" ? "#fcfcfc" : "#292929"}
               style={{
                 fontWeight:
                 selectedDateFilter === "1 Year" ? "bold" : "normal",

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import { styled } from "@mui/system";
 import { BarChart } from "@mui/x-charts/BarChart";
 import {
@@ -28,6 +29,7 @@ const StyledImage = styled("img")({
 });
 
 const ProductWastage = () => {
+  const navigate = useNavigate();
   const [wasteProducts, setWasteProducts] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [totalStockQuantities, setTotalStockQuantities] = useState(null);

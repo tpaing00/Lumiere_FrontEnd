@@ -226,9 +226,9 @@ const ProductWastage = () => {
     setSelectedDateFilter(dateFilter);
   };
 
-  const handleViewDetail = (inventoryId, barcodeNumber) => {
+  const handleViewDetail = (inventoryId, barcodeNumber, wasteId) => {
     navigate("/productdetail", {
-      state: { inventoryId, barcodeNumber },
+      state: { inventoryId, barcodeNumber, wasteId },
     });
   };
 
@@ -241,7 +241,15 @@ const ProductWastage = () => {
             <Tab
               key={index}
               icon={
-                <StyledImage src={product.photo[0]} alt={product.productName} />
+                <StyledImage src={product.photo[0]} alt={product.productName} 
+                onClick={() =>
+                  handleViewDetail(
+                    product.inventoryId,
+                    product.barcodeNumber,
+                    product._id,
+                  )
+                }
+                />
               }
             />
           ))}
@@ -330,7 +338,8 @@ const ProductWastage = () => {
                             onClick={() =>
                               handleViewDetail(
                                 inventoryId,
-                                product.barcodeNumber
+                                product.barcodeNumber,
+                                product._id,
                               )
                             }
                             style={{

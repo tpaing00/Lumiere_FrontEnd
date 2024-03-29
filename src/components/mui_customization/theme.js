@@ -55,7 +55,6 @@ const theme = createTheme({
     body: {
       main: '#292929',
     },
-
   },
   typography: {
     h1: {

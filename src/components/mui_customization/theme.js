@@ -48,7 +48,14 @@ const theme = createTheme({
     background: {
       paper: '#fcfcfc',
       default: '#f5f4f1',
-    }
+    },
+    white: {
+      main: '#fcfcfc',
+    },
+    body: {
+      main: '#292929',
+    },
+
   },
   typography: {
     h1: {

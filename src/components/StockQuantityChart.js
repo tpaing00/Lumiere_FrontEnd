@@ -95,8 +95,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
 
   return (
     <>
-      {/* <Grid item xs={12} md={6} align="center"> */}
-      <Card sx={{ width: "100%" }}>
+      <Card sx={{ width: "100%", p: 5}}>
         <Grid container spacing={0}>
           <Grid
             item
@@ -108,7 +107,6 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
               justifyContent: "center",
             }}
           >
-            {/* <Card sx={{ width: "100%" }}> */}
             <PieChart width={selectedCategory ? 500 : 300} height={selectedCategory ? 450 : 300}>
               <Pie
                 data={pieData}
@@ -167,7 +165,6 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
               />
             </PieChart>
             {selectedCategory && <ExportReport />}
-            {/* </Card> */}
           </Grid>
 
           <Grid

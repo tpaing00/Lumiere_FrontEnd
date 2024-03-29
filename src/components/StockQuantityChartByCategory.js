@@ -9,13 +9,14 @@ import {
   Button,
   Pagination,
 } from "@mui/material";
-import { PieChart, Pie, Tooltip, Cell, Stack } from "recharts";
+import { PieChart, Pie, Tooltip, Cell } from "recharts";
 import * as XLSX from "xlsx";
 
 const StockQuantityChartByCategory = ({
   selectedCategory,
   totalInventoryStock,
   totalInventoryStockWithData,
+  selectedDateFilter
 }) => {
   const data = totalInventoryStock;
   console.log(data);
@@ -36,37 +37,55 @@ const StockQuantityChartByCategory = ({
   };
 
   const foundCategory = data.find((item) => item._id === selectedCategory);
-  const otherCategoriesQuantity =
-    totalQuantity - foundCategory.totalStockQuantity;
-  const percentage = (foundCategory.totalStockQuantity / totalQuantity) * 100;
-  const pieData = [
-    { name: foundCategory._id, value: foundCategory.totalStockQuantity },
-    { name: "Other", value: otherCategoriesQuantity },
-    { fill: getColor(foundCategory._id) },
-  ];
+  if (!foundCategory) {
+    return (
+      <Box
+        sx={{
+          height: 200,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'white', 
+        }}
+      >
+        <Typography variant="body1" align="center">
+          List empty
+        </Typography>
+      </Box>
+    );
+  }
+    const otherCategoriesQuantity =
+      totalQuantity - foundCategory.totalStockQuantity;
+    const percentage = (foundCategory.totalStockQuantity / totalQuantity) * 100;
+    const pieData = [
+      { name: foundCategory._id, value: foundCategory.totalStockQuantity },
+      { name: "Other", value: otherCategoriesQuantity },
+      { fill: getColor(foundCategory._id) },
+    ];
 
-  const foundCategoryData = totalInventoryStockWithData.find((item) => {
-    if (item._id === selectedCategory) {
-      return item.data;
-    }
-  }).data;
+    const foundCategoryData = totalInventoryStockWithData.find((item) => {
+      if (item._id === selectedCategory) {
+        return item.data;
+      }
+    }).data;
 
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 4;
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 4;
 
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategory]);
+    useEffect(() => {
+      setPage(1);
+    }, [selectedCategory,selectedDateFilter]);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
 
-  const startIndex = (page - 1) * itemsPerPage;
-  const paginatedData = foundCategoryData.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+    const startIndex = (page - 1) * itemsPerPage;
+    const paginatedData = foundCategoryData.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
+  
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -126,7 +145,7 @@ const StockQuantityChartByCategory = ({
   };
 
   return (
-    <Card>
+    <Card sx={{p: 5}}>
       <CardContent>
         <Grid container spacing={1}>
           <Grid
@@ -258,7 +277,6 @@ const StockQuantityChartByCategory = ({
               color="primary"
               sx={{ margin: "auto", marginTop: "20px" }}
             />
-            {/* </Stack> */}
           </Grid>
         </Grid>
       </CardContent>

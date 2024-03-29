@@ -10,7 +10,7 @@ import CategoryNavIcon from "./CategoryNavIcon";
 const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
   const theme = useTheme();
   const categories = [
-    { name: "All", label: "All Categories", icon: All, height: "22px", width: "22px", viewBox: "0 0 22 19" },
+    { name: "All", label: "All Categories", icon: All, height: "22px", width: "22px", viewBox: "0 0 18 15" },
     { name: "Hair Care", label: "Hair Care", icon: HairCare, height: "24px", width: "24px", viewBox: "0 0 24 24" },
     { name: "Skin Care", label: "Skin Care", icon: SkinCare, height: "30px", width: "30px", viewBox: "0 0 30 30" },
     { name: "Make Up", label: "Make-up", icon: MakeUp, height: "30px", width: "30px", viewBox: "0 0 30 30" },

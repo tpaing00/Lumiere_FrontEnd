@@ -19,7 +19,6 @@ const StockQuantityChartByCategory = ({
   selectedDateFilter
 }) => {
   const data = totalInventoryStock;
-  console.log(data);
   const totalQuantity = data.reduce(
     (acc, curr) => acc + curr.totalStockQuantity,
     0

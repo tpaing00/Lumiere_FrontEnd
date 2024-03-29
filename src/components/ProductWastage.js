@@ -7,6 +7,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import * as XLSX from "xlsx";
 import CategoryNav from "./CategoryNav";
+import DateFilter from "./DateFilter";
+import { format } from "date-fns";
 
 const StyledImage = styled("img")({
   width: "200px",
@@ -17,6 +19,7 @@ const StyledImage = styled("img")({
   margin: '10px'
 });
 
+
 const ProductWastage = () => {
   const [wasteProducts, setWasteProducts] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -26,6 +29,7 @@ const ProductWastage = () => {
   const [series, setSeries] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [filteredWasteProducts, setFilteredWasteProducts] = useState([]);
+  const [selectedDateFilter, setSelectedDateFilter] = useState("Today");
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -64,44 +68,7 @@ const ProductWastage = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
     };
-    // const handleExport = () => {
-    //   const wb = XLSX.utils.book_new();
-    //   wb.SheetNames.push("Product Wastage");
-    //   const wsData = [
-    //     ["Category", "Total Stock Quantity", "Total Waste Quantity"],
-    //     ...data.map(({ category, totalStockQuantity, totalWasteQuantity }) => [
-    //       category,
-    //       totalStockQuantity,
-    //       totalWasteQuantity,
-    //     ]),
-    //   ];
-    //   const ws = XLSX.utils.aoa_to_sheet(wsData);
-    //   wb.Sheets["Product Wastage"] = ws;
-    //   const wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
-    //   const filename = "product_wastage_report.xlsx";
-    //   const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    //   saveAs(blob, filename);
-    // };
-  
-    // const s2ab = (s) => {
-    //   const buf = new ArrayBuffer(s.length);
-    //   const view = new Uint8Array(buf);
-    //   for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-    //   return buf;
-    // };
-  
-    // const saveAs = (blob, filename) => {
-    //   const link = document.createElement("a");
-    //   if (typeof link.download === "string") {
-    //     document.body.appendChild(link);
-    //     link.download = filename;
-    //     link.href = URL.createObjectURL(blob);
-    //     link.click();
-    //     document.body.removeChild(link);
-    //   } else {
-    //     window.open(URL.createObjectURL(blob), "_blank");
-    //   }
-    // };
+    
   
     return (
       <Box sx={{ mt: 5, display: 'flex', justifyContent: 'center' }}>
@@ -117,6 +84,28 @@ const ProductWastage = () => {
   }, [selectedCategory, wasteProducts]);
 
   useEffect(() => {
+    let toDate;
+    let fromDate;
+    let toDateFormatted;
+    let fromDateFormatted;
+
+    if (selectedDateFilter === "1 Month") {
+      toDate = new Date();
+      fromDate = new Date();
+      fromDate.setMonth(fromDate.getMonth() - 1);
+
+      toDateFormatted = format(toDate, "yyyy-MMM-dd").toUpperCase();
+      fromDateFormatted = format(fromDate, "yyyy-MMM-dd").toUpperCase();
+    }
+
+    if (selectedDateFilter === "1 Year") {
+      toDate = new Date();
+      fromDate = new Date();
+      fromDate.setFullYear(fromDate.getFullYear() - 1);
+
+      toDateFormatted = format(toDate, "yyyy-MMM-dd").toUpperCase();
+      fromDateFormatted = format(fromDate, "yyyy-MMM-dd").toUpperCase();
+    }
     const fetchWastageData = async () => {
       try {
         const response = await axios.get(
@@ -130,27 +119,34 @@ const ProductWastage = () => {
         } else {
           console.error("Failed to fetch data:", response.status);
         }
-
         const inventoryResponse = await axios.get(
-          "https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory"
-        );
+          "https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory", {
+            params: {
+              toDate: toDateFormatted,
+              fromDate: fromDateFormatted,
+            },
+          });
         const wasteResponse = await axios.get(
-          "https://api.lumiereapp.ca/api/v1/wastetop5bycategory"
-        );
-
+          "https://api.lumiereapp.ca/api/v1/wastebycategory", {
+            params: {
+              toDate: toDateFormatted,
+              fromDate: fromDateFormatted,
+            },
+          });
         if (inventoryResponse.status === 200 && wasteResponse.status === 200) {
          
           // Combine inventory and wastage data
           const combinedData = wasteResponse.data.map((wasteItem) => {
             const correspondingInventoryItem = inventoryResponse.data.find(
-              (inventoryItem) => wasteItem.category === inventoryItem._id
+              (inventoryItem) => wasteItem._id === inventoryItem._id
             );
 
             // Check if correspondingWasteItem exists and its category matches
             if (
               correspondingInventoryItem &&
-              correspondingInventoryItem._id === wasteItem.category
+              correspondingInventoryItem._id === wasteItem._id
             ) {
+
               return {
                 category: correspondingInventoryItem._id,
                 totalStockQuantity:
@@ -166,6 +162,7 @@ const ProductWastage = () => {
           const totalWasteQuantities = combinedData.map(
             (item) => item.totalWasteQuantity
           );
+          
           const xLabels = combinedData.map((item) => item.category);
           const series = combinedData.flatMap((item) => [
             {
@@ -196,17 +193,21 @@ const ProductWastage = () => {
       }
     };
     fetchWastageData();
-  }, []);
+  }, [selectedDateFilter]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
-const handleViewDetail = (inventoryId, barcodeNumber) => {
-  navigate("/productdetail", {
-    state: { inventoryId, barcodeNumber },
-  });
-};
+  const handleDateFilterChange = (dateFilter) => { 
+    setSelectedDateFilter(dateFilter);
+  };
+
+  const handleViewDetail = (inventoryId, barcodeNumber) => {
+    navigate("/productdetail", {
+      state: { inventoryId, barcodeNumber },
+    });
+  };
 
   return (
     <>
@@ -231,7 +232,12 @@ const handleViewDetail = (inventoryId, barcodeNumber) => {
             />
 
       </Box>
-
+      <Box sx={{ mb: 5, mt: 8, mb: -2 }}>
+        <DateFilter
+          handleDateFilterChange={handleDateFilterChange}
+          selectedDateFilter={selectedDateFilter}
+        />
+      </Box>
       <Card sx={{ mt: 3 }}>
         <CardContent>
           {selectedCategory === "All" && totalStockQuantities && totalWasteQuantities && xLabels && series && (

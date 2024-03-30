@@ -276,13 +276,15 @@ const ProductWastage = () => {
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, width: "100%"  }}>
         <Card sx={{width: "80%"}}>
-          <CardContent>
+          <CardContent>          
             {selectedCategory === "All" &&
               totalStockQuantities &&
               totalWasteQuantities &&
               xLabels &&
               series && (
                 <>
+                <Box display="flex" alignItems="center" flexDirection="column">
+                <Box>
                   <BarChart
                     width={800}
                     height={300}
@@ -315,8 +317,13 @@ const ProductWastage = () => {
                     layout="horizontal" // Setting layout to horizontal
                     margin={{ top: 50, right: 30, left: 150, bottom: 20 }} // Adjusting margins
                   />
-                  <ExportReport />
+                  </Box>
+                  <Box mt={2}>
+                    <ExportReport />
+                  </Box>
+                  </Box>
                 </>
+                
               )}
             {selectedCategory !== "All" && (
               <>

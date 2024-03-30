@@ -22,11 +22,13 @@ import theme from "./mui_customization/theme";
 
 const RootContainer = styled("div")({
   display: "flex",
-  height: "85vh",
+  height: "100vh",
+  padding: 0
 });
 const ContentContainer = styled("main")({
   flexGrow: 1,
   overflow: "auto",
+  padding: 0
 });
 
 const App = () => {

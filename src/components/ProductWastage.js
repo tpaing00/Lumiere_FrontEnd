@@ -106,6 +106,7 @@ const ProductWastage = () => {
 
     if (selectedDateFilter === "1 Month") {
       toDate = new Date();
+      toDate.setDate(toDate.getDate() + 1);
       fromDate = new Date();
       fromDate.setMonth(fromDate.getMonth() - 1);
 
@@ -116,6 +117,7 @@ const ProductWastage = () => {
 
     if (selectedDateFilter === "1 Year") {
       toDate = new Date();
+      toDate.setDate(toDate.getDate() + 1);
       fromDate = new Date();
       fromDate.setFullYear(fromDate.getFullYear() - 1);
 
@@ -125,16 +127,13 @@ const ProductWastage = () => {
     }
     const fetchWastageData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.lumiereapp.ca/api/v1/wastetop5bycategory`
-          // , ?toDate=${toDateFormatted}&fromDate=${fromDateFormatted}
-          // {
-          //   params: {
-          //     toDate: toDateFormatted5,
-          //     fromDate: fromDateFormatted5,
-          //   },
-          // }
-        );
+        let urlTop = `https://api.lumiereapp.ca/api/v1/wastetop5bycategory`;
+        if (selectedDateFilter != "Today")
+        {
+          urlTop = `https://api.lumiereapp.ca/api/v1/wastetop5bycategory?toDate=${toDateFormatted}&fromDate=${fromDateFormatted}`;
+        }
+        const response = await axios.get(urlTop);
+
         if (response.status === 200) {
           const top5Waste = response.data.flatMap(
             (category) => category.top5Waste
@@ -143,26 +142,22 @@ const ProductWastage = () => {
         } else {
           console.error("Failed to fetch data:", response.status);
         }
-        const inventoryResponse = await axios.get(
-          `https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory`
-          // ,
-          // {
-          //   params: {
-          //     toDate: toDateFormatted,
-          //     fromDate: fromDateFormatted,
-          //   },
-          // }
-        );
+
+        let urlInv = `https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory`;
+        if (selectedDateFilter != "Today")
+        {
+          urlInv = `https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory?toDate=${toDateFormatted}&fromDate=${fromDateFormatted}`;
+        }
+        const inventoryResponse = await axios.get(urlInv);
         
-        const wasteResponse = await axios.get(`https://api.lumiereapp.ca/api/v1/wastebycategory`
-          // ,
-          // {
-          //   params: {
-          //     toDate: toDateFormatted6,
-          //     fromDate: fromDateFormatted6,
-          //   },
-          // }
-        );
+        let urlWaste = `https://api.lumiereapp.ca/api/v1/wastebycategory`;
+        if (selectedDateFilter != "Today")
+        {
+          urlWaste = `https://api.lumiereapp.ca/api/v1/wastebycategory?toDate=${toDateFormatted}&fromDate=${fromDateFormatted}`;
+        }
+
+        const wasteResponse = await axios.get(urlWaste);
+        console.log("wasteResponse ", wasteResponse);
         if (inventoryResponse.status === 200 && wasteResponse.status === 200) {
           // Combine inventory and wastage data
           const combinedData = wasteResponse.data.map((wasteItem) => {

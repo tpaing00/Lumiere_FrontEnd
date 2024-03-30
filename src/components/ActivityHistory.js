@@ -96,13 +96,13 @@ const ActivityHistory = ({
                   <TableCell>User Name</TableCell>
                   <TableCell>Activity</TableCell>
                   <TableCell>Quantity Change</TableCell>
-                  <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
+                  {/* <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
                     Date of Open
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
+                <TableRow >
                   <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
                     <Typography>
                       {format(
@@ -130,9 +130,9 @@ const ActivityHistory = ({
                   <TableCell>
                     +{combinedUserInventoryResults.initialStock}
                   </TableCell>
-                  <TableCell
-                    sx={{ display: { xs: "none", lg: "block" } }}
-                  ></TableCell>
+                  {/* <TableCell
+                      sx={{ display: { xs: "none", lg: "block" } }}
+                    ></TableCell> */}
                 </TableRow>
                 {combinedData.map((list, index) => (
                   <TableRow key={index}>
@@ -153,12 +153,12 @@ const ActivityHistory = ({
                     <TableCell>{list.firstName}</TableCell>
                     <TableCell>{list.reason}</TableCell>
                     <TableCell>-{list.quantity}</TableCell>
-                    <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
+                    {/* <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
                       {format(
                         subDays(new Date(list.openingDate), 0),
                         "MM/dd/yyyy"
                       )}
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))}
                 {combinedUserSaleData.map((list, index) => (
@@ -177,9 +177,9 @@ const ActivityHistory = ({
                     <TableCell>{list.firstName}</TableCell>
                     <TableCell>Sold</TableCell>
                     <TableCell>-{list.soldQuantity}</TableCell>
-                    <TableCell
+                    {/* <TableCell
                       sx={{ display: { xs: "none", lg: "block" } }}
-                    ></TableCell>
+                    ></TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>

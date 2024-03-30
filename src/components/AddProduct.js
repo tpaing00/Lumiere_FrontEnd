@@ -376,7 +376,7 @@ const AddProduct = () => {
                   <Grid container spacing="24px">
                     <Grid item xs={6} lg={3}>
                     <InputLabel variant="standard" id="addToInventory-label">
-                        Product Category
+                        Inventory Category
                       </InputLabel>
                       <Select
                         id="addToInventory"

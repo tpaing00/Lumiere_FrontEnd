@@ -9,6 +9,8 @@ const RetailCheckOutModal = ({
   inventoryId,
   stockQuantity,
   handleReloadRetailData,
+  setIsSnackbarOpen,
+  setSnackbarMessage,
 }) => {
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
   const [error, setError] = useState(null); // Define error state
@@ -46,14 +48,15 @@ const RetailCheckOutModal = ({
     axios
       .post("https://api.lumiereapp.ca/api/v1/checkout", formData)
       .then((response) => {
-        alert("Checkout successful!");
+        //alert("Checkout successful!");
         handleReloadRetailData(response.data);
         handleClose();
+        setIsSnackbarOpen(true);
+        setSnackbarMessage("Checkout successful!");
       })
       .catch((error) => {
         // Handle error
         console.error("Error during checkout:", error);
-        alert("Error during checkout. Please try again.");
         handleClose();
       });
   };

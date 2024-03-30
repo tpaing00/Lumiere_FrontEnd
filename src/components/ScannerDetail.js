@@ -17,6 +17,8 @@ import {
   Box,
   Container,
   Modal,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 const ScannerDetail = () => {
@@ -29,6 +31,8 @@ const ScannerDetail = () => {
   const [barcode, setBarcode] = useState([]);
   const [showInternalModal, setShowInternalModal] = useState(false);
   const [showRetailModal, setShowRetailModal] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -306,6 +310,8 @@ const ScannerDetail = () => {
                   inventoryId={internalInventory[0]._id}
                   stockQuantity={internalInventory[0].stockQuantity}
                   handleReloadInternalData={handleReloadInternalData}
+                  setIsSnackbarOpen={setIsSnackbarOpen}
+                  setSnackbarMessage={setSnackbarMessage} 
                 />
               </Grid>
             </Grid>
@@ -474,6 +480,8 @@ const ScannerDetail = () => {
                   inventoryId={retailInventory[0]._id}
                   stockQuantity={retailInventory[0].stockQuantity}
                   handleReloadRetailData={handleReloadRetailData}
+                  setIsSnackbarOpen={setIsSnackbarOpen}
+                  setSnackbarMessage={setSnackbarMessage} 
                 />
               </Grid>
             </Grid>
@@ -500,6 +508,25 @@ const ScannerDetail = () => {
           </div>
         )}
       </Box>
+      <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={2000} // Adjust the duration as needed
+          onClose={() => setIsSnackbarOpen(false)}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+            <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+          
+        </Snackbar>
     </Container>
   );
   // return (

@@ -101,8 +101,8 @@ const ProductWastage = () => {
   useEffect(() => {
     let toDate;
     let fromDate;
-    let toDateFormatted;
-    let fromDateFormatted;
+    let toDateFormatted = "";
+    let fromDateFormatted = "";   
 
     if (selectedDateFilter === "1 Month") {
       toDate = new Date();
@@ -111,6 +111,7 @@ const ProductWastage = () => {
 
       toDateFormatted = format(toDate, "yyyy-MMM-dd").toUpperCase();
       fromDateFormatted = format(fromDate, "yyyy-MMM-dd").toUpperCase();
+      
     }
 
     if (selectedDateFilter === "1 Year") {
@@ -120,17 +121,19 @@ const ProductWastage = () => {
 
       toDateFormatted = format(toDate, "yyyy-MMM-dd").toUpperCase();
       fromDateFormatted = format(fromDate, "yyyy-MMM-dd").toUpperCase();
+      
     }
     const fetchWastageData = async () => {
       try {
         const response = await axios.get(
-          "https://api.lumiereapp.ca/api/v1/wastetop5bycategory",
-          {
-            params: {
-              toDate: toDateFormatted,
-              fromDate: fromDateFormatted,
-            },
-          }
+          `https://api.lumiereapp.ca/api/v1/wastetop5bycategory`
+          // , ?toDate=${toDateFormatted}&fromDate=${fromDateFormatted}
+          // {
+          //   params: {
+          //     toDate: toDateFormatted5,
+          //     fromDate: fromDateFormatted5,
+          //   },
+          // }
         );
         if (response.status === 200) {
           const top5Waste = response.data.flatMap(
@@ -141,24 +144,25 @@ const ProductWastage = () => {
           console.error("Failed to fetch data:", response.status);
         }
         const inventoryResponse = await axios.get(
-          "https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory",
-          {
-            params: {
-              toDate: toDateFormatted,
-              fromDate: fromDateFormatted,
-            },
-          }
+          `https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory`
+          // ,
+          // {
+          //   params: {
+          //     toDate: toDateFormatted,
+          //     fromDate: fromDateFormatted,
+          //   },
+          // }
         );
-        const wasteResponse = await axios.get(
-          "https://api.lumiereapp.ca/api/v1/wastebycategory",
-          {
-            params: {
-              toDate: toDateFormatted,
-              fromDate: fromDateFormatted,
-            },
-          }
+        
+        const wasteResponse = await axios.get(`https://api.lumiereapp.ca/api/v1/wastebycategory`
+          // ,
+          // {
+          //   params: {
+          //     toDate: toDateFormatted6,
+          //     fromDate: fromDateFormatted6,
+          //   },
+          // }
         );
-
         if (inventoryResponse.status === 200 && wasteResponse.status === 200) {
           // Combine inventory and wastage data
           const combinedData = wasteResponse.data.map((wasteItem) => {
@@ -179,7 +183,6 @@ const ProductWastage = () => {
               };
             }
           });
-
           const totalStockQuantities = combinedData.map(
             (item) => item.totalStockQuantity
           );
@@ -325,7 +328,7 @@ const ProductWastage = () => {
                 <Typography variant="h5" gutterBottom>
                   Most 5 Wastage Products
                 </Typography>
-                <Grid container spacing={1} sx={{ justifyContent: "center"}} >
+                <Grid container spacing={1} sx={{ justifyContent: "left"}} >
                   {filteredWasteProducts.slice(0, 5).map((product, index) => {
                     // Limit to first 5 products
                     if (product) {

@@ -2,16 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import Cookies from "js-cookie";
-import { Box, Container, Grid } from '@mui/material';
-import CustomButton from './mui_customization/base_components/CustomButton';
-import CustomTextField from './mui_customization/base_components/CustomTextField';
-import CustomHeading2 from './mui_customization/typography/CustomHeading2';
-import Logo from './logo/Logo';
+import { Box, Button, Grid, InputLabel, TextField, Typography, useTheme } from '@mui/material';
 import LogInPage from '../assets/images/LogInPage.jpg';
-
-
+import LogoDesktop from "../assets/logo/logoDesktop.svg";
 
 const Login = ({ onLogin }) => {
+    const theme = useTheme();
 
     const [formData, setFormData] = useState(
         {
@@ -60,68 +56,136 @@ const Login = ({ onLogin }) => {
 
     return (<>
 
-        <Container component='main' >
+        <Box >
 
             <Grid container>
 
                 <Grid item xs={0} lg={6}
-                style={{
-                    backgroundImage: `url(${LogInPage})`,
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    minHeight: '100vh', // Set a minimum height to cover the entire viewport
-                  }}
+                    style={{
+                        backgroundImage: `url(${LogInPage})`,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        minHeight: '100vh', // Set a minimum height to cover the entire viewport
+                    }}
                 >
                 </Grid>
 
-                <Grid item xs={12} lg={6}>
-                    <Logo />
+                <Grid item xs={12} lg={6} sx={{ display: 'flex', alignContent: 'center', backgroundColor: theme.palette.environment.white }}>
+                    <Box sx={{ padding: { xs: '0 16px', lg: '0' }, maxWidth: { xs: '320px', lg: '396px' }, margin: 'auto' }} >
+                        <Box
+                            component={LogoDesktop}
+                            sx={{
+                                width: "100%",
+                                height: { xs: 72, lg: 140.76 },
+                                p: 0,
+                                m: "auto",
+                            }}
+                        />
 
-                    <CustomHeading2 text='Login' />
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'left',
-                        }}
-                    >
-                        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }} >
+                        <Typography component="h1" variant="h1" text="Login"
+                            sx={{
+                                fontSize: { xs: '24px', lg: '48px' },
+                                marginTop: { xs: '30px', lg: '77px' },
+                                marginBottom: { xs: '24px', lg: '38px' }
+                            }}
+                        >
+                            Login
+                        </Typography>
 
-                            <CustomTextField
-                                id='username'
-                                name='userName'
-                                labelText='Email'
-                                placeholder='Type your email here'
-                                value={formData.userName}
-                                onChangeFunction={handleChange}
-                                required  // Add required attribute
-                                error={error && !formData.userName}  // Set error if username is empty
-                                helperText={error && !formData.userName && "Username is required"}
-                            />
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'left'
+                            }}
+                        >
+                            <Box component='form' onSubmit={handleSubmit} >
+
+                                <InputLabel variant="standard" id="username-label"
+                                    sx={{
+                                        fontSize: { xs: '14px', lg: '16px' }
+                                    }}
+                                >
+                                    Email
+                                </InputLabel>
+                                <TextField
+                                    aria-label="Email"
+                                    className='TextField'
+                                    id="username"
+                                    name="userName"
+                                    placeholder="Type your email here"
+                                    value={formData.userName}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    required  // Add required attribute
+                                    error={error && !formData.userName}  // Set error if username is empty
+                                    helperText={error && !formData.userName && "Username is required"}
+                                    sx={{ marginBottom: '15px', marginTop: '0' }}
+                                />
+
+                                <InputLabel variant="standard" id="password-label"
+                                    sx={{
+                                        fontSize: { xs: '14px', lg: '16px' }
+                                    }}
+                                >
+                                    Password
+                                </InputLabel>
+                                <TextField
+                                    aria-label="Password"
+                                    className='TextField'
+                                    id="password"
+                                    name="password"
+                                    placeholder="Type your password here"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    type="password"
+                                    fullWidth
+                                    required
+                                    error={error && !formData.password}  // Set error if password is empty
+                                    helperText={error && !formData.password && "Password is required"}
+                                />
+
+                                {/* <CustomTextField
+                                    id='username'
+                                    name='userName'
+                                    labelText='Email'
+                                    placeholder='Type your email here'
+                                    value={formData.userName}
+                                    onChangeFunction={handleChange}
+                                    required  // Add required attribute
+                                    error={error && !formData.userName}  // Set error if username is empty
+                                    helperText={error && !formData.userName && "Username is required"}
+                                    sx={{ marginBottom: '15px', marginTop: '0' }}
+                                /> */}
 
 
-                            <CustomTextField
-                                id='password'
-                                name='password'
-                                labelText='Password'
-                                placeholder='Type your password here'
-                                value={formData.password}
-                                onChangeFunction={handleChange}
-                                required  // Add required attribute
-                                error={error && !formData.password}  // Set error if password is empty
-                                helperText={error && !formData.password && "Password is required"}
-                            />
+                                {/* <CustomTextField
+                                    id='password'
+                                    name='password'
+                                    labelText='Password'
+                                    placeholder='Type your password here'
+                                    value={formData.password}
+                                    onChangeFunction={handleChange}
+                                    required  // Add required attribute
+                                    error={error && !formData.password}  // Set error if password is empty
+                                    helperText={error && !formData.password && "Password is required"}
+                                /> */}
 
-                            {error && <span style={{ color: 'red' }}>{error}</span>}
+                                {error && <span style={{ color: 'red' }}>{error}</span>}
 
-                            <CustomButton text="Login" variant="contained" type="submit" />
+                                <Button variant="contained" type="submit"
+                                    sx={{ m: 0, mt: {xs: '24px', lg: '37px'}, width: '100%', fontWeight: 'bold' }}
+                                >
+                                    Login
+                                </Button>
+                            </Box>
                         </Box>
                     </Box>
                 </Grid>
 
             </Grid>
 
-        </Container>
+        </Box>
     </>
     )
 }

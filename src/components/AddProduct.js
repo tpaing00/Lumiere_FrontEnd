@@ -321,7 +321,7 @@ const AddProduct = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/add-product", formDataToSend, {
+      const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
 
         headers: {
           "Content-Type": "multipart/form-data",

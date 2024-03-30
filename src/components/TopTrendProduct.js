@@ -114,7 +114,7 @@ const TopTrendProducts = () => {
                 <Typography variant="h5" gutterBottom>
                     Most 5 Latest Trendy Products
                 </Typography>
-                <Grid container spacing={1} sx={{ justifyContent:"center" }}>
+                <Grid container spacing={1} sx={{ justifyContent:"left" }}>
             {trendyProducts.slice(0, 5).map((product, index) => { // Limit to first 5 products
                 const productDetails = productData.find(
                     (item) => item.productName === product._id

@@ -276,8 +276,8 @@ const ProductWastage = () => {
             selectedDateFilter={selectedDateFilter}
           />
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <Card>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, width: "100%"  }}>
+        <Card sx={{width: "80%"}}>
           <CardContent>
             {selectedCategory === "All" &&
               totalStockQuantities &&
@@ -315,7 +315,7 @@ const ProductWastage = () => {
                       }
                     ]}
                     layout="horizontal" // Setting layout to horizontal
-                    margin={{ top: 50, right: 30, left: 100, bottom: 20 }} // Adjusting margins
+                    margin={{ top: 50, right: 30, left: 150, bottom: 20 }} // Adjusting margins
                   />
                   <ExportReport />
                 </>
@@ -325,16 +325,14 @@ const ProductWastage = () => {
                 <Typography variant="h5" gutterBottom>
                   Most 5 Wastage Products
                 </Typography>
-                <Grid container spacing={1} sx={{ justifyContent: "left" }}>
+                <Grid container spacing={1} sx={{ justifyContent: "center"}} >
                   {filteredWasteProducts.slice(0, 5).map((product, index) => {
                     // Limit to first 5 products
-
                     if (product) {
                       const inventoryId = inventory[product.barcodeNumber];
-
-                      return (
+                      return (                        
                         <Grid key={index} item xs={12} sm={6} md={5} lg={5}>
-                          <Card
+                          <Card 
                             onClick={() =>
                               handleViewDetail(
                                 inventoryId,
@@ -374,7 +372,6 @@ const ProductWastage = () => {
                                 >
                                   Barcode Number: {product.barcodeNumber}
                                 </Typography>
-                                {/* Add more product info as needed */}
                               </div>
                             </CardContent>
                           </Card>
@@ -389,8 +386,7 @@ const ProductWastage = () => {
             )}
           </CardContent>
         </Card>
-        </Box>
-       
+        </Box>       
       </div>
     </>
   );

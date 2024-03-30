@@ -25,6 +25,8 @@ const StaffCheckOutModal = ({
   inventoryId,
   stockQuantity,
   handleReloadInternalData,
+  setIsSnackbarOpen,
+  setSnackbarMessage,
 }) => {
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
   const [reason, setReason] = useState(""); // State for reason dropdown
@@ -119,9 +121,11 @@ const StaffCheckOutModal = ({
     axios
       .post("https://api.lumiereapp.ca/api/v1/checkout", formData)
       .then((response) => {
-        alert("Checkout successful!");
+        //alert("Checkout successful!");
         handleReloadInternalData(response.data);
         handleClose();
+        setIsSnackbarOpen(true);
+        setSnackbarMessage("Checkout successful!");
       })
       .catch((error) => {
         // Handle error

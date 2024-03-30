@@ -9,7 +9,7 @@ import MakeUp from '../../assets/icons/MakeUp.svg'
 import SkinCare from '../../assets/icons/SkinCare.svg'
 import BodyCare from '../../assets/icons/BodyCare.svg'
 
-export default function DashOverviewPiece({ title, variant, resultsName }) {
+export default function DashOverviewPiece({ title, variant, resultsName, xsWidth, lgWidth }) {
     const theme = useTheme();
 
     let component = "";
@@ -57,7 +57,7 @@ export default function DashOverviewPiece({ title, variant, resultsName }) {
 
     return (
         <>
-            <Grid item xs={6} sx={{ display: 'flex', padding: 0 }}>
+            <Grid item xs={xsWidth} lg={lgWidth} sx={{ display: 'flex', padding: 0 }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                     <SvgIcon component={component} sx={{ height: 31.5, width: 31.5, mr: '13.25px', ml: '5.25px' }} />
                 </Box>

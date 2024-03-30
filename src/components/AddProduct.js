@@ -246,32 +246,88 @@ const AddProduct = () => {
   };
 
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   if (!validateForm()) {
+  //     return;
+  //   }
+
+  //   const formDataToSend = new FormData();
+
+  //   //console.log("form data", formData);
+  //   Object.entries(formData).forEach(([key, value]) => {
+  //     formDataToSend.append(key, value);
+  //   });
+
+  //   images.forEach((image, index) => {
+  //     formDataToSend.append(`images`, image);
+  //   });
+
+  //   try {
+  //     const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
+
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+
+  //     if (response.status === 201) {
+  //       const { inventory, notification, product } = response.data;
+  //       let inventoryId = inventory._id;
+  //       let barcodeNumber = formData.barcodeNumber;
+  //       navigate("/productdetail", {
+  //         state: { inventoryId, barcodeNumber },
+  //       });
+  //       setError(null);
+  //     } else {
+  //       setError("Unable to register product");
+  //     }
+  //   } catch (error) {
+  //     if (error.response) {
+  //       setError(error.response.data.error);
+  //     } else {
+  //       console.error("Error:", error.message);
+  //     }
+  //   }
+  // };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     const formDataToSend = new FormData();
-
-    //console.log("form data", formData);
+  
+    // Append form data
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
-
-    images.forEach((image, index) => {
-      formDataToSend.append(`images`, image);
-    });
-
+  
+    // Check if there are new images uploaded
+    if (images.length === 0 && existingProductData && existingProductData.photo) {
+      // Append existing images
+      existingProductData.photo.forEach((photo, index) => {
+        formDataToSend.append(`photo`, photo);
+      });
+    } else {
+      // Append newly uploaded images
+      images.forEach((image, index) => {
+        console.log("image is ", image);
+        formDataToSend.append(`photo`, image);
+      });
+    }
+  
     try {
-      const response = await axios.post("https://api.lumiereapp.ca/api/v1/add-product", formDataToSend, {
+      const response = await axios.post("http://localhost:8080/api/v1/add-product", formDataToSend, {
 
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+  
       if (response.status === 201) {
         const { inventory, notification, product } = response.data;
         let inventoryId = inventory._id;
@@ -291,7 +347,7 @@ const AddProduct = () => {
       }
     }
   };
-
+  
   return (
     <>
 

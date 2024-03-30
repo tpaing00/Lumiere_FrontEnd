@@ -2,13 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Typography, Grid, Box, Card, CardContent, SvgIcon, useTheme } from "@mui/material";
-import StockQuantityChart from "./StockQuantityChart";
 import DashInfoPiece from "./dashboard/DashInfoPiece";
 import Bell from '../assets/icons/Bell.svg'
 import CustomCardcontent from "./dashboard/CustomCardContent";
 import DashOverviewPiece from "./dashboard/DashOverviewPiece";
 import DashCard from "./dashboard/DashCard";
 import DashboardTopTrendProducts from "./DashboardTopTrendProducts.js";
+import DashboardTotalProducts from "./DashboardTotalProducts.js";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -115,24 +115,26 @@ const Dashboard = () => {
         <Grid item xs={12} lg={8} sx={{ p: 0 }}>
           <Card sx={{ p: 0 }}>
             <CustomCardcontent className="dashboard-overview">
+              <Grid container spacing={1}>
 
-              <DashInfoPiece
-                text="Total Inventory"
-                resultsName={totalInventoryResults}
-                type="number"
-              />
+                <DashInfoPiece
+                  text="Total Inventory"
+                  resultsName={totalInventoryResults}
+                  type="number"
+                />
 
-              <DashInfoPiece
-                text="Total Inventory Value"
-                resultsName={totalInventoryValueResults}
-                type="currency"
-              />
+                <DashInfoPiece
+                  text="Total Inventory Value"
+                  resultsName={totalInventoryValueResults}
+                  type="currency"
+                />
 
-              <DashInfoPiece
-                text="Total Sales"
-                resultsName={totalSaleResults}
-                type="number"
-              />
+                <DashInfoPiece
+                  text="Total Sales"
+                  resultsName={totalSaleResults}
+                  type="number"
+                />
+              </Grid>
 
             </CustomCardcontent>
           </Card>
@@ -156,21 +158,29 @@ const Dashboard = () => {
             title="Total of Retail Products"
             variant="retail"
             resultsName={totalSaleResults}
+            xsWidth="12"
+            lgWidth="6"
           />
           <DashOverviewPiece
             title="Total of In-Store Products"
             variant="inStore"
             resultsName={totalInternalUseProducts}
+            xsWidth="12"
+            lgWidth="6"
           />
           <DashOverviewPiece
             title="Nearly Expired"
             variant="nearlyExpired"
             resultsName={nearlyExpiredProducts}
+            xsWidth="12"
+            lgWidth="6"
           />
           <DashOverviewPiece
             title="Expired Products"
             variant="expired"
             resultsName={expiredProducts}
+            xsWidth="12"
+            lgWidth="6"
           />
         </DashCard>
 
@@ -179,29 +189,37 @@ const Dashboard = () => {
             title="Hair Care"
             variant="hairCare"
             resultsName={totalInventoryByCategory}
+            xsWidth="6"
+            lgWidth="6"
           />
           <DashOverviewPiece
             title="Make-Up"
             variant="makeUp"
             resultsName={totalInventoryByCategory}
+            xsWidth="6"
+            lgWidth="6"
           />
           <DashOverviewPiece
             title="Skin Care"
             variant="skinCare"
             resultsName={totalInventoryByCategory}
+            xsWidth="6"
+            lgWidth="6"
           />
           <DashOverviewPiece
             title="Body Care"
             variant="bodyCare"
             resultsName={totalInventoryByCategory}
+            xsWidth="6"
+            lgWidth="6"
           />
         </DashCard>
 
         <DashCard title="Total Products">
-          {totalInventoryStock && (<StockQuantityChart totalInventoryStock={totalInventoryStock} />)}
+          {totalInventoryStock && (<DashboardTotalProducts totalInventoryStock={totalInventoryStock} />)}
         </DashCard>
 
-        <DashCard title="Top Trend Product">
+        <DashCard title="Top Trend Products">
           <DashboardTopTrendProducts />
         </DashCard>
 

@@ -22,7 +22,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
     const colorMap = {
       "Hair Care": "#87BBD7",
       "Skin Care": "#F26419",
-      "Body Care": "#000000",
+      "Body Care": "#003c5c",
       "Make Up": "#F5B02C",
     };
 

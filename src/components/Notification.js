@@ -15,10 +15,17 @@ const Notification = ({ inPopup }) => {
     const [wasteData, setWasteData] = useState([]);
     const [filterOption, setFilterOption] = useState('all'); // State to track filter option
 
-    const handleViewDetail = (inventoryId, barcodeNumber) => {
-        navigate("/productdetail", {
-            state: { inventoryId, barcodeNumber },
-        });
+    const handleViewDetail = async (inventoryId, barcodeNumber, notificationId) => {
+        try {
+
+            await axios.put(`https://api.lumiereapp.ca/api/v1/notification/${notificationId}/mark-read`);
+    
+            navigate("/productdetail", {
+                state: { inventoryId, barcodeNumber },
+            });
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
     };
 
     useEffect(() => {
@@ -49,6 +56,7 @@ const Notification = ({ inPopup }) => {
 
         // Iterate over low stock notifications and generate notifications
         notificationsData.lowStockResults.forEach(notification => {
+            const notificationId = notification.notificationResults[0]._id;
             const productData = findProductByBarcode(productsData, notification.barcodeNumber);
             allNotifications.push({
                 type: 'Low Stock',
@@ -56,12 +64,15 @@ const Notification = ({ inPopup }) => {
                 productPhoto: productData.productPhoto,
                 message: `The ${productData.productName} has low-stock.`,
                 inventoryId: notification._id, // Include inventoryId from the low stock notification
-                barcodeNumber: productData.barcodeNumber
+                notificationId: notificationId, // Include notificationId
+                barcodeNumber: productData.barcodeNumber,
+                read: notification.notificationResults[0].read 
             });
         });
 
         // Iterate over expiry notifications and generate notifications
         notificationsData.expiryResults.forEach(notification => {
+            const notificationId = notification.notificationResults[0]._id;
             const productData = findProductByBarcode(productsData, notification.barcodeNumber);
             const expiryDate = new Date(notification.expiryDate).toLocaleDateString();
             allNotifications.push({
@@ -70,7 +81,9 @@ const Notification = ({ inPopup }) => {
                 productPhoto: productData.productPhoto,
                 message: `The ${productData.productName} is almost expired (${expiryDate}).`,
                 inventoryId: notification._id, // Include inventoryId from the expiry notification
-                barcodeNumber: productData.barcodeNumber
+                notificationId: notificationId, // Include notificationId
+                barcodeNumber: productData.barcodeNumber,
+                read: notification.notificationResults[0].read 
             });
         });
 
@@ -240,8 +253,11 @@ const Notification = ({ inPopup }) => {
                             return (
                               
                                 <Box sx={{width: '444px', p: '16px'}} >
-                                    <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item" fullWidth>
-                                        <Typography component="h2" sx={{fontSize: '14px', fontWeight: 600}}>{notification.type}</Typography>
+                                    {/* <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber, notification.notificationId)} className="notification-item" fullWidth>
+                                    <Typography component="h2" sx={{fontSize: '14px', fontWeight: 600}}>
+                                        {notification.type}
+                                        {!notification.read && <span style={{marginLeft: '5px', width: '10px', height: '10px', backgroundColor: 'orange', borderRadius: '50%', display: 'inline-block'}}></span>}
+                                    </Typography>
                                         <Box display="flex" alignItems="center">
                                         <img
                                             src={notification.productPhoto}
@@ -251,26 +267,46 @@ const Notification = ({ inPopup }) => {
                                         />
                                         <Typography sx={{fontSize: '14px'}}>{notification.message}</Typography>
                                         </Box>
+                                    </Box> */}
+                                    <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber, notification.notificationId)} className="notification-item" fullWidth sx={{ position: 'relative','&:hover': { backgroundColor: '#f5f5f5', cursor: 'pointer' } }}>
+                                        <Typography component="h2" sx={{ fontSize: '14px', fontWeight: 600 }}>
+                                            {notification.type}
+                                        </Typography>
+                                        {!notification.read && (
+                                            <span style={{ position: 'absolute', top: '0', right: '0', marginRight: '5px', width: '10px', height: '10px', backgroundColor: 'orange', borderRadius: '50%', display: 'inline-block' }}></span>
+                                        )}
+                                        <Box display="flex" alignItems="center">
+                                            <img
+                                                src={notification.productPhoto}
+                                                alt={notification.productName}
+                                                className="notification-image"
+                                                style={{ width: '60px', height: '60px' }}
+                                            />
+                                            <Typography sx={{ fontSize: '14px' }}>{notification.message}</Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
                             );
                         })
                         : notifications.map((notification, index) => {
                             return (
-                                <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber)} className="notification-item"
-                                    sx={{ maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '12px 16px' }}
-                                >
-                                    <Typography component="h2" sx={{ fontSize: '16px', fontWeight: 700, mb: '8px' }}>{notification.type}</Typography>
-                                    <Box display="flex" alignItems="center">
-                                        <img
-                                            src={notification.productPhoto}
-                                            alt={notification.productName}
-                                            className="notification-image"
-                                            style={{ width: '100px', height: '100px' }}
-                                        />
-                                        <Typography sx={{ ml: '16px' }}>{notification.message}</Typography>
-                                    </Box>
-                                </Box>
+                                <Box key={index} onClick={() => handleViewDetail(notification.inventoryId, notification.barcodeNumber, notification.notificationId)} className="notification-item" sx={{ maxWidth: '678px', margin: 'auto', backgroundColor: theme.palette.environment.white, padding: '12px 16px', position: 'relative', '&:hover': { backgroundColor: '#f5f5f5', cursor: 'pointer' } }}>
+                            <Typography component="h2" sx={{ fontSize: '16px', fontWeight: 700, mb: '8px' }}>
+                                {notification.type}
+                            </Typography>
+                            {!notification.read && (
+                                <span style={{ position: 'absolute', top: '50%', right: '0', transform: 'translateY(-50%)', marginRight: '5px', width: '10px', height: '10px', backgroundColor: 'orange', borderRadius: '50%', display: 'inline-block' }}></span>
+                            )}
+                            <Box display="flex" alignItems="center">
+                                <img
+                                    src={notification.productPhoto}
+                                    alt={notification.productName}
+                                    className="notification-image"
+                                    style={{ width: '100px', height: '100px' }}
+                                />
+                                <Typography sx={{ ml: '16px' }}>{notification.message}</Typography>
+                            </Box>
+                        </Box>
                             );
                         })
                     }

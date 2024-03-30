@@ -2,11 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import Cookies from "js-cookie";
-import { Box, Button, Grid, InputLabel, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, InputLabel, TextField, Typography, useTheme } from '@mui/material';
 import LogInPage from '../assets/images/LogInPage.jpg';
 import LogoDesktop from "../assets/logo/logoDesktop.svg";
 
 const Login = ({ onLogin }) => {
+    const theme = useTheme();
 
     const [formData, setFormData] = useState(
         {
@@ -69,7 +70,7 @@ const Login = ({ onLogin }) => {
                 >
                 </Grid>
 
-                <Grid item xs={12} lg={6} sx={{ display: 'flex', alignContent: 'center' }}>
+                <Grid item xs={12} lg={6} sx={{ display: 'flex', alignContent: 'center', backgroundColor: theme.palette.environment.white }}>
                     <Box sx={{ padding: { xs: '0 16px', lg: '0' }, maxWidth: { xs: '320px', lg: '396px' }, margin: 'auto' }} >
                         <Box
                             component={LogoDesktop}

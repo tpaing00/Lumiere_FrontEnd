@@ -349,10 +349,10 @@ const ProductList = () => {
         };
     
         // POST request to report the product as wasted
-        const response = await axios.post("https://api.lumiereapp.ca/api/v1/waste", formData);
+        const response = await axios.post("https://api.lumiereapp.ca/api/v1/waste", formData);        
+        handleReloadInternalData(); // Reload internal data after reporting
         setIsSnackbarOpen(true);
         setSnackbarMessage('Reported Waste successfully!');
-        handleReloadInternalData(); // Reload internal data after reporting
       } catch (error) {
         console.error("Error during report:", error);
       }
@@ -395,9 +395,9 @@ const ProductList = () => {
           });
         }
         //alert("Product deleted successfully!");
+        handleReloadInternalData(); // Reload internal data after deletion
         setIsSnackbarOpen(true);
         setSnackbarMessage('Product deleted successfully!');
-        handleReloadInternalData(); // Reload internal data after deletion
       } catch (error) {
         console.error("Error during delete:", error);
       }
@@ -589,7 +589,7 @@ const ProductList = () => {
         </Dialog>
         <Snackbar
           open={isSnackbarOpen}
-          autoHideDuration={6000} // Adjust the duration as needed
+          autoHideDuration={2000} // Adjust the duration as needed
           onClose={() => setIsSnackbarOpen(false)}
           anchorOrigin={{
             vertical: 'top',
@@ -805,6 +805,8 @@ const ProductList = () => {
                 inventoryId={selectedInventoryProduct.inventoryId}
                 stockQuantity={selectedInventoryProduct.stockQuantity}
                 handleReloadInternalData={handleReloadInternalData}
+                setIsSnackbarOpen={setIsSnackbarOpen}
+                setSnackbarMessage={setSnackbarMessage} 
               />
             )}
           </CardContent>

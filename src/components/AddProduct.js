@@ -356,7 +356,7 @@ const AddProduct = () => {
 
           <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Register New Product</Typography>
 
-          <Card sx={{ borderRadius: '12px', m: '30px 40px 0 40px' }}>
+          <Card sx={{ borderRadius: '12px', m: '30px 10px 0 10px' }}>
 
             <CardContent sx={{ p: '28px 40px', m: 0 }}>
 
@@ -638,7 +638,7 @@ const AddProduct = () => {
                   </Accordion>
                 </Box>
 
-                <Box className="register-notification-settings">
+                <Box className="register-notification-settings" sx={{ mt: '24px' }}>
                   <Accordion defaultExpanded>
                     <AccordionSummary
                       expandIcon={<RemoveIcon />}

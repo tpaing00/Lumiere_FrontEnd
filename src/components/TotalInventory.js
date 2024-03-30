@@ -23,6 +23,7 @@ const TotalInventory = () => {
     
     if (selectedDateFilter === "1 Month") {
       toDate = new Date();
+      toDate.setDate(toDate.getDate() + 1);
       fromDate = new Date();
       fromDate.setMonth(fromDate.getMonth() - 1);
 
@@ -32,6 +33,7 @@ const TotalInventory = () => {
 
     if (selectedDateFilter === "1 Year") {
       toDate = new Date();
+      toDate.setDate(toDate.getDate() + 1);
       fromDate = new Date();
       fromDate.setFullYear(fromDate.getFullYear() - 1);
 

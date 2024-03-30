@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   Grid,
@@ -16,7 +17,7 @@ const StockQuantityChartByCategory = ({
   selectedCategory,
   totalInventoryStock,
   totalInventoryStockWithData,
-  selectedDateFilter
+  selectedDateFilter,
 }) => {
   const data = totalInventoryStock;
   const totalQuantity = data.reduce(
@@ -41,10 +42,10 @@ const StockQuantityChartByCategory = ({
       <Box
         sx={{
           height: 200,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'white', 
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "white",
         }}
       >
         <Typography variant="body1" align="center">
@@ -53,38 +54,44 @@ const StockQuantityChartByCategory = ({
       </Box>
     );
   }
-    const otherCategoriesQuantity =
-      totalQuantity - foundCategory.totalStockQuantity;
-    const percentage = (foundCategory.totalStockQuantity / totalQuantity) * 100;
-    const pieData = [
-      { name: foundCategory._id, value: foundCategory.totalStockQuantity },
-      { name: "Other", value: otherCategoriesQuantity },
-      { fill: getColor(foundCategory._id) },
-    ];
+  const otherCategoriesQuantity =
+    totalQuantity - foundCategory.totalStockQuantity;
+  const percentage = (foundCategory.totalStockQuantity / totalQuantity) * 100;
+  const pieData = [
+    { name: foundCategory._id, value: foundCategory.totalStockQuantity },
+    { name: "Other", value: otherCategoriesQuantity },
+    { fill: getColor(foundCategory._id) },
+  ];
 
-    const foundCategoryData = totalInventoryStockWithData.find((item) => {
-      if (item._id === selectedCategory) {
-        return item.data;
-      }
-    }).data;
+  const foundCategoryData = totalInventoryStockWithData.find((item) => {
+    if (item._id === selectedCategory) {
+      return item.data;
+    }
+  }).data;
 
-    const [page, setPage] = useState(1);
-    const itemsPerPage = 4;
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 4;
 
-    useEffect(() => {
-      setPage(1);
-    }, [selectedCategory,selectedDateFilter]);
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory, selectedDateFilter]);
 
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-    const startIndex = (page - 1) * itemsPerPage;
-    const paginatedData = foundCategoryData.slice(
-      startIndex,
-      startIndex + itemsPerPage
-    );
-  
+  const startIndex = (page - 1) * itemsPerPage;
+  const paginatedData = foundCategoryData.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const navigate = useNavigate();
+  const handleViewDetail = (inventoryId, barcodeNumber) => {
+    navigate("/productdetail", {
+      state: { inventoryId, barcodeNumber },
+    });
+  };
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -144,7 +151,7 @@ const StockQuantityChartByCategory = ({
   };
 
   return (
-    <Card sx={{p: 5}}>
+    <Card sx={{ p: 5 }}>
       <CardContent>
         <Grid container spacing={1}>
           <Grid
@@ -217,7 +224,12 @@ const StockQuantityChartByCategory = ({
             {/* <Stack spacing={2}> */}
             {paginatedData.map((product, index) => (
               <Grid key={index} item xs={12} lg={12}>
-                <Card sx={{ width: "70%", margin: "auto" }}>
+                <Card
+                  sx={{ width: "70%", margin: "auto" }}
+                  onClick={() =>
+                    handleViewDetail(product._id, product.product.barcodeNumber)
+                  }
+                >
                   <CardContent sx={{ padding: 0, marginBottom: 0 }}>
                     <Grid container spacing={1} xs={12} lg={12}>
                       <Grid

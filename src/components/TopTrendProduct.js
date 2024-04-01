@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Grid, Avatar, IconButton, Tabs, Tab, Box } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Avatar, IconButton, Tabs, Tab, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CategoryNav from "./CategoryNav";
-
-
+import * as XLSX from "xlsx";
 
 const TopTrendProducts = () => {
     const navigate = useNavigate();
+    const [xLabels, setXLabels] = useState([]);
     const [trendyProducts, setTrendyProducts] = useState([]);
     const [inventory, setInventoryData] = useState([]);
     const [productData, setProductData] = useState([]);
@@ -27,7 +27,6 @@ const TopTrendProducts = () => {
     
             setTrendyProducts(topProductsResponse);
     
-            // Build a mapping of barcode numbers to inventory ID
             const inventoryMap = {};
             inventoryResponse.forEach(item => {
                 inventoryMap[item.barcodeNumber] = item._id;
@@ -36,15 +35,15 @@ const TopTrendProducts = () => {
     
             console.log("inventory response ", inventoryResponse);
             setProductData(productsResponse);
+
+            const labels = topProductsResponse.map(product => product._id);
+            setXLabels(labels);
         })
         .catch((error) => {
             console.error(error);
         });
     }, []);
     
-    
-
-
     const handleViewDetail = (inventoryId, barcodeNumber) => {
         navigate("/productdetail", {
           state: { inventoryId, barcodeNumber },
@@ -62,7 +61,47 @@ const TopTrendProducts = () => {
             return product.category === selectedCategory;
         }
     }
+
+    const handleExport = () => {
+        const exportData = trendyProducts.map((product) => {
+            const productDetails = productData.find((item) => item.productName === product._id);
+            if (productDetails) {
+                return {
+                    productName: product._id,
+                    category: productDetails.category,
+                };
+            } else {
+                return null;
+            }
+        }).filter(Boolean); 
     
+        // Create a new workbook
+        const workbook = XLSX.utils.book_new();
+    
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
+    
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Trendy Products");
+    
+        const fileData = XLSX.write(workbook, {
+            bookType: "xlsx",
+            type: "array",
+        });
+    
+        const blob = new Blob([fileData], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+    
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "trendy_products.xlsx";
+    
+        document.body.appendChild(link);
+        link.click();
+    
+        // Cleanup
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    };
     
 
     return (
@@ -149,7 +188,6 @@ const TopTrendProducts = () => {
                                         <Typography variant="body2" color="text.secondary">
                                             Barcode Number: {productDetails.barcodeNumber}
                                         </Typography>
-                                        {/* Add more product info as needed */}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -160,6 +198,9 @@ const TopTrendProducts = () => {
                 }
             })}
         </Grid>
+        <Box mt={2} textAlign={"center"}>
+            <Button onClick={handleExport} variant="contained" color="primary">Export Report</Button>
+        </Box>
             </div>
         </div>
     );

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import inventoryTypeData from "./predefined_data/inventorytype.json";
 import productCategoryData from "./predefined_data/productcategory.json";
 import StaffCheckOutModal from "./StaffCheckOutModal";
+import { subDays, format } from "date-fns";
 import {
   Box,
   Button,
@@ -116,8 +117,8 @@ const ProductList = () => {
         const combined = {
           ...inventoryRow,
           ...matchingProduct,
-          dateAdded: formatDate(inventoryRow.dateAdded),
-          expiryDate: formatDate(inventoryRow.expiryDate),
+          dateAdded: format(subDays(new Date(inventoryRow.dateAdded),0),"yyyy-MM-dd"),
+          expiryDate: format(subDays(new Date(inventoryRow.expiryDate),0),"yyyy-MM-dd"),
           status: calculateStatus(inventoryRow._id),
           inventoryId: inventoryRow._id,
           productId: matchingProduct._id,
@@ -414,8 +415,8 @@ const ProductList = () => {
           <TableCell>{row.productName}</TableCell>
           <TableCell>{row.brandName}</TableCell>
           <TableCell>{row.category}</TableCell>
-          <TableCell>{formatDate(row.dateAdded)}</TableCell>
-          <TableCell>{formatDate(row.expiryDate)}</TableCell>
+          <TableCell>{row.dateAdded}</TableCell>
+          <TableCell>{row.expiryDate}</TableCell>
           <TableCell style={renderStatusStyle(row.status)}>
             {row.status}
           </TableCell>
@@ -627,14 +628,6 @@ const ProductList = () => {
 
   const handleNewProduct = () => {
     navigate("/add-product");
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`; // Formats the date to display only date portion
   };
 
   const calculateStatus = (inventoryId) => {

@@ -20,9 +20,6 @@ const ActivityHistory = ({
   saleResults,
   wasteProductResults,
 }) => {
-  // console.log(userListResults);
-  // console.log(internalUseListResults);
-  console.log(saleResults);
 
   // const [userInventoryResults, setUserInventoryResults] = useState("");
 
@@ -37,7 +34,6 @@ const ActivityHistory = ({
         ...internalUseRow,
         ...found,
       };
-      console.log("combined" + combined);
       return combined;
       // }
     });
@@ -45,7 +41,6 @@ const ActivityHistory = ({
 
   let combinedUserInventoryResults;
   if (inventoryResults !== "") {
-    console.log("inventoryResults" + inventoryResults);
 
     const found = userListResults.find(
       (user) => user._id === inventoryResults.userId
@@ -56,7 +51,6 @@ const ActivityHistory = ({
       ...found,
     };
     // setUserInventoryResults(combinedUserInventoryResults);
-    console.log(combinedUserInventoryResults);
     // }
   }
 

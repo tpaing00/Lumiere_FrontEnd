@@ -315,7 +315,6 @@ const AddProduct = () => {
     } else {
       // Append newly uploaded images
       images.forEach((image, index) => {
-        console.log("image is ", image);
         formDataToSend.append(`photo`, image);
       });
     }
@@ -351,14 +350,14 @@ const AddProduct = () => {
   return (
     <>
 
-      <Container component="main" maxWidth="1146px" sx={{ mt: 3 }} >
+    <Box component="main" sx={{ mt: 3 }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 
           <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Register New Product</Typography>
+          
+          <Card sx={{ borderRadius: "20px", m: "12px 40px 0 40px" }}>
 
-          <Card sx={{ borderRadius: '12px', m: '30px 10px 0 10px' }}>
-
-            <CardContent sx={{ p: '28px 40px', m: 0 }}>
+          <CardContent sx={{ p: "24px", m: 0 }}>
 
               {error && (
                 <Typography paragraph={true} sx={{ color: "red" }}>
@@ -784,8 +783,8 @@ const AddProduct = () => {
             </CardContent>
           </Card>
         </LocalizationProvider>
-      </Container>
-    </>
+        </Box>
+    </>    
   );
 };
 

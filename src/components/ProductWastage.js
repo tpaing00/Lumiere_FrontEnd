@@ -11,6 +11,8 @@ import {
   Button,
   Grid,
   Avatar,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -19,14 +21,7 @@ import CategoryNav from "./CategoryNav";
 import DateFilter from "./DateFilter";
 import { format } from "date-fns";
 
-const StyledImage = styled("img")({
-  width: "200px",
-  height: "200px",
-  background: "white",
-  borderRadius: "30px",
-  objectFit: "cover",
-  margin: "10px",
-});
+
 
 const ProductWastage = () => {
   const navigate = useNavigate();
@@ -39,6 +34,18 @@ const ProductWastage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [filteredWasteProducts, setFilteredWasteProducts] = useState([]);
   const [selectedDateFilter, setSelectedDateFilter] = useState("Today");
+  const theme = useTheme();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  
+  const StyledImage = styled("img")({
+    width: isMobile ? "150px" : "200px", // Adjust width for mobile view
+    height: isMobile ? "150px" : "200px", // Adjust height for mobile view
+    background: "white",
+    borderRadius: "30px",
+    objectFit: "cover",
+    margin: "0px",
+  });
+  
 
   const ExportReport = () => {
     const handleExport = () => {
@@ -157,7 +164,6 @@ const ProductWastage = () => {
         }
 
         const wasteResponse = await axios.get(urlWaste);
-        console.log("wasteResponse ", wasteResponse);
         if (inventoryResponse.status === 200 && wasteResponse.status === 200) {
           // Combine inventory and wastage data
           const combinedData = wasteResponse.data.map((wasteItem) => {
@@ -233,6 +239,7 @@ const ProductWastage = () => {
   return (
     <>
       <Typography variant="h1">Product Wastage</Typography>
+
       <Box sx={{ width: "100%", mb: 10 }}>
         <Tabs variant="scrollable" scrollButtons="auto" value={0}>
           {wasteProducts.map((product, index) => (
@@ -258,7 +265,7 @@ const ProductWastage = () => {
           marginTop: "30px",
           margin: "auto",
           backgroundColor: "#FFFFFF",
-          padding: "20px",
+          paddingTop: "20px",
           borderRadius: "10px",
         }}
       >
@@ -275,7 +282,7 @@ const ProductWastage = () => {
           />
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, width: "100%"  }}>
-        <Card sx={{width: "80%"}}>
+        <Card sx={{width: "100%"}}>
           <CardContent>          
             {selectedCategory === "All" &&
               totalStockQuantities &&
@@ -284,9 +291,8 @@ const ProductWastage = () => {
               series && (
                 <>
                 <Box display="flex" alignItems="center" flexDirection="column">
-                <Box>
+                <Box style={{ width: '100%', maxWidth: isMobile ? '400px' : '800px', height: 'auto' }}>
                   <BarChart
-                    width={800}
                     height={300}
                     series={[
                       {
@@ -307,7 +313,7 @@ const ProductWastage = () => {
                       {
                         data: xLabels,
                         tickLabelStyle : {
-                          fontSize: 18,        
+                          fontSize: 16,        
                           fill : '#003C5C',   
                           fontWeight: 'bold'               
                         },
@@ -315,7 +321,7 @@ const ProductWastage = () => {
                       }
                     ]}
                     layout="horizontal" // Setting layout to horizontal
-                    margin={{ top: 50, right: 30, left: 150, bottom: 20 }} // Adjusting margins
+                    margin={{ top: 50, right: 30, left: 90, bottom: 20 }} // Adjusting margins
                   />
                   </Box>
                   <Box mt={2}>
@@ -336,7 +342,7 @@ const ProductWastage = () => {
                     if (product) {
                       const inventoryId = inventory[product.barcodeNumber];
                       return (                        
-                        <Grid key={index} item xs={12} sm={6} md={5} lg={5}>
+                        <Grid key={index} item xs={12} lg={6}>
                           <Card 
                             onClick={() =>
                               handleViewDetail(
@@ -349,14 +355,15 @@ const ProductWastage = () => {
                               boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow
                               cursor: "pointer",
                               margin: "8px",
+                              height: "100%"
                             }}
                           >
                             <CardContent sx={{ display: "flex" }}>
-                              <Avatar
-                                sx={{ width: 80, height: 80, marginRight: 2 }}
-                                alt={product.productName}
-                                src={product.photo[0]}
-                              />
+                            <Avatar
+                              sx={{ width: 50, height: 50, marginRight: 2 }}
+                              alt={product.productName}
+                              src={product.photo[0]}
+                            />
                               <div>
                                 <Typography
                                   gutterBottom

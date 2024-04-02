@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from 'axios'; // Import axios
 import {
   AppBar,
   Toolbar,
@@ -26,6 +27,7 @@ const Header = ({ loggedIn, handleLogout }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [avatarAnchorEl, setAvatarAnchorEl] = useState(null);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,6 +43,33 @@ const Header = ({ loggedIn, handleLogout }) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+
+  useEffect(() => {
+    // Fetch unread notifications count from backend using axios
+    const fetchUnreadNotifications = async () => {
+      try {
+        console.log("fetching unread notifications...");
+        const response = await axios.get("https://api.lumiereapp.ca/api/v1/notifications/unreadCount", {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        });
+        if (response.status === 200) {
+          const data = response.data;
+          console.log("unread count is ", data);
+          setUnreadNotifications(data.unreadCount);
+        } else {
+          throw new Error("Failed to fetch unread notifications count");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (loggedIn) {
+      fetchUnreadNotifications();
+    }
+  }, [loggedIn]);
 
   let firstName = Cookies.get("firstName");
   let photo = Cookies.get("photo");
@@ -68,18 +97,32 @@ const Header = ({ loggedIn, handleLogout }) => {
             </Typography>
           </Box>
           <Typography component="div" flexGrow={1}></Typography>
-          {/* <IconButton color="inherit" aria-label="notifications" onClick={handleClick} sx={{p: '16px'}}> */}
-          <SvgIcon
-            component={Bell}
-            sx={{
-              width: "15.54",
-              height: "20",
-              color: theme.palette.secondary.dark,
-              mr: "16px",
-            }}
-            onClick={handleClick}
-          />
-          {/* </IconButton> */}
+          <IconButton color="inherit" aria-label="notifications" onClick={handleClick} sx={{ padding: '0', position: 'relative' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginRight: '16px' }}>
+              <SvgIcon
+                component={Bell}
+                sx={{
+                  width: "15.54",
+                  height: "20",
+                  color: theme.palette.secondary.dark,
+                  position: 'relative',
+                }}
+              />
+              {unreadNotifications > 0 && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    transform: 'translate(110%, -50%)',
+                    backgroundColor: '#F26419',
+                    width: 12,
+                    height: 12,
+                    borderRadius: '50%',
+                  }}
+                />
+              )}
+            </div>
+          </IconButton>
           <IconButton
             color="inherit"
             aria-label="user"
@@ -125,7 +168,6 @@ const Header = ({ loggedIn, handleLogout }) => {
             <ListItemText primary="See All" />
           </ListItem>
           <Notification inPopup={true} />{" "}
-          {/* Pass inPopup as true when rendering in the popup */}
         </List>
       </Popover>
       <Popover

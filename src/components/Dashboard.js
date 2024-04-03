@@ -20,8 +20,9 @@ const Dashboard = () => {
   const [totalInternalUseProducts, setTotalInternalUseProducts] = useState("");
   const [nearlyExpiredProducts, setNearlyExpiredProducts] = useState("");
   const [expiredProducts, setExpiredProducts] = useState("");
-  const [totalInventoryByCategory, setTotalInventoryByCategory] = useState({});
+  const [soldByCategory, setSoldByCategory] = useState({});
   const [totalInventoryStock, setTotalInventoryStock] = useState();
+  const [totalInventoryByType, setTotalInventoryByType] = useState({});
 
   useEffect(() => {
     axios
@@ -57,6 +58,22 @@ const Dashboard = () => {
         console.error("Error:", error.message);
       });
 
+      axios
+      .get(`https://api.lumiereapp.ca/api/v1/totalinventorybytype`)
+      .then((response) => {
+        if (response.status === 200) {
+          let totalByCategory = {};
+          response.data.forEach((item) => {
+            totalByCategory[item.addToInventory] = item.totalInventory;
+          });
+          setTotalInventoryByType(totalByCategory);
+          console.log(totalByCategory);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
     axios
       .get(`https://api.lumiereapp.ca/api/v1/getnearlyexpiredinventory`)
       .then((response) => {
@@ -84,12 +101,22 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalInventoryStock(response.data);
-          let totalStockByCategory = {};
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
+      axios
+      .get(`https://api.lumiereapp.ca/api/v1/soldbycategory`)
+      .then((response) => {
+        if (response.status === 200) {
+          let totalSaleByCategory = {};
           response.data.forEach((item) => {
-            totalStockByCategory[item._id] = item.totalStockQuantity;
+            totalSaleByCategory[item._id] = item.totalSoldQuantity;
           });
 
-          setTotalInventoryByCategory(totalStockByCategory);
+          setSoldByCategory(totalSaleByCategory);
         }
       })
       .catch((error) => {
@@ -157,14 +184,14 @@ const Dashboard = () => {
           <DashOverviewPiece
             title="Total of Retail Products"
             variant="retail"
-            resultsName={totalSaleResults}
+            resultsName={totalInventoryByType}
             xsWidth="12"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Total of In-Store Products"
             variant="inStore"
-            resultsName={totalInternalUseProducts}
+            resultsName={totalInventoryByType}
             xsWidth="12"
             lgWidth="6"
           />
@@ -188,28 +215,28 @@ const Dashboard = () => {
           <DashOverviewPiece
             title="Hair Care"
             variant="hairCare"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Make-Up"
             variant="makeUp"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Skin Care"
             variant="skinCare"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Body Care"
             variant="bodyCare"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />

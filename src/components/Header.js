@@ -49,11 +49,7 @@ const Header = ({ loggedIn, handleLogout }) => {
     const fetchUnreadNotifications = async () => {
       try {
         console.log("fetching unread notifications...");
-        const response = await axios.get("https://api.lumiereapp.ca/api/v1/notifications/unreadCount", {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        });
+        const response = await axios.get("https://api.lumiereapp.ca/api/v1/notifications/unreadCount");
         if (response.status === 200) {
           const data = response.data;
           console.log("unread count is ", data);

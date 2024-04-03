@@ -30,6 +30,7 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
+  useMediaQuery,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import CustomSearch from "./mui_customization/base_components/CustomSearch";
@@ -266,15 +267,34 @@ const ProductList = () => {
 
   const renderTableHeader = () => {
     // Define the keys to display in the table
-    let header = [
-      "Name",
-      "Brand",
-      "Category",
-      "Date Added",
-      "EXP",
-      "Status",
-      "Inventory",
-    ];
+    let header = [];
+    if (isMobile){
+      header = [
+        "Name",       
+        "Status",
+        "Inventory",
+      ];
+    }else {
+      header = [
+        "Name",
+        "Brand",
+        "Category",
+        "Date Added",
+        "EXP",
+        "Status",
+        "Inventory",
+      ];
+      
+    }
+    // let header = [
+    //   "Name",
+    //   "Brand",
+    //   "Category",
+    //   "Date Added",
+    //   "EXP",
+    //   "Status",
+    //   "Inventory",
+    // ];
     return header.map((key, index) => {
       return <TableCell key={index}>{key}</TableCell>;
     });
@@ -413,14 +433,18 @@ const ProductList = () => {
       <>
         <TableRow key={index}>
           <TableCell>{row.productName}</TableCell>
-          <TableCell>{row.brandName}</TableCell>
+          {!isMobile && <TableCell>{row.brandName}</TableCell>}
+          {!isMobile && <TableCell>{row.category}</TableCell>}
+          {!isMobile && <TableCell>{row.dateAdded}</TableCell>}
+          {!isMobile && <TableCell>{row.expiryDate}</TableCell>}
+          {/* <TableCell>{row.brandName}</TableCell>
           <TableCell>{row.category}</TableCell>
           <TableCell>{row.dateAdded}</TableCell>
           <TableCell>{row.expiryDate}</TableCell>
           <TableCell style={renderStatusStyle(row.status)}>
             {row.status}
-          </TableCell>
-          {/* <TableCell>{row.status}</TableCell> */}
+          </TableCell>*/}
+          <TableCell>{row.status}</TableCell> 
           <TableCell>{row.addToInventory}</TableCell>
           <TableCell>
             <IconButton
@@ -652,6 +676,7 @@ const ProductList = () => {
     return "In Stock";
   };
 
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
     <>
       <Box component="main" sx={{ mt: 3 }}>
@@ -661,7 +686,40 @@ const ProductList = () => {
 
         <Card sx={{ borderRadius: "20px", m: "12px 40px 0 40px" }}>
           <CardContent sx={{ p: "24px", m: 0 }}>
+          {isMobile && (
+              <Button
+                onClick={handleNewProduct}
+                variant="outlined"
+                sx={{ mb: 2 }}
+                fullWidth
+              >
+                Register New Product
+              </Button>
+            )}
+
             <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: "15px",
+              }}
+              fullWidth
+            >
+               <Typography variant="h2" sx={{ m: 0 }}>
+                Product List
+              </Typography>
+              {!isMobile && (
+                <Button
+                  onClick={handleNewProduct}
+                  variant="outlined"
+                  sx={{ m: 0 }}
+                >
+                  Register New Product
+                </Button>
+              )}             
+            </Box>
+            {/* <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -680,10 +738,12 @@ const ProductList = () => {
               >
                 Register New Product
               </Button>
-            </Box>
+            </Box> */}
 
             <Grid container spacing={4} fullWidth>
               <Grid container item spacing="16px" xs={7}>
+              {!isMobile && (
+                <>
                 <Grid item xs={3}>
                   <Select
                     id="filterInventory"
@@ -740,8 +800,9 @@ const ProductList = () => {
                     <MenuItem value="desc">Descending</MenuItem>
                   </Select>
                 </Grid>
-
-                <Grid item xs={3}>
+                </>
+              )}
+                <Grid item xs={isMobile ? 12 : 3} sx={{ alignItems: isMobile ? 'right' : 'left' }}>
                   <Select
                     id="filterStatus"
                     name="filterStatus"
@@ -761,7 +822,7 @@ const ProductList = () => {
                 </Grid>
               </Grid>
 
-              <Grid item xs={5}>
+              <Grid item xs={isMobile ? 12 : 5}>
                 <CustomSearch
                   id="searchInventory"
                   name="searchInventory"

@@ -20,9 +20,9 @@ const Dashboard = () => {
   const [totalInternalUseProducts, setTotalInternalUseProducts] = useState("");
   const [nearlyExpiredProducts, setNearlyExpiredProducts] = useState("");
   const [expiredProducts, setExpiredProducts] = useState("");
-  const [totalInventoryByCategory, setTotalInventoryByCategory] = useState({});
   const [soldByCategory, setSoldByCategory] = useState({});
   const [totalInventoryStock, setTotalInventoryStock] = useState();
+  const [totalInventoryByType, setTotalInventoryByType] = useState({});
 
   useEffect(() => {
     axios
@@ -52,6 +52,22 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalSaleResults(response.data.totalSale);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
+      axios
+      .get(`https://api.lumiereapp.ca/api/v1/totalinventorybytype`)
+      .then((response) => {
+        if (response.status === 200) {
+          let totalByCategory = {};
+          response.data.forEach((item) => {
+            totalByCategory[item.addToInventory] = item.totalInventory;
+          });
+          setTotalInventoryByType(totalByCategory);
+          console.log(totalByCategory);
         }
       })
       .catch((error) => {
@@ -95,7 +111,6 @@ const Dashboard = () => {
       .get(`https://api.lumiereapp.ca/api/v1/soldbycategory`)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
           let totalSaleByCategory = {};
           response.data.forEach((item) => {
             totalSaleByCategory[item._id] = item.totalSoldQuantity;
@@ -169,14 +184,14 @@ const Dashboard = () => {
           <DashOverviewPiece
             title="Total of Retail Products"
             variant="retail"
-            resultsName={totalSaleResults}
+            resultsName={totalInventoryByType}
             xsWidth="12"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Total of In-Store Products"
             variant="inStore"
-            resultsName={totalInternalUseProducts}
+            resultsName={totalInventoryByType}
             xsWidth="12"
             lgWidth="6"
           />

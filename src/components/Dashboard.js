@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [nearlyExpiredProducts, setNearlyExpiredProducts] = useState("");
   const [expiredProducts, setExpiredProducts] = useState("");
   const [totalInventoryByCategory, setTotalInventoryByCategory] = useState({});
+  const [soldByCategory, setSoldByCategory] = useState({});
   const [totalInventoryStock, setTotalInventoryStock] = useState();
 
   useEffect(() => {
@@ -84,12 +85,23 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status === 200) {
           setTotalInventoryStock(response.data);
-          let totalStockByCategory = {};
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+
+      axios
+      .get(`https://api.lumiereapp.ca/api/v1/soldbycategory`)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.data);
+          let totalSaleByCategory = {};
           response.data.forEach((item) => {
-            totalStockByCategory[item._id] = item.totalStockQuantity;
+            totalSaleByCategory[item._id] = item.totalSoldQuantity;
           });
 
-          setTotalInventoryByCategory(totalStockByCategory);
+          setSoldByCategory(totalSaleByCategory);
         }
       })
       .catch((error) => {
@@ -188,28 +200,28 @@ const Dashboard = () => {
           <DashOverviewPiece
             title="Hair Care"
             variant="hairCare"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Make-Up"
             variant="makeUp"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Skin Care"
             variant="skinCare"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />
           <DashOverviewPiece
             title="Body Care"
             variant="bodyCare"
-            resultsName={totalInventoryByCategory}
+            resultsName={soldByCategory}
             xsWidth="6"
             lgWidth="6"
           />

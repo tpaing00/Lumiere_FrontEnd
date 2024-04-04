@@ -100,11 +100,13 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
   return (
     <>
       {isMobile ? (
-        <Grid container item xs={12} spacing={1}>
+        <Grid container xs={12} spacing={1}>
           <Grid
             item
             xs={12}
             lg={6}
+            align="center"
+            justifyContent="center"
             sx={{
               display: "flex",
               alignItems: "center",
@@ -114,7 +116,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
             <Card
               width="90%"
               height="100%"
-              sx={{ backgroundColor: "transparent", cursor: "pointer", p: 5}}
+              sx={{ backgroundColor: "transparent", p: 0 }}
             >
               <PieChart width={280} height={300}>
                 <Pie

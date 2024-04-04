@@ -19,6 +19,7 @@ import Cookies from "js-cookie";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { styled } from "@mui/material";
 import theme from "./mui_customization/theme";
+import Landing from "./Landing";
 
 const RootContainer = styled("div")({
   display: "flex",
@@ -71,21 +72,20 @@ const App = () => {
                 <Route
                   exact
                   path="/"
-                  element={!loggedIn ? <Navigate to="/login" /> : <Scanner />}
+                  element={!loggedIn ? <Landing /> : <Scanner />}
                 />
+                {/* <Route
+                  exact
+                  path="/login"
+                  element={!loggedIn ? <Navigate to="/" /> : <Scanner />}
+                /> */}
                 <Route
                   path="/dashboard"
                   element={loggedIn ? <Dashboard /> : <Navigate to="/" />}
                 />
                 <Route
                   path="/login"
-                  element={
-                    loggedIn ? (
-                      <Navigate to="/" />
-                    ) : (
-                      <Login onLogin={handleLogin} />
-                    )
-                  }
+                  element={loggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />}
                 />
                 <Route
                   path="/scannerdetail"

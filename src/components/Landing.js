@@ -17,6 +17,10 @@ const Landing = () => {
         setShowMenu(!showMenu);
     };
 
+    const handleLogin = () => {
+        navigate("/login");
+      };
+
     const renderNavbar = () => {
         const navItems = (
             <>
@@ -169,7 +173,7 @@ const Landing = () => {
                             A web application that helps beauty salon businesses to streamline their inventory management process and reduce product wastage.
                         </Typography>
 
-                        <Button variant="contained" href="/login"
+                        <Button variant="contained" 
                             sx={{
                                 align: { xs: "center", lg: "left" },
                                 fontWeight: 500,
@@ -179,7 +183,7 @@ const Landing = () => {
                                 flexShrink: 0,
                                 ml: { lg: 0 }
                             }}
-                            onClick={navigate("/login")}
+                            onClick={handleLogin}
                         >
                             Visit Now
                         </Button>

@@ -179,8 +179,8 @@ const StockQuantityChartByCategory = ({
                 dataKey="value"
                 cx="50%"
                 cy="50%"
-                outerRadius={210}
-                innerRadius={160}
+                outerRadius={220}
+                innerRadius={170}
                 startAngle={90}
                 endAngle={-360}
                 label={({ cx, cy }) => (

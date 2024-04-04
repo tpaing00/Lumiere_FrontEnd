@@ -5,15 +5,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import LogoMobile from "../assets/logo/lumiere-logo-mobile.svg";
 import Hero from "../assets/features/hero.png";
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const theme = useTheme();
     const [showMenu, setShowMenu] = useState(false);
+    const navigate = useNavigate();
 
     const handleMenuToggle = () => {
         setShowMenu(!showMenu);
     };
+
+    const handleLogin = () => {
+        navigate("/login");
+      };
 
     const renderNavbar = () => {
         const navItems = (
@@ -167,7 +173,7 @@ const Landing = () => {
                             A web application that helps beauty salon businesses to streamline their inventory management process and reduce product wastage.
                         </Typography>
 
-                        <Button variant="contained" href="/login"
+                        <Button variant="contained" 
                             sx={{
                                 align: { xs: "center", lg: "left" },
                                 fontWeight: 500,
@@ -177,6 +183,7 @@ const Landing = () => {
                                 flexShrink: 0,
                                 ml: { lg: 0 }
                             }}
+                            onClick={handleLogin}
                         >
                             Visit Now
                         </Button>

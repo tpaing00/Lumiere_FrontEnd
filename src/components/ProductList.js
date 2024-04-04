@@ -689,12 +689,13 @@ const ProductList = () => {
 
   return (
     <>
-      <Box component="main" sx={{ mt: 3 }}>
-        <Typography variant="h1" sx={{ pl: "40px", mb: "12px" }}>
+      {/* <Box component="main" sx={{ mt: 3 }}> */}
+      <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+        <Typography variant="h1" sx={{ mb: "12px" }}>
           Inventory
         </Typography>
 
-        <Card sx={{ borderRadius: "20px", m: "12px 40px 0 40px" }}>
+        <Card sx={{ borderRadius: "20px"}}>
           <CardContent sx={{ p: "24px", m: 0 }}>
           {isMobile && (
               <Button

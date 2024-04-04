@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Typography, Grid, Box, Card, CardContent, SvgIcon, useTheme } from "@mui/material";
+import { Typography, Grid, Box, Card, CardContent, SvgIcon, useTheme, useMediaQuery } from "@mui/material";
 import DashInfoPiece from "./dashboard/DashInfoPiece";
 import Bell from '../assets/icons/Bell.svg'
 import CustomCardcontent from "./dashboard/CustomCardContent";
@@ -12,6 +12,7 @@ import DashboardTotalProducts from "./DashboardTotalProducts.js";
 
 const Dashboard = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const [totalInventoryResults, setTotalInventoryResults] = useState("");
   const [totalInventoryValueResults, setTotalInventoryValueResults] =
@@ -137,8 +138,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Dashboard</Typography>
-      <Grid container alignItems="left" sx={{ pr: '30px', pb: 0, pl: '40px' }} spacing={'24px'}>
+     <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+      <Typography variant="h1" sx={{  mb: '12px' }}>Dashboard</Typography>
+      <Grid container alignItems="left" sx={{  pb: 0}} spacing={'24px'}>
         <Grid item xs={12} lg={8} sx={{ p: 0 }}>
           <Card sx={{ p: 0 }}>
             <CustomCardcontent className="dashboard-overview">
@@ -251,7 +253,7 @@ const Dashboard = () => {
         </DashCard>
 
       </Grid>
-
+      </Box>
     </>
   );
 };

@@ -71,6 +71,10 @@ const Header = ({ loggedIn, handleLogout }) => {
   let photo = Cookies.get("photo");
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
+  const handleNotificationClick = () => {
+    handleClose(); 
+  };
+
   return (
     <>
       <AppBar
@@ -152,7 +156,7 @@ const Header = ({ loggedIn, handleLogout }) => {
           <ListItem
             component={Link}
             to="/notification"
-            onClick={handleClose}
+            onClick={handleNotificationClick}
             sx={{
               "&:hover": {
                 backgroundColor: "transparent",
@@ -163,7 +167,7 @@ const Header = ({ loggedIn, handleLogout }) => {
           >
             <ListItemText primary="See All" />
           </ListItem>
-          <Notification inPopup={true} />{" "}
+          <Notification inPopup={true} onClosePopup={handleClose} />{" "}
         </List>
       </Popover>
       <Popover

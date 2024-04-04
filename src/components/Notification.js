@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import { CustomTypography } from '../components/mui_customization/base_components/CustomTypography'
 
-const Notification = ({ inPopup }) => {
+const Notification = ({ inPopup, onClosePopup }) => {
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -18,8 +18,12 @@ const Notification = ({ inPopup }) => {
     const handleViewDetail = async (inventoryId, barcodeNumber, notificationId) => {
         try {
 
+            console.log("sending notificaiton id as ", notificationId);
+
             await axios.put(`https://api.lumiereapp.ca/api/v1/notification/${notificationId}/mark-read`);
-    
+            
+            onClosePopup();
+
             navigate("/productdetail", {
                 state: { inventoryId, barcodeNumber },
             });
@@ -95,15 +99,25 @@ const Notification = ({ inPopup }) => {
 
 
     // Function to apply filtering based on filterOption
-    const applyFilter = (notifications, filterOption) => {
+const applyFilter = (notifications, filterOption) => {
+    return notifications.filter(notification => {
+        // Clone the notification object to avoid modifying the original
+        const filteredNotification = { ...notification };
+
+        // Check the filter option
         if (filterOption === 'lowStock') {
-            return notifications.filter(notification => notification.type === 'Low Stock');
+            // If filter option is 'lowStock', keep notifications of type 'Low Stock'
+            return filteredNotification.type === 'Low Stock';
         } else if (filterOption === 'expiration') {
-            return notifications.filter(notification => notification.type === 'Expiration');
+            // If filter option is 'expiration', keep notifications of type 'Expiration'
+            return filteredNotification.type === 'Expiration';
         } else {
-            return notifications; // Return all notifications if filterOption is 'all'
+            // If filter option is 'all', include all notifications
+            return true;
         }
-    };
+    });
+};
+
 
     // Function to find product by barcode
     const findProductByBarcode = (productsData, barcodeNumber) => {
@@ -132,16 +146,18 @@ const Notification = ({ inPopup }) => {
             barcodeNumber: product.barcodeNumber
         };
     };
+    
     const handleFilterNotifications = async (filterType) => {
         try {
             setLoading(true); // Set loading state while fetching data
             const notificationResponse = await axios.get('https://api.lumiereapp.ca/api/v1/activeNotificationList');
             generateNotifications(products, notificationResponse.data);
-
             setFilterOption(filterType);
-
+    
+            const allNotifications = [];
+    
             if (filterType === 'lowStock') {
-                setNotifications(notificationResponse.data.lowStockResults.map(notification => {
+                allNotifications.push(...notificationResponse.data.lowStockResults.map(notification => {
                     const productData = findProductByBarcode(products, notification.barcodeNumber);
                     return {
                         type: 'Low Stock',
@@ -149,24 +165,28 @@ const Notification = ({ inPopup }) => {
                         productPhoto: productData.productPhoto,
                         message: `The ${productData.productName} has low stock.`,
                         inventoryId: notification._id,
-                        barcodeNumber: productData.barcodeNumber
+                        notificationId: notification.notificationResults[0]._id, // Include notificationId
+                        barcodeNumber: productData.barcodeNumber,
+                        read: notification.notificationResults[0].read
                     };
                 }));
             } else if (filterType === 'expiration') {
-                setNotifications(notificationResponse.data.expiryResults.map(notification => {
+                allNotifications.push(...notificationResponse.data.expiryResults.map(notification => {
                     const productData = findProductByBarcode(products, notification.barcodeNumber);
                     const expiryDate = new Date(notification.expiryDate).toLocaleDateString();
                     return {
                         type: 'Expiration',
                         productName: productData.productName,
                         productPhoto: productData.productPhoto,
-                        message: `The ${productData.productName} is almost expired ( ${expiryDate} ).`,
+                        message: `The ${productData.productName} is almost expired (${expiryDate}).`,
                         inventoryId: notification._id,
-                        barcodeNumber: productData.barcodeNumber
+                        notificationId: notification.notificationResults[0]._id, // Include notificationId
+                        barcodeNumber: productData.barcodeNumber,
+                        read: notification.notificationResults[0].read
                     };
                 }));
             } else if (filterType === 'all') {
-                const allNotifications = [
+                allNotifications.push(
                     ...notificationResponse.data.lowStockResults.map(notification => {
                         const productData = findProductByBarcode(products, notification.barcodeNumber);
                         return {
@@ -175,29 +195,37 @@ const Notification = ({ inPopup }) => {
                             productPhoto: productData.productPhoto,
                             message: `The ${productData.productName} has low stock.`,
                             inventoryId: notification._id,
-                            barcodeNumber: productData.barcodeNumber
+                            notificationId: notification.notificationResults[0]._id, // Include notificationId
+                            barcodeNumber: productData.barcodeNumber,
+                            read: notification.notificationResults[0].read
                         };
                     }),
                     ...notificationResponse.data.expiryResults.map(notification => {
                         const productData = findProductByBarcode(products, notification.barcodeNumber);
+                        const expiryDate = new Date(notification.expiryDate).toLocaleDateString();
                         return {
                             type: 'Expiration',
                             productName: productData.productName,
                             productPhoto: productData.productPhoto,
-                            message: `The ${productData.productName} is almost expired ${notification.expiryDate}.`,
+                            message: `The ${productData.productName} is almost expired (${expiryDate}).`,
                             inventoryId: notification._id,
-                            barcodeNumber: productData.barcodeNumber
+                            notificationId: notification.notificationResults[0]._id, // Include notificationId
+                            barcodeNumber: productData.barcodeNumber,
+                            read: notification.notificationResults[0].read
                         };
                     })
-                ];
-                setNotifications(allNotifications);
+                );
             }
+    
+            setNotifications(allNotifications);
             setLoading(false); // Update loading state
         } catch (error) {
             console.error('Error fetching data:', error);
             setLoading(false); // Update loading state
         }
     };
+    
+    
 
     const buttonBorder = "5px solid #75500b";
 

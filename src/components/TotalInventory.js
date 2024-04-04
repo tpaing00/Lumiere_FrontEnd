@@ -20,7 +20,7 @@ const TotalInventory = () => {
     let fromDate;
     let toDateFormatted;
     let fromDateFormatted;
-    
+
     if (selectedDateFilter === "1 Month") {
       toDate = new Date();
       toDate.setDate(toDate.getDate() + 1);
@@ -40,8 +40,6 @@ const TotalInventory = () => {
       toDateFormatted = format(toDate, "yyyy MMM dd").toUpperCase();
       fromDateFormatted = format(fromDate, "yyyy MMM dd").toUpperCase();
     }
-    // console.log("toDateFormatted " +toDateFormatted);
-    // console.log("fromDateFormatted " +fromDateFormatted);
 
     axios
       .get(`https://api.lumiereapp.ca/api/v1/gettotalinventorybycategory`, {

@@ -355,7 +355,7 @@ const teamMembers = [
         name: 'Harleen Kaur',
         title: 'Lead Back-end Developer',
         image: require("../assets/team/harleen.png").default,
-        linkedin: 'https://linkedin.com/in/harleen-kaur'
+        linkedin: 'https://www.linkedin.com/in/harleenk-sekhon/'
     },
     {
         name: 'Tin Zar Paing',

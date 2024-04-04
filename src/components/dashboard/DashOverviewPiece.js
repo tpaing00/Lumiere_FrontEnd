@@ -20,12 +20,12 @@ export default function DashOverviewPiece({ title, variant, resultsName, xsWidth
         case "retail":
             component = Total;
             design = "b";
-            category = "Internal Use";
+            category = "Retail";
             break;
         case "inStore":
             component = Store;
             design = "b";
-            category = "Retail";
+            category = "Internal Use";
             break;
         case "nearlyExpired":
             component = NearlyExpired;

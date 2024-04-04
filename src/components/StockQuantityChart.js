@@ -89,7 +89,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
     };
 
     return (
-      <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
         <Button variant="contained" onClick={handleExport}>
           Export Report
         </Button>
@@ -112,11 +112,11 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
             }}
           >
             <Card
-              width="100%"
+              width="90%"
               height="100%"
-              sx={{ backgroundColor: "transparent", cursor: "pointer", p: 5 }}
+              sx={{ backgroundColor: "transparent", cursor: "pointer", p: 5}}
             >
-              <PieChart width={300} height={300}>
+              <PieChart width={280} height={300}>
                 <Pie
                   data={pieData}
                   dataKey="value"
@@ -177,8 +177,17 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
               {selectedCategory && <ExportReport />}
             </Card>
           </Grid>
-          <Card>
-            <Grid container item xs={12} lg={6} spacing={1}>
+
+          <Grid
+            item
+            xs={12}
+            lg={12}
+            spacing={1}
+            sx={{
+              width: "100%",
+            }}
+          >
+            <Card>
               {data.map((item, index) => {
                 const otherCategoriesQuantity =
                   totalQuantity - item.totalStockQuantity;
@@ -265,8 +274,8 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
                   </Grid>
                 );
               })}
-            </Grid>
-          </Card>
+            </Card>
+          </Grid>
         </Grid>
       ) : (
         <Card sx={{ width: "100%", p: 5 }}>

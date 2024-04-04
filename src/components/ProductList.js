@@ -118,8 +118,8 @@ const ProductList = () => {
         const combined = {
           ...inventoryRow,
           ...matchingProduct,
-          dateAdded: format(subDays(new Date(inventoryRow.dateAdded),0),"yyyy-MM-dd"),
-          expiryDate: format(subDays(new Date(inventoryRow.expiryDate),0),"yyyy-MM-dd"),
+          dateAdded: inventoryRow.dateAdded,
+          expiryDate: inventoryRow.expiryDate,
           status: calculateStatus(inventoryRow._id),
           inventoryId: inventoryRow._id,
           productId: matchingProduct._id,
@@ -435,8 +435,8 @@ const ProductList = () => {
           <TableCell>{row.productName}</TableCell>
           {!isMobile && <TableCell>{row.brandName}</TableCell>}
           {!isMobile && <TableCell>{row.category}</TableCell>}
-          {!isMobile && <TableCell>{row.dateAdded}</TableCell>}
-          {!isMobile && <TableCell>{row.expiryDate}</TableCell>}
+          {!isMobile && <TableCell>{format(subDays(new Date(row.dateAdded),0),"yyyy-MM-dd")}</TableCell>}
+          {!isMobile && <TableCell>{format(subDays(new Date(row.expiryDate),0),"yyyy-MM-dd")}</TableCell>}
           {/* <TableCell>{row.brandName}</TableCell>
           <TableCell>{row.category}</TableCell>
           <TableCell>{row.dateAdded}</TableCell>
@@ -444,7 +444,9 @@ const ProductList = () => {
           <TableCell style={renderStatusStyle(row.status)}>
             {row.status}
           </TableCell>*/}
-          <TableCell>{row.status}</TableCell> 
+          <TableCell style={renderStatusStyle(row.status)}>
+            {row.status}
+          </TableCell>
           <TableCell>{row.addToInventory}</TableCell>
           <TableCell>
             <IconButton
@@ -802,7 +804,7 @@ const ProductList = () => {
                 </Grid>
                 </>
               )}
-                <Grid item xs={isMobile ? 12 : 3} sx={{ alignItems: isMobile ? 'right' : 'left' }}>
+                <Grid item xs={isMobile ? 12 : 3} sx={{ alignItems: isMobile ? 'right' : 'left' }} width={'100%'}>
                   <Select
                     id="filterStatus"
                     name="filterStatus"

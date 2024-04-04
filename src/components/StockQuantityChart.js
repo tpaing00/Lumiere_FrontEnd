@@ -107,39 +107,28 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
               justifyContent: "center",
             }}
           >
-            <PieChart width={selectedCategory ? 500 : 300} height={selectedCategory ? 450 : 300}>
+            <PieChart width={500} height={450}>
               <Pie
                 data={pieData}
                 dataKey="value"
                 cx="50%"
                 cy="50%"
-                outerRadius={selectedCategory ? 200 : 140}
-                innerRadius={selectedCategory ? 160 : 100}
+                outerRadius={210}
+                innerRadius={160}
                 startAngle={90}
                 endAngle={-360}
                 label={({ cx, cy }) => (
                   <>
                     <text
                       x={cx}
-                      y={cy - 20}
+                      y={cy}
                       textAnchor="middle"
                       dominantBaseline="middle"
-                      fontSize="24px"
+                      fontSize="44px"
                       fontWeight="bold"
                       fontFamily="Roboto Condensed"
                     >
-                      {totalQuantity}
-                    </text>
-                    <text
-                      x={cx}
-                      y={cy + 20}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontSize="24px"
-                      fontWeight="bold"
-                      fontFamily="Roboto Condensed"
-                    >
-                      Products
+                      {totalQuantity} Products
                     </text>
                   </>
                 )}
@@ -193,8 +182,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
                   >
                     <Card
                       sx={{
-                        boxShadow: (theme) =>
-                          `4px 4px 8px ${getColor(item._id)}`,
+                        boxShadow: (theme) => `2px 2px 1px ${getColor(item._id)}`,
                         margin: 1,
                       }}
                     >
@@ -209,7 +197,7 @@ const StockQuantityChart = ({ totalInventoryStock, selectedCategory }) => {
                             cx="50%"
                             cy="50%"
                             outerRadius={50}
-                            innerRadius={40}
+                            innerRadius={38}
                             startAngle={90}
                             endAngle={-360}
                             label={({ cx, cy }) => (

@@ -29,7 +29,7 @@ const StockQuantityChartByCategory = ({
     const colorMap = {
       "Hair Care": "#87BBD7",
       "Skin Care": "#F26419",
-      "Body Care": "#000000",
+      "Body Care": "#003c5c",
       "Make Up": "#F5B02C",
     };
 
@@ -171,16 +171,16 @@ const StockQuantityChartByCategory = ({
             }}
           >
             <PieChart
-              width={selectedCategory ? 500 : 300}
-              height={selectedCategory ? 450 : 400}
+              width={500}
+              height={450}
             >
               <Pie
                 data={pieData}
                 dataKey="value"
                 cx="50%"
                 cy="50%"
-                outerRadius={selectedCategory ? 200 : 140}
-                innerRadius={selectedCategory ? 160 : 100}
+                outerRadius={210}
+                innerRadius={160}
                 startAngle={90}
                 endAngle={-360}
                 label={({ cx, cy }) => (

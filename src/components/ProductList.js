@@ -6,6 +6,7 @@ import productCategoryData from "./predefined_data/productcategory.json";
 import StaffCheckOutModal from "./StaffCheckOutModal";
 import { subDays, format } from "date-fns";
 import {
+  InputLabel,
   Box,
   Button,
   Grid,
@@ -509,14 +510,16 @@ const ProductList = () => {
           onClose={handleCloseConfirmation}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          maxWidth={false}
+          fullScreen={isMobile} 
+          fullWidth
+          maxWidth="sm" 
           sx={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "30vw", // Set width to 30% of the viewport width
-            height: 500,
+            width: width,
+            height: height,
             zIndex: 1000, // Adjust z-index as needed
           }}
           PaperProps={{
@@ -570,14 +573,16 @@ const ProductList = () => {
           onClose={handleCloseReportDialog}
           aria-labelledby="report-dialog-title"
           aria-describedby="report-dialog-description"
-          maxWidth={false}
+          fullScreen={isMobile} 
+          fullWidth
+          maxWidth="sm" 
           sx={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "30vw", // Set width to 30% of the viewport width
-            height: 500,
+            width: width,
+            height: height,
             zIndex: 1000, // Adjust z-index as needed
           }}
           PaperProps={{
@@ -679,6 +684,9 @@ const ProductList = () => {
   };
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const height = isMobile ? "35vh" : 500;
+  const width = isMobile ? "60vw" : "30vw";
+
   return (
     <>
       <Box component="main" sx={{ mt: 3 }}>
@@ -746,7 +754,7 @@ const ProductList = () => {
               <Grid container item spacing="16px" xs={7}>
               {!isMobile && (
                 <>
-                <Grid item xs={3}>
+                <Grid item xs={3}>                  
                   <Select
                     id="filterInventory"
                     name="filterInventory"
@@ -757,7 +765,7 @@ const ProductList = () => {
                     //onChange={(event) => setFilterByInventory(event.target.value)}
                     fullWidth
                   >
-                    <MenuItem value="All">All</MenuItem>
+                    <MenuItem sx={{color:'lightgray'}} value="All">Inventory</MenuItem>
                     {inventoryTypeData.map((type) => (
                       <MenuItem key={type.value} value={type.value}>
                         {type.label}
@@ -766,7 +774,7 @@ const ProductList = () => {
                   </Select>
                 </Grid>
 
-                <Grid item xs={3}>
+                <Grid item xs={3}>                  
                   <Select
                     id="filterCategory"
                     name="filterCategory"
@@ -776,7 +784,7 @@ const ProductList = () => {
                     onChange={handleCategoryChange}
                     fullWidth
                   >
-                    <MenuItem value="All">All</MenuItem>
+                    <MenuItem sx={{color:'lightgray'}} value="All">Category</MenuItem>
                     {productCategoryData.map((type) =>
                       type.label !== "Select" ? (
                         <MenuItem key={type.value} value={type.value}>
@@ -787,7 +795,7 @@ const ProductList = () => {
                   </Select>
                 </Grid>
 
-                <Grid item xs={3}>
+                <Grid item xs={3}>                  
                   <Select
                     id="sortByBrand"
                     name="sortByBrand"
@@ -797,14 +805,14 @@ const ProductList = () => {
                     onChange={handleBrandChange}
                     fullWidth
                   >
-                    <MenuItem value="None">None</MenuItem>
+                    <MenuItem sx={{color:'lightgray'}} value="None">Brand</MenuItem>
                     <MenuItem value="asc">Ascending</MenuItem>
                     <MenuItem value="desc">Descending</MenuItem>
                   </Select>
                 </Grid>
                 </>
               )}
-                <Grid item xs={isMobile ? 12 : 3} sx={{ alignItems: isMobile ? 'right' : 'left' }} width={'100%'}>
+                <Grid item xs={isMobile ? 12 : 3} sx={{ alignItems: isMobile ? 'right' : 'left' }} width={'100%'}>                  
                   <Select
                     id="filterStatus"
                     name="filterStatus"
@@ -814,7 +822,7 @@ const ProductList = () => {
                     onChange={(e) => setFilterByStatus(e.target.value)}
                     fullWidth
                   >
-                    <MenuItem value="All">All</MenuItem>
+                    <MenuItem sx={{color:'lightgray'}} value="All">Status</MenuItem>
                     <MenuItem value="In Stock">In Stock</MenuItem>
                     <MenuItem value="Low Stock">Low Stock</MenuItem>
                     <MenuItem value="Expired">Expired</MenuItem>
@@ -824,7 +832,7 @@ const ProductList = () => {
                 </Grid>
               </Grid>
 
-              <Grid item xs={isMobile ? 12 : 5}>
+              <Grid item xs={isMobile ? 12 : 5}>                
                 <CustomSearch
                   id="searchInventory"
                   name="searchInventory"

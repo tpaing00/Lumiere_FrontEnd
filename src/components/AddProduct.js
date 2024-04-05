@@ -246,6 +246,10 @@ const AddProduct = () => {
     navigate("/");
   };
 
+  const handleCancel = () => {
+    navigate('/inventory');
+  };
+  
 
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -347,11 +351,26 @@ const AddProduct = () => {
       }
     }
   };
+
+  const handleDashBoard = () => {
+    navigate("/dashboard");
+  };
+
+  const handleInventory = () => {
+    navigate("/inventory");
+  };
   
   return (
     <>
 
       <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+      <Box sx={{ pt: 4}}>
+      <Typography component="body1" align="left" variant="body1">
+        <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>Lumiere</span> &gt;{" "}
+        <span onClick={handleInventory} style={{ cursor: "pointer" }}>Inventory</span>&gt;{" "}
+        <strong>Register New Product</strong>
+      </Typography>
+      </Box>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Typography variant="h1" sx={{ mb: "12px" }}>Register New Product</Typography>          
           <Card sx={{ borderRadius: "20px", m: "12px 0 0 0" }}>
@@ -768,7 +787,7 @@ const AddProduct = () => {
                     aria-label="Form options"
                     sx={{ display: 'flex', justifyContent: 'flex-start' }}
                   >
-                    <Button variant="outlined" type="reset" sx={{ mr: 3 }}>
+                    <Button variant="outlined" type="reset" sx={{ mr: 3 }} onClick={handleCancel}>
                       Cancel
                     </Button>
                     <Button variant="contained" type="submit">

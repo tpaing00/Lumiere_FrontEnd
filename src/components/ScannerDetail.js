@@ -128,13 +128,23 @@ const ScannerDetail = () => {
         return expiry < today;
     };
 
+    const handleDashBoard = () => {
+        navigate("/dashboard");
+    };
+
+    const handleScanner = () => {
+        navigate("/");
+    };
+
     return (
         <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>        
-            {/* <Box sx={{ mt: 3 }}>
+            <Box sx={{ pt: 4}}>
                 <Typography component="body1" align="left" variant="body1">
-                    Lumiere &gt; Quick Scan &gt; <strong>Scan Result</strong>
+                    <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>Lumiere</span> &gt;{" "}
+                    <span onClick={handleScanner} style={{ cursor: "pointer" }}>Quick Scan</span>&gt;{" "}
+                    <strong>Scan Result</strong>
                 </Typography>
-            </Box> */}
+            </Box>
             <Box sx={{ mt: 3 }}>
                 <Typography variant="h1" sx={{ mb: '12px' }}>
                     Scan Result

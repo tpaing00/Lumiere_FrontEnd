@@ -358,8 +358,7 @@ const AddProduct = () => {
 
   const handleInventory = () => {
     navigate("/inventory");
-  };
-  
+  };  
   return (
     <>
 

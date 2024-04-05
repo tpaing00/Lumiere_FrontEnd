@@ -752,7 +752,7 @@ const ProductList = () => {
             </Box> */}
 
             <Grid container spacing={4} fullWidth>
-              <Grid container item spacing="16px" xs={7}>
+              <Grid container item spacing="16px" xs={12} lg={7}>
               {!isMobile && (
                 <>
                 <Grid item xs={3}>                  
@@ -813,7 +813,7 @@ const ProductList = () => {
                 </Grid>
                 </>
               )}
-                <Grid item xs={isMobile ? 12 : 3} sx={{ justifyContent: isMobile ? 'right' : 'left' }} width={'100%'}>                  
+                <Grid item id="testDivSelect" xs={isMobile ? 12 : 3} sx={{ display: "flex", justifyContent: isMobile ? 'right' : 'left' }} width={'100%'}>                  
                   <Select
                     id="filterStatus"
                     name="filterStatus"

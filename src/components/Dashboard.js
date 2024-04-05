@@ -136,6 +136,39 @@ const Dashboard = () => {
       });
   }, []);
 
+  const [mostRecentNotification, setMostRecentNotification] = useState("");
+  useEffect(() => {
+    axios.get('https://api.lumiereapp.ca/api/v1/activeNotificationList')
+      .then(response => {
+        if (response.status === 200) {
+          const { expiryResults } = response.data;
+          const sortedExpiryResults = expiryResults.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+  
+          if (sortedExpiryResults.length > 0) {
+            const mostRecentNotification = sortedExpiryResults[0];
+  
+            // Fetch product details
+            axios.get(`https://api.lumiereapp.ca/api/v1/products`)
+              .then(productResponse => {
+                if (productResponse.status === 200) {
+                  const products = productResponse.data;
+                  const matchingProduct = products.find(product => product.barcodeNumber === mostRecentNotification.barcodeNumber);
+                  if (matchingProduct) {
+                    setMostRecentNotification({ ...mostRecentNotification, productName: matchingProduct.productName });
+                  }
+                }
+              })
+              .catch(error => {
+                console.error('Error fetching product details:', error);
+              });
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching notifications:', error);
+      });
+  }, []);
+
   return (
     <>
      <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
@@ -175,7 +208,7 @@ const Dashboard = () => {
 
               <Typography sx={{ display: "flex", alignItems: "center" }}>
                 <SvgIcon component={Bell} sx={{ width: '27.19px', height: '35px', color: theme.palette.secondary.dark, mr: '16px' }} />
-                The Dandelion is almost expired
+                The {mostRecentNotification.productName} is expiring soon!
               </Typography>
 
             </CustomCardcontent>

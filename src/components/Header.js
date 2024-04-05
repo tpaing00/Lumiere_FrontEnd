@@ -90,7 +90,9 @@ const Header = ({ loggedIn, handleLogout }) => {
       >
         <Toolbar sx={{ color: theme.palette.secondary.dark }}>
           <Box position="relative" left={30}>
-            <Box component={LogoMobile} width="100px" height="24px"></Box>
+            {isMobile ? (
+              <Box component={LogoMobile} width="100px" height="24px"></Box>
+            ) : null}
           </Box>
           <Typography component="div" flexGrow={1}></Typography>
           <IconButton

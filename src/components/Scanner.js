@@ -73,9 +73,19 @@ function Scanner() {
       });
   };
 
+  const handleDashBoard = () => {
+      navigate("/dashboard");
+  };
+
   return (
    <>
       <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+        <Box sx={{ pt: 4}}>
+          <Typography component="body1" align="left" variant="body1">
+              <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>Lumiere</span> &gt;{" "}
+              <strong>Quick Scan</strong>
+          </Typography>
+        </Box>
         <Typography variant="h1" sx={{ mb: '12px' }}>
           Quick Scan
         </Typography>

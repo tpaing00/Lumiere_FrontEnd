@@ -683,6 +683,11 @@ const ProductList = () => {
     return "In Stock";
   };
 
+  const handleDashBoard = () => {
+    navigate("/dashboard");
+};
+
+
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const height = isMobile ? "35vh" : 500;
   const width = isMobile ? "60vw" : "30vw";
@@ -691,6 +696,12 @@ const ProductList = () => {
     <>
       {/* <Box component="main" sx={{ mt: 3 }}> */}
       <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+        <Box sx={{ pt: 4}}>
+          <Typography component="body1" align="left" variant="body1">
+              <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>Lumiere</span> &gt;{" "}
+              <strong>Inventory</strong>
+          </Typography>
+        </Box>
         <Typography variant="h1" sx={{ mb: "12px" }}>
           Inventory
         </Typography>

@@ -393,6 +393,11 @@ const StockQuantityChartByCategory = ({
                         margin: "auto",
                         boxShadow: (theme) => `2px 2px 1px #dfdfdf`,
                         borderRadius: "35px",
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                          cursor: "pointer",
+                        },
                       }}
                       onClick={() =>
                         handleViewDetail(

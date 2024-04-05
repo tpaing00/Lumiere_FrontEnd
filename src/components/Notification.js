@@ -15,39 +15,64 @@ const Notification = ({ inPopup, onClosePopup }) => {
     const [wasteData, setWasteData] = useState([]);
     const [filterOption, setFilterOption] = useState('all'); // State to track filter option
 
+    // const handleViewDetail = async (inventoryId, barcodeNumber, notificationId) => {
+    //     try {
+
+    //         console.log("sending notificaiton id as ", notificationId);
+
+    //         await axios.put(`https://api.lumiereapp.ca/api/v1/notification/${notificationId}/mark-read`);
+            
+    //         navigate("/productdetail", {
+    //             state: { inventoryId, barcodeNumber },
+    //         });
+
+    //         if (inPopup && onClosePopup) {
+    //             onClosePopup();
+    //         }
+
+           
+    //     } catch (error) {
+    //         console.error('Error marking notification as read:', error);
+    //     }
+    // };
+
     const handleViewDetail = async (inventoryId, barcodeNumber, notificationId) => {
         try {
-
-            console.log("sending notificaiton id as ", notificationId);
-
+    
             await axios.put(`https://api.lumiereapp.ca/api/v1/notification/${notificationId}/mark-read`);
             
-            onClosePopup();
-
-            navigate("/productdetail", {
-                state: { inventoryId, barcodeNumber },
-            });
+            const productDetailPage = window.openedProductDetailPage;
+    
+            if (productDetailPage) {
+                productDetailPage.updateContent(inventoryId, barcodeNumber);
+            } else {
+                navigate("/productdetail", {
+                    state: { inventoryId, barcodeNumber },
+                });
+            }
+    
+            if (inPopup && onClosePopup) {
+                onClosePopup();
+            }
         } catch (error) {
             console.error('Error marking notification as read:', error);
         }
     };
+    
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch products first
                 const productsResponse = await axios.get('https://api.lumiereapp.ca/api/v1/products');
                 console.log("Product Response ", productsResponse.data);
                 setProducts(productsResponse.data);
-                // Fetch notifications after products are fetched
                 const notificationResponse = await axios.get('https://api.lumiereapp.ca/api/v1/activeNotificationList');
                 console.log("notification response ", notificationResponse.data);
-                // Call generateNotifications after both products and notifications are fetched
                 generateNotifications(productsResponse.data, notificationResponse.data);
-                setLoading(false); // Update loading state
+                setLoading(false); 
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setLoading(false); // Update loading state
+                setLoading(false);
             }
         };
 

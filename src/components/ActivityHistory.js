@@ -11,6 +11,8 @@ import {
   Grid,
   Card,
   CardContent,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
 const ActivityHistory = ({
@@ -20,6 +22,8 @@ const ActivityHistory = ({
   saleResults,
   wasteProductResults,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   // const [userInventoryResults, setUserInventoryResults] = useState("");
 
@@ -41,7 +45,6 @@ const ActivityHistory = ({
 
   let combinedUserInventoryResults;
   if (inventoryResults !== "") {
-
     const found = userListResults.find(
       (user) => user._id === inventoryResults.userId
     );
@@ -72,8 +75,8 @@ const ActivityHistory = ({
   }
 
   return (
-    <Card sx={{ mt: 2 }}>
-      <CardContent>
+    <Card sx={{ mt: 3 }}>
+      <CardContent sx={{ pt: 0.5 }}>
         <Grid container>
           <Grid item xs={12} sx={{ padding: "10px 0 0 10px" }}>
             <Typography variant="h2" sx={{ mb: 2 }}>
@@ -90,13 +93,15 @@ const ActivityHistory = ({
                   <TableCell>User Name</TableCell>
                   <TableCell>Activity</TableCell>
                   <TableCell>Quantity Change</TableCell>
-                  {/* <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
-                    Date of Open
-                  </TableCell> */}
+                  {isMobile ? null : (
+                    <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
+                      Date of Open
+                    </TableCell>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow >
+                <TableRow>
                   <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
                     <Typography>
                       {format(
@@ -124,9 +129,7 @@ const ActivityHistory = ({
                   <TableCell>
                     +{combinedUserInventoryResults.initialStock}
                   </TableCell>
-                  {/* <TableCell
-                      sx={{ display: { xs: "none", lg: "block" } }}
-                    ></TableCell> */}
+                  {isMobile ? null : <TableCell></TableCell>}
                 </TableRow>
                 {combinedData.map((list, index) => (
                   <TableRow key={index}>
@@ -147,12 +150,14 @@ const ActivityHistory = ({
                     <TableCell>{list.firstName}</TableCell>
                     <TableCell>{list.reason}</TableCell>
                     <TableCell>-{list.quantity}</TableCell>
-                    {/* <TableCell sx={{ display: { xs: "none", lg: "block" } }}>
-                      {format(
-                        subDays(new Date(list.openingDate), 0),
-                        "MM/dd/yyyy"
-                      )}
-                    </TableCell> */}
+                    {isMobile ? null : (
+                      <TableCell>
+                        {format(
+                          subDays(new Date(list.openingDate), 0),
+                          "MM/dd/yyyy"
+                        )}
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
                 {combinedUserSaleData.map((list, index) => (
@@ -171,9 +176,7 @@ const ActivityHistory = ({
                     <TableCell>{list.firstName}</TableCell>
                     <TableCell>Sold</TableCell>
                     <TableCell>-{list.soldQuantity}</TableCell>
-                    {/* <TableCell
-                      sx={{ display: { xs: "none", lg: "block" } }}
-                    ></TableCell> */}
+                    {isMobile ? null : <TableCell></TableCell>}
                   </TableRow>
                 ))}
               </TableBody>

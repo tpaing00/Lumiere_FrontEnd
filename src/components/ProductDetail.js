@@ -153,9 +153,6 @@ const ProductDetail = () => {
   return (
     <>
       <Box sx={{ p: 4 }}>
-        {/* <Typography variant="h1" sx={{ padding: "10px 0 10px 0" }}>
-        Product Detail
-      </Typography> */}
         <Typography
           sx={{
             backgroundColor: "#DAEDF5",
@@ -295,6 +292,16 @@ const ProductDetail = () => {
                         {wasteId === undefined || wasteId === ""
                           ? inventoryResults.barcodeNumber
                           : wasteProductResults.barcodeNumber}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Location
+                      </Typography>
+                      <Typography>
+                        {wasteId === undefined || wasteId === ""
+                          ? productResults.location
+                          : " "}
                       </Typography>
                     </Grid>
                     <Grid item xs={6} lg={3}>

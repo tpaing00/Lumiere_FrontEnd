@@ -11,10 +11,13 @@ import {
   Tab,
   Box,
   Button,
+  useMediaQuery
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CategoryNav from "./CategoryNav";
 import * as XLSX from "xlsx";
+import { styled } from "@mui/system";
+
 
 const TopTrendProducts = () => {
   const navigate = useNavigate();
@@ -23,6 +26,17 @@ const TopTrendProducts = () => {
   const [inventory, setInventoryData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
+
+  const StyledImage = styled("img")({
+    width: isMobile ? "150px" : "200px", 
+    height: isMobile ? "150px" : "200px", 
+    background: "white",
+    borderRadius: "30px",
+    objectFit: "cover",
+    margin: "0px",
+  });
 
   useEffect(() => {
     Promise.all([
@@ -134,15 +148,9 @@ const TopTrendProducts = () => {
                   <Tab
                     key={index}
                     icon={
-                      <img
+                      <StyledImage
                         src={product.photo[0]}
                         alt={product.productName}
-                        style={{
-                          width: 200,
-                          height: 200,
-                          margin: "10px",
-                          borderRadius: 30,
-                        }}
                       />
                     }
                     onClick={() =>

@@ -93,11 +93,11 @@ function Scanner() {
         <Grid container justifyContent="center" sx={{ backgroundColor: "#6A6A6A", mt: 0,  mb: '12px', minHeight: '80vh'}}>
           <Grid  container justifyContent="center" item xs={12} sm={8} md={6} sx={{ pt: '40px', pb: '40px', pl:0, pr:0}}>
             <Box sx={{justifyContent:'center', textAlign:'center'}}>
-              <Typography component="p" sx={{textAlign: "center", color: "white", mb: 2}}>
+              <Typography component="p" sx={{textAlign: "center", color: "white !important", mb: 2}}>
                 Scan or enter barcode to find and checkout products.
               </Typography>
               {barcode && (
-                <Typography component="p" sx={{textAlign: "center", color: "white", mt: 2, mb: 2 }}>
+                <Typography component="p" sx={{textAlign: "center", color: "white !important", mt: 2, mb: 2 }}>
                   {" "}
                   Detected Barcode: {barcode}{" "}
                 </Typography>
@@ -112,10 +112,10 @@ function Scanner() {
                 placeholder="Barcode Number"
                 sx={{ width: "400px", mt: 5  , background: "white"}}
                 InputLabelProps={{
-                  sx: { color: "gray" } // Set label color to white
+                  sx: { color: "black" } // Set label color to white
                 }}
                 InputProps={{
-                  sx: { color: "gray" },
+                  sx: { color: "black" },
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={handleSearch}>

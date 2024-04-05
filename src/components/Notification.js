@@ -15,26 +15,6 @@ const Notification = ({ inPopup, onClosePopup }) => {
     const [wasteData, setWasteData] = useState([]);
     const [filterOption, setFilterOption] = useState('all'); // State to track filter option
 
-    // const handleViewDetail = async (inventoryId, barcodeNumber, notificationId) => {
-    //     try {
-
-    //         console.log("sending notificaiton id as ", notificationId);
-
-    //         await axios.put(`https://api.lumiereapp.ca/api/v1/notification/${notificationId}/mark-read`);
-            
-    //         navigate("/productdetail", {
-    //             state: { inventoryId, barcodeNumber },
-    //         });
-
-    //         if (inPopup && onClosePopup) {
-    //             onClosePopup();
-    //         }
-
-           
-    //     } catch (error) {
-    //         console.error('Error marking notification as read:', error);
-    //     }
-    // };
 
     const handleViewDetail = async (inventoryId, barcodeNumber, notificationId) => {
         try {

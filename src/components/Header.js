@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import axios from 'axios'; // Import axios
+import axios from "axios"; // Import axios
 import {
   AppBar,
   Toolbar,
@@ -19,7 +19,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import LogoMobile from "../assets/logo/lumiere-logotype-mobile.svg";
 import Notification from "./Notification";
 import Bell from "../assets/icons/Bell.svg";
 
@@ -49,7 +49,9 @@ const Header = ({ loggedIn, handleLogout }) => {
     const fetchUnreadNotifications = async () => {
       try {
         console.log("fetching unread notifications...");
-        const response = await axios.get("https://api.lumiereapp.ca/api/v1/notifications/unreadCount");
+        const response = await axios.get(
+          "https://api.lumiereapp.ca/api/v1/notifications/unreadCount"
+        );
         if (response.status === 200) {
           const data = response.data;
           console.log("unread count is ", data);
@@ -72,7 +74,7 @@ const Header = ({ loggedIn, handleLogout }) => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const handleNotificationClick = () => {
-    handleClose(); 
+    handleClose();
   };
 
   return (
@@ -88,36 +90,41 @@ const Header = ({ loggedIn, handleLogout }) => {
       >
         <Toolbar sx={{ color: theme.palette.secondary.dark }}>
           <Box position="relative" left={30}>
-            <Typography
-              component="div"
-              variant="h6"
-              sx={{ flexGrow: 1, display: { lg: "none" } }}
-            >
-              Lumière
-            </Typography>
+            <Box component={LogoMobile} width="100px" height="24px"></Box>
           </Box>
           <Typography component="div" flexGrow={1}></Typography>
-          <IconButton color="inherit" aria-label="notifications" onClick={handleClick} sx={{ padding: '0', position: 'relative' }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginRight: '16px' }}>
+          <IconButton
+            color="inherit"
+            aria-label="notifications"
+            onClick={handleClick}
+            sx={{ padding: "0", position: "relative" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginRight: "16px",
+              }}
+            >
               <SvgIcon
                 component={Bell}
                 sx={{
                   width: "15.54",
                   height: "20",
                   color: theme.palette.secondary.dark,
-                  position: 'relative',
+                  position: "relative",
                 }}
               />
               {unreadNotifications > 0 && (
                 <div
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     top: 0,
-                    transform: 'translate(110%, -50%)',
-                    backgroundColor: '#F26419',
+                    transform: "translate(110%, -50%)",
+                    backgroundColor: "#F26419",
                     width: 12,
                     height: 12,
-                    borderRadius: '50%',
+                    borderRadius: "50%",
                   }}
                 />
               )}

@@ -208,7 +208,7 @@ const Dashboard = () => {
 
               <Typography sx={{ display: "flex", alignItems: "center" }}>
                 <SvgIcon component={Bell} sx={{ width: '27.19px', height: '35px', color: theme.palette.secondary.dark, mr: '16px' }} />
-                The {mostRecentNotification.productName} is almost expired
+                The {mostRecentNotification.productName} is expiring soon!
               </Typography>
 
             </CustomCardcontent>

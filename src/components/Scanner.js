@@ -79,29 +79,30 @@ function Scanner() {
 
   return (
    <>
-      <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+      <Box sx={{ p: 4, paddingTop:"0", paddingBottom:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
         <Box sx={{ pt: 4}}>
           <Typography component="body1" align="left" variant="body1">
               <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>Lumiere</span> &gt;{" "}
               <strong>Quick Scan</strong>
           </Typography>
         </Box>
-        <Typography variant="h1" sx={{ mb: '12px' }}>
+        <Typography variant="h1">
           Quick Scan
         </Typography>
-        <Grid container justifyContent="center" sx={{ backgroundColor: "#6A6A6A", mt: 5,  pl: '10px', mb: '12px', minHeight: '80vh',  }}>
-          <Grid  container justifyContent="center" item xs={12} sm={8} md={6} sx={{ pt: '40px', pb: '40px', }}>
-            <Box>
-              <Typography component="p" sx={{textAlign: "center", color: "white", }}>
+        </Box>
+        <Grid container justifyContent="center" sx={{ backgroundColor: "#6A6A6A", mt: 0,  mb: '12px', minHeight: '80vh'}}>
+          <Grid  container justifyContent="center" item xs={12} sm={8} md={6} sx={{ pt: '40px', pb: '40px', pl:0, pr:0}}>
+            <Box sx={{justifyContent:'center', textAlign:'center'}}>
+              <Typography component="p" sx={{textAlign: "center", color: "white", mb: 2}}>
                 Scan or enter barcode to find and checkout products.
               </Typography>
               {barcode && (
-                <Typography component="p" sx={{textAlign: "center", color: "white", mt: 2 }}>
+                <Typography component="p" sx={{textAlign: "center", color: "white", mt: 2, mb: 2 }}>
                   {" "}
                   Detected Barcode: {barcode}{" "}
                 </Typography>
               )}
-              <Box id="barcode-scanner" sx={{mt: 5 }}></Box>
+              <Box id="barcode-scanner" sx={{mt: 5, margin:0, padding:0}}></Box>
               <TextField
                 type="text"
                 max={15}
@@ -127,7 +128,7 @@ function Scanner() {
             </Box>
           </Grid>
         </Grid>
-        </Box>
+        
         </> 
   );
 }

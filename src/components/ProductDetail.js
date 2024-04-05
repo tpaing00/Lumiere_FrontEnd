@@ -230,11 +230,11 @@ const ProductDetail = () => {
             />
           </Box>
 
-          <Card>
-            <CardContent>
+          <Card sx={{width: "100%"}}>
+            <CardContent sx={{ padding: "10px 30px"}}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
-                  <Typography variant="h2" sx={{ mb: 4 }}>
+                  <Typography variant="h2" sx={{ mb: 5 }}>
                     Product Information
                   </Typography>
                 </Grid>
@@ -250,7 +250,7 @@ const ProductDetail = () => {
                       pb: 3,
                     }}
                   >
-                    <Grid item xs={4}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography sx={{ fontSize: "14px" }}>Stock</Typography>
                       <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
                         {wasteId === undefined || wasteId === ""
@@ -258,7 +258,7 @@ const ProductDetail = () => {
                           : wasteProductResults.wasteQuantity}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography sx={{ fontSize: "14px" }}>
                         Unit Price
                       </Typography>
@@ -269,7 +269,7 @@ const ProductDetail = () => {
                           : wasteProductResults.unitPrice}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography sx={{ fontSize: "14px" }}>
                         Total Value
                       </Typography>
@@ -284,7 +284,7 @@ const ProductDetail = () => {
                 </Grid>
                 <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
                   <Grid container spacing={2}>
-                    <Grid item xs={6} lg={3}>
+                    <Grid item xs={6} lg={3} >
                       <Typography sx={{ fontSize: "14px" }}>
                         Barcode Number
                       </Typography>

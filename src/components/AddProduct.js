@@ -27,6 +27,7 @@ import {
   TextField,
   Typography,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -40,7 +41,7 @@ import { ThemeContext } from "@emotion/react";
 const AddProduct = () => {
 
   const theme = useTheme();
-
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   // State to hold all selected image files
   const [allImages, setAllImages] = useState([]);
 
@@ -350,12 +351,10 @@ const AddProduct = () => {
   return (
     <>
 
-    <Box component="main" sx={{ mt: 3 }}>
+      <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-          <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>Register New Product</Typography>
-          
-          <Card sx={{ borderRadius: "20px", m: "12px 40px 0 40px" }}>
+          <Typography variant="h1" sx={{ mb: "12px" }}>Register New Product</Typography>          
+          <Card sx={{ borderRadius: "20px", m: "12px 0 0 0" }}>
 
           <CardContent sx={{ p: "24px", m: 0 }}>
 

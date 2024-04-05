@@ -10,6 +10,8 @@ import {
   TextField,
   Typography,
   Grid,
+  useTheme, 
+  useMediaQuery
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
@@ -17,6 +19,8 @@ function Scanner() {
   const [barcode, setBarcode] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   useEffect(() => {
     Quagga.init(config, (error) => {
@@ -71,7 +75,8 @@ function Scanner() {
 
   return (
    <>
-        <Typography variant="h1" sx={{ pl: '40px', mb: '12px' }}>
+      <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+        <Typography variant="h1" sx={{ mb: '12px' }}>
           Quick Scan
         </Typography>
         <Grid container justifyContent="center" sx={{ backgroundColor: "#6A6A6A", mt: 5,  pl: '10px', mb: '12px', minHeight: '80vh',  }}>
@@ -112,6 +117,7 @@ function Scanner() {
             </Box>
           </Grid>
         </Grid>
+        </Box>
         </> 
   );
 }

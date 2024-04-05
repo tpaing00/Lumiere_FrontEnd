@@ -19,12 +19,15 @@ import {
     Modal,
     Snackbar,
     Alert,
+    useTheme, 
+    useMediaQuery
 } from "@mui/material";
 
 const ScannerDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const theme = useTheme();
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
     const [productResults, setProductResults] = useState([]);
     const [retailInventory, setretailInventoryResults] = useState([]);
@@ -128,18 +131,23 @@ const ScannerDetail = () => {
     };
 
     return (
+<<<<<<< HEAD
         <Container component="main" maxWidth="lg" sx={{ p: 2 }}>
             <Box sx={{ mt: 3 }}>
+=======
+        <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>        
+            {/* <Box sx={{ mt: 3 }}>
+>>>>>>> 4dbf02a1369953c223dfda832715cf4c7048c824
                 <Typography component="body1" align="left" variant="body1">
                     Lumiere &gt; Quick Scan &gt; <strong>Scan Result</strong>
                 </Typography>
-            </Box>
+            </Box> */}
             <Box sx={{ mt: 3 }}>
-                <Typography component="h1" align="left" variant="h2">
+                <Typography variant="h1" sx={{ mb: '12px' }}>
                     Scan Result
                 </Typography>
             </Box>
-            <Box sx={{ mt: 3, p: 2 }}>
+            <Box sx={{ mt: 3 }}>
                 {internalInventory.length > 0 && (
                     <div>
                         <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
@@ -375,9 +383,15 @@ const ScannerDetail = () => {
                 )}
                 {internalInventory.length === 0 && (
                     <div>
+<<<<<<< HEAD
                         <Typography variant="h3">
                             {" "}
                             <SvgIcon component={Inventory} sx={{ mr: "12px" }} /> Internal Use
+=======
+                        <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <SvgIcon component={InventoryActive} /> {"    "}
+                            Internal Use
+>>>>>>> 4dbf02a1369953c223dfda832715cf4c7048c824
                         </Typography>
                         <Card sx={{
                             borderRadius: 5,
@@ -676,8 +690,8 @@ const ScannerDetail = () => {
                     {snackbarMessage}
                 </Alert>
 
-            </Snackbar>
-        </Container>
+            </Snackbar>        
+        </Box>
     );
 };
 

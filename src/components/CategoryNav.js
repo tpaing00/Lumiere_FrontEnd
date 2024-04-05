@@ -12,7 +12,10 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const categories = [
     {
-      name: "All", label: "All Categories", icon: All, viewBox: "0 0 18 15",
+      name: "All",
+      label: "All Categories",
+      icon: All,
+      viewBox: "0 0 18 15",
       mobile: {
         height: "18px",
         width: "18px",
@@ -20,10 +23,13 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
       desktop: {
         height: "22px",
         width: "22px",
-      }
+      },
     },
     {
-      name: "Hair Care", label: "Hair Care", icon: HairCare, viewBox: "0 0 24 24",
+      name: "Hair Care",
+      label: "Hair Care",
+      icon: HairCare,
+      viewBox: "0 0 24 24",
       mobile: {
         height: "16px",
         width: "16px",
@@ -34,7 +40,10 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
       },
     },
     {
-      name: "Skin Care", label: "Skin Care", icon: SkinCare, viewBox: "0 0 30 30",
+      name: "Skin Care",
+      label: "Skin Care",
+      icon: SkinCare,
+      viewBox: "0 0 30 30",
       mobile: {
         height: "16px",
         width: "16px",
@@ -42,10 +51,13 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
       desktop: {
         height: "30px",
         width: "30px",
-      }
+      },
     },
     {
-      name: "Make Up", label: "Make-up", icon: MakeUp, viewBox: "0 0 30 30",
+      name: "Make Up",
+      label: "Make-up",
+      icon: MakeUp,
+      viewBox: "0 0 30 30",
       mobile: {
         height: "16px",
         width: "16px",
@@ -53,10 +65,13 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
       desktop: {
         height: "30px",
         width: "30px",
-      }
+      },
     },
     {
-      name: "Body Care", label: "Body Care", icon: BodyCare, viewBox: "0 0 19 18",
+      name: "Body Care",
+      label: "Body Care",
+      icon: BodyCare,
+      viewBox: "0 0 19 18",
       mobile: {
         height: "16px",
         width: "16px",
@@ -64,8 +79,8 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
       desktop: {
         height: "18px",
         width: "19px",
-      }
-    }
+      },
+    },
   ];
   return (
     <>
@@ -75,13 +90,12 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
         maxWidth="600px"
         alignItems="center"
         sx={{
-          marginTop: {xs: "20px", lg: "36px"},
+          marginTop: { xs: "20px", lg: "36px" },
           marginLeft: "auto",
           marginRight: "auto",
-          overflowY: "auto"
+          overflowY: "auto",
         }}
       >
-
         {categories.map((category) => (
           <CategoryNavIcon
             key={category.name}
@@ -95,41 +109,14 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
             onClick={() => handleCategoryChange(category.name)}
             bottomText={category.label}
             svgComponent={category.icon}
-            svgHeight={isMobile ? category.mobile.height : category.desktop.height}
+            svgHeight={
+              isMobile ? category.mobile.height : category.desktop.height
+            }
             svgWidth={isMobile ? category.mobile.width : category.desktop.width}
             svgViewBox={category.viewBox}
           />
         ))}
-
       </Box>
-      {/* <Grid
-        container
-        spacing={1}
-        justifyContent="center"
-        alignItems="center"
-        style={{ marginTop: "-50px", marginLeft: "auto", marginRight: "auto" }}
-      >
-
-        {categories.map((category) => (
-          <CategoryNavIcon
-            key={category.name}
-            backgroundRule={
-              selectedCategory === category.name ? "#003c5c" : "white"
-            }
-            fonWeightRule={
-              selectedCategory === category.name ? "bold" : "normal"
-            }
-            iconColor={selectedCategory === category.name ? "white" : "body"}
-            onClick={() => handleCategoryChange(category.name)}
-            bottomText={category.label}
-            svgComponent={category.icon}
-            svgHeight={isMobile ? category.mobile.height : category.desktop.height}
-            svgWidth={isMobile ? category.mobile.width : category.desktop.width}
-            svgViewBox={category.viewBox}
-          />
-        ))}
-
-      </Grid> */}
     </>
   );
 };

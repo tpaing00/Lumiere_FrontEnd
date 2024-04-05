@@ -689,19 +689,20 @@ const ProductList = () => {
 
   return (
     <>
-      <Box component="main" sx={{ mt: 3 }}>
-        <Typography variant="h1" sx={{ pl: "40px", mb: "12px" }}>
+      {/* <Box component="main" sx={{ mt: 3 }}> */}
+      <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
+        <Typography variant="h1" sx={{ mb: "12px" }}>
           Inventory
         </Typography>
 
-        <Card sx={{ borderRadius: "20px", m: "12px 40px 0 40px" }}>
+        <Card sx={{ borderRadius: "20px"}}>
           <CardContent sx={{ p: "24px", m: 0 }}>
           {isMobile && (
               <Button
                 onClick={handleNewProduct}
                 variant="outlined"
-                sx={{ mb: 2 }}
-                fullWidth
+                sx={{ ml: 0, mb: 2, width:'100%' }}
+                
               >
                 Register New Product
               </Button>
@@ -759,7 +760,7 @@ const ProductList = () => {
                     id="filterInventory"
                     name="filterInventory"
                     className="dropdown"
-                    label="Filter by Inventory"
+                    aria-label="Filter by Inventory"
                     value={filterByInventory}
                     onChange={handleInventoryChange}
                     //onChange={(event) => setFilterByInventory(event.target.value)}
@@ -779,7 +780,7 @@ const ProductList = () => {
                     id="filterCategory"
                     name="filterCategory"
                     className="dropdown"
-                    label="Filter by Category"
+                    aria-label="Filter by Category"
                     value={filterByCategory}
                     onChange={handleCategoryChange}
                     fullWidth
@@ -800,7 +801,7 @@ const ProductList = () => {
                     id="sortByBrand"
                     name="sortByBrand"
                     className="dropdown"
-                    label="Sort by Brand"
+                    aria-label="Sort by Brand"
                     value={sortByBrand}
                     onChange={handleBrandChange}
                     fullWidth
@@ -812,12 +813,12 @@ const ProductList = () => {
                 </Grid>
                 </>
               )}
-                <Grid item xs={isMobile ? 12 : 3} sx={{ alignItems: isMobile ? 'right' : 'left' }} width={'100%'}>                  
+                <Grid item xs={isMobile ? 12 : 3} sx={{ justifyContent: isMobile ? 'right' : 'left' }} width={'100%'}>                  
                   <Select
                     id="filterStatus"
                     name="filterStatus"
                     className="dropdown"
-                    label="Filter by Status"
+                    aria-label="Filter by Status"
                     value={filterByStatus}
                     onChange={(e) => setFilterByStatus(e.target.value)}
                     fullWidth

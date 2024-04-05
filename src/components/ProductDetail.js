@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { format, addDays, subDays } from "date-fns";
 import axios from "axios";
@@ -18,17 +19,13 @@ import {
 const ProductDetail = () => {
   const location = useLocation();
   const { inventoryId, barcodeNumber, wasteId } = location.state;
-  // console.log("inId :" +inventoryId);
-  // console.log("barcodeId :" +barcodeNumber);
   console.log("wasteId :" + wasteId);
   const [productResults, setProductResults] = useState("");
   const [inventoryResults, setInventoryResults] = useState("");
-  // const [notificationResults, setNotificationResults] = useState("");
   const [internalUseListResults, setInternalUseListResults] = useState("");
   const [wasteProductResults, setwasteProductResults] = useState("");
   const [userListResults, setUserListResults] = useState("");
   const [saleResults, setSaleResults] = useState("");
-  // const [showActivityHistory, setshowActivityHistory] = useState(true);
   const [formattedExpiryDate, setFormattedexpiryDate] = useState("");
 
   // To set pagination for image
@@ -53,10 +50,6 @@ const ProductDetail = () => {
       .then((res) => {
         if (res.status === 200) {
           setInventoryResults(res.data);
-          // console.log(res.data);
-          // if (res.data.addToInventory === "Retail") {
-          //   setshowActivityHistory(false);
-          // }
           const dateString = res.data.expiryDate;
           const date = new Date(dateString);
           const adjustedDate = addDays(date, 1);
@@ -70,17 +63,6 @@ const ProductDetail = () => {
       .catch((error) => {
         console.error("Error:", error.message);
       });
-
-    // axios
-    //   .get(`https://api.lumiereapp.ca/api/v1/notification/${inventoryId}`)
-    //   .then((resObj) => {
-    //     if (resObj.status === 200) {
-    //       setNotificationResults(resObj.data[0]);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error.message);
-    //   });
 
     axios
       .get(`https://api.lumiereapp.ca/api/v1/sale/${inventoryId}`)
@@ -150,12 +132,25 @@ const ProductDetail = () => {
       ? productResults.photo
       : wasteProductResults.photo) || [];
 
+  const navigate = useNavigate();
+  const handleDashBoard = () => {
+    navigate("/dashboard");
+  };
+  const handleInventory = () => {
+    navigate("/inventory");
+  };
+
   return (
     <>
+    <Box sx={{ pl: 4, pt: 4}}>
+    <Typography component="body1" align="left" variant="body1">
+    <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>Lumiere</span> &gt;{" "}
+    <span onClick={handleInventory} style={{ cursor: "pointer" }}>Inventory</span>&gt;{" "}
+    <strong>Product Detail</strong>
+  </Typography>
+  </Box>
       <Box sx={{ p: 4 }}>
-        {/* <Typography variant="h1" sx={{ padding: "10px 0 10px 0" }}>
-        Product Detail
-      </Typography> */}
+        
         <Typography
           sx={{
             backgroundColor: "#DAEDF5",
@@ -233,11 +228,11 @@ const ProductDetail = () => {
             />
           </Box>
 
-          <Card>
-            <CardContent>
+          <Card sx={{ width: "100%" }}>
+            <CardContent sx={{ padding: "10px 30px" }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{ padding: "20px 0 0 0" }}>
-                  <Typography variant="h2" sx={{ mb: 4 }}>
+                  <Typography variant="h2" sx={{ mb: 5 }}>
                     Product Information
                   </Typography>
                 </Grid>
@@ -253,7 +248,7 @@ const ProductDetail = () => {
                       pb: 3,
                     }}
                   >
-                    <Grid item xs={4}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography sx={{ fontSize: "14px" }}>Stock</Typography>
                       <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
                         {wasteId === undefined || wasteId === ""
@@ -261,7 +256,7 @@ const ProductDetail = () => {
                           : wasteProductResults.wasteQuantity}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography sx={{ fontSize: "14px" }}>
                         Unit Price
                       </Typography>
@@ -272,7 +267,7 @@ const ProductDetail = () => {
                           : wasteProductResults.unitPrice}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Typography sx={{ fontSize: "14px" }}>
                         Total Value
                       </Typography>
@@ -295,6 +290,16 @@ const ProductDetail = () => {
                         {wasteId === undefined || wasteId === ""
                           ? inventoryResults.barcodeNumber
                           : wasteProductResults.barcodeNumber}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} lg={3}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Location
+                      </Typography>
+                      <Typography>
+                        {wasteId === undefined || wasteId === ""
+                          ? productResults.location
+                          : " "}
                       </Typography>
                     </Grid>
                     <Grid item xs={6} lg={3}>

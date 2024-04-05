@@ -9,6 +9,8 @@ import {
   Box,
   Button,
   Pagination,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
 import * as XLSX from "xlsx";
@@ -25,11 +27,14 @@ const StockQuantityChartByCategory = ({
     0
   );
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
   const getColor = (category) => {
     const colorMap = {
       "Hair Care": "#87BBD7",
       "Skin Care": "#F26419",
-      "Body Care": "#000000",
+      "Body Care": "#003c5c",
       "Make Up": "#F5B02C",
     };
 
@@ -155,152 +160,311 @@ const StockQuantityChartByCategory = ({
   };
 
   return (
-    <Card sx={{ p: 5 }}>
-      <CardContent>
-        <Grid container spacing={1}>
-          <Grid
-            item
-            xs={6}
-            lg={6}
-            align="center"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <PieChart
-              width={selectedCategory ? 500 : 300}
-              height={selectedCategory ? 450 : 400}
-            >
-              <Pie
-                data={pieData}
-                dataKey="value"
-                cx="50%"
-                cy="50%"
-                outerRadius={selectedCategory ? 200 : 140}
-                innerRadius={selectedCategory ? 160 : 100}
-                startAngle={90}
-                endAngle={-360}
-                label={({ cx, cy }) => (
-                  <text
-                    x={cx}
-                    y={cy}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize={14}
-                  >
-                    <tspan
-                      x={cx}
-                      y={cy - 40}
-                      fontSize="24px"
-                    >{`${percentage.toFixed(0)}%`}</tspan>
-                    <tspan x={cx} y={cy + 5} fontWeight="bold" fontSize="32px">
-                      {foundCategory.totalStockQuantity}
-                    </tspan>
-                    <tspan x={cx} y={cy + 40} fontSize="24px">
-                      Products
-                    </tspan>
-                  </text>
-                )}
-                labelLine={false}
+    <>
+      {isMobile ? (
+        <Card sx={{ backgroundColor: "transparent", p: 0 }}>
+          <CardContent>
+            <Grid container spacing={1}>
+              <Grid
+                item
+                xs={12}
+                lg={6}
+                align="center"
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                {pieData.map((entry, i) => (
-                  <Cell
-                    key={`cell-${i}`}
-                    fill={i === 0 ? getColor(foundCategory._id) : "#CCCCCC"}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-            <ExportReport />
-          </Grid>
-          <Grid item container spacing={1} xs={6} lg={6}>
-            <Typography
-              variant="h3"
-              gutterBottom
-              sx={{ margin: "auto", marginBottom: "20px" }}
-            >
-              List of Products
-            </Typography>
-            {/* <Stack spacing={2}> */}
-            {paginatedData.map((product, index) =>
-              // product.stockQuantity > 0 ? (
-                <Grid key={index} item xs={12} lg={12}>
-                  <Card
-                    sx={{ width: "70%", margin: "auto" }}
-                    onClick={() =>
-                      handleViewDetail(
-                        product._id,
-                        product.product.barcodeNumber
-                      )
-                    }
+                <PieChart width={300} height={300}>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="80%"
+                    innerRadius="60%"
+                    startAngle={90}
+                    endAngle={-360}
+                    label={({ cx, cy }) => (
+                      <text
+                        x={cx}
+                        y={cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fontSize={14}
+                      >
+                        <tspan
+                          x={cx}
+                          y={cy - 40}
+                          fontSize="24px"
+                        >{`${percentage.toFixed(0)}%`}</tspan>
+                        <tspan
+                          x={cx}
+                          y={cy + 5}
+                          fontWeight="bold"
+                          fontSize="32px"
+                        >
+                          {foundCategory.totalStockQuantity}
+                        </tspan>
+                        <tspan x={cx} y={cy + 40} fontSize="24px">
+                          Products
+                        </tspan>
+                      </text>
+                    )}
+                    labelLine={false}
                   >
-                    <CardContent sx={{ padding: 0, marginBottom: 0 }}>
-                      <Grid container spacing={1} xs={12} lg={12}>
-                        <Grid
-                          item
-                          container
-                          spacing={1}
-                          xs={6}
-                          lg={4}
-                          justifyContent="center"
-                          alignItems="center"
-                        >
-                          <Avatar
-                            sx={{ width: 80, height: 80, marginRight: 2 }}
-                            alt={product.product.productName}
-                            src={product.product.photo[0]}
-                          />
-                        </Grid>
-                        <Grid
-                          item
-                          container
-                          spacing={1}
-                          xs={6}
-                          lg={6}
-                          sx={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography
-                            gutterBottom
-                            variant="body1"
-                            component="div"
+                    {pieData.map((entry, i) => (
+                      <Cell
+                        key={`cell-${i}`}
+                        fill={i === 0 ? getColor(foundCategory._id) : "#CCCCCC"}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+                <ExportReport />
+              </Grid>
+              <Grid item container spacing={1} xs={12} lg={6} mt={5}>
+                <Typography
+                  variant="h3"
+                  gutterBottom
+                  sx={{ margin: "auto", marginBottom: "20px" }}
+                >
+                  List of Products
+                </Typography>
+                {paginatedData.map((product, index) => (
+                  <Grid key={index} item xs={12} lg={12}>
+                    <Card
+                      sx={{
+                        width: "100%",
+                        margin: "auto",
+                        boxShadow: (theme) => `2px 2px 1px #dfdfdf`,
+                        borderRadius: "35px",
+                      }}
+                      onClick={() =>
+                        handleViewDetail(
+                          product._id,
+                          product.product.barcodeNumber
+                        )
+                      }
+                    >
+                      <CardContent sx={{ padding: 0, marginBottom: 0 }}>
+                        <Grid container spacing={1} xs={12} lg={12}>
+                          <Grid
+                            item
+                            container
+                            spacing={1}
+                            xs={6}
+                            lg={4}
+                            justifyContent="center"
+                            alignItems="center"
                           >
-                            {product.product.brandName}
-                          </Typography>
-                          <Typography
-                            gutterBottom
-                            variant="body1"
-                            component="div"
+                            <Avatar
+                              sx={{ width: 80, height: 80, marginRight: 2 }}
+                              alt={product.product.productName}
+                              src={product.product.photo[0]}
+                            />
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            spacing={1}
+                            xs={6}
+                            lg={6}
+                            sx={{ display: "flex", flexDirection: "column" }}
                           >
-                            {product.product.productName}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Quantity: {product.stockQuantity}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {product.addToInventory}
-                          </Typography>
+                            <Typography
+                              gutterBottom
+                              variant="body1"
+                              component="div"
+                            >
+                              {product.product.brandName}
+                            </Typography>
+                            <Typography
+                              gutterBottom
+                              variant="body1"
+                              component="div"
+                            >
+                              {product.product.productName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              Quantity: {product.stockQuantity}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {product.addToInventory}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              // ) : null
-            )}
-            <Pagination
-              count={Math.ceil(foundCategoryData.length / itemsPerPage)}
-              page={page}
-              onChange={handleChangePage}
-              color="primary"
-              sx={{ margin: "auto", marginTop: "20px" }}
-            />
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+                <Pagination
+                  count={Math.ceil(foundCategoryData.length / itemsPerPage)}
+                  page={page}
+                  onChange={handleChangePage}
+                  color="secondary"
+                  sx={{ margin: "auto", marginTop: "20px" }}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card sx={{ p: 5 }}>
+          <CardContent>
+            <Grid container spacing={1}>
+              <Grid
+                item
+                xs={6}
+                lg={6}
+                align="center"
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <PieChart width={500} height={450}>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={220}
+                    innerRadius={170}
+                    startAngle={90}
+                    endAngle={-360}
+                    label={({ cx, cy }) => (
+                      <text
+                        x={cx}
+                        y={cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fontSize={14}
+                      >
+                        <tspan
+                          x={cx}
+                          y={cy - 40}
+                          fontSize="24px"
+                        >{`${percentage.toFixed(0)}%`}</tspan>
+                        <tspan
+                          x={cx}
+                          y={cy + 5}
+                          fontWeight="bold"
+                          fontSize="32px"
+                        >
+                          {foundCategory.totalStockQuantity}
+                        </tspan>
+                        <tspan x={cx} y={cy + 40} fontSize="24px">
+                          Products
+                        </tspan>
+                      </text>
+                    )}
+                    labelLine={false}
+                  >
+                    {pieData.map((entry, i) => (
+                      <Cell
+                        key={`cell-${i}`}
+                        fill={i === 0 ? getColor(foundCategory._id) : "#CCCCCC"}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+                <ExportReport />
+              </Grid>
+              <Grid item container spacing={1} xs={6} lg={6}>
+                <Typography
+                  variant="h3"
+                  gutterBottom
+                  sx={{ margin: "auto", marginBottom: "20px" }}
+                >
+                  List of Products
+                </Typography>
+                {paginatedData.map((product, index) => (
+                  <Grid key={index} item xs={12} lg={12}>
+                    <Card
+                      sx={{
+                        width: "70%",
+                        margin: "auto",
+                        boxShadow: (theme) => `2px 2px 1px #dfdfdf`,
+                        borderRadius: "35px",
+                      }}
+                      onClick={() =>
+                        handleViewDetail(
+                          product._id,
+                          product.product.barcodeNumber
+                        )
+                      }
+                    >
+                      <CardContent sx={{ padding: 0, marginBottom: 0 }}>
+                        <Grid container spacing={1} xs={12} lg={12}>
+                          <Grid
+                            item
+                            container
+                            spacing={1}
+                            xs={6}
+                            lg={4}
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Avatar
+                              sx={{ width: 80, height: 80, marginRight: 2 }}
+                              alt={product.product.productName}
+                              src={product.product.photo[0]}
+                            />
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            spacing={1}
+                            xs={6}
+                            lg={6}
+                            sx={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <Typography
+                              gutterBottom
+                              variant="body1"
+                              component="div"
+                            >
+                              {product.product.brandName}
+                            </Typography>
+                            <Typography
+                              gutterBottom
+                              variant="body1"
+                              component="div"
+                            >
+                              {product.product.productName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              Quantity: {product.stockQuantity}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {product.addToInventory}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+                <Pagination
+                  count={Math.ceil(foundCategoryData.length / itemsPerPage)}
+                  page={page}
+                  onChange={handleChangePage}
+                  color="secondary"
+                  sx={{ margin: "auto", marginTop: "20px" }}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 };
 

@@ -366,7 +366,7 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         input: {
-          border: '1px solid #919191',
+          // border: '1px solid #919191',
           borderRadius: '4px',
           padding: '12px 16px',
           width: '100%',

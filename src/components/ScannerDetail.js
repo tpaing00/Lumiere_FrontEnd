@@ -19,11 +19,15 @@ import {
     Modal,
     Snackbar,
     Alert,
+    useTheme, 
+    useMediaQuery
 } from "@mui/material";
 
 const ScannerDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
     const [productResults, setProductResults] = useState([]);
     const [retailInventory, setretailInventoryResults] = useState([]);
@@ -127,22 +131,22 @@ const ScannerDetail = () => {
     };
 
     return (
-        <Container component="main" maxWidth="lg" sx={{p: 2}}>
-            <Box sx={{ mt: 3 }}>
+        <Box sx={{ p: 4, paddingTop:"0", paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>        
+            {/* <Box sx={{ mt: 3 }}>
                 <Typography component="body1" align="left" variant="body1">
                     Lumiere &gt; Quick Scan &gt; <strong>Scan Result</strong>
                 </Typography>
-            </Box>
+            </Box> */}
             <Box sx={{ mt: 3 }}>
-                <Typography component="h1" align="left" variant="h2">
+                <Typography variant="h1" sx={{ mb: '12px' }}>
                     Scan Result
                 </Typography>
             </Box>
-            <Box sx={{ mt: 3, p: 2 }}>
+            <Box sx={{ mt: 3 }}>
                 {internalInventory.length > 0 && (
                     <div>
                         <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                            <SvgIcon component={InventoryActive} />{"  "}
+                        <SvgIcon component={InventoryActive} /> {"    "}
                             {internalInventory[0].addToInventory}
                         </Typography>
                         <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
@@ -319,9 +323,9 @@ const ScannerDetail = () => {
                 )}
                 {internalInventory.length === 0 && (
                     <div>
-                        <Typography variant="h3">
-                            {" "}
-                            <SvgIcon component={InventoryActive} /> Internal Use
+                        <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <SvgIcon component={InventoryActive} /> {"    "}
+                            Internal Use
                         </Typography>
                         <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
                             <CardContent>
@@ -341,7 +345,7 @@ const ScannerDetail = () => {
                     {retailInventory.length > 0 && (
                         <div>
                             <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <SvgIcon component={InventoryActive} /> {" "}{retailInventory[0].addToInventory}
+                                <SvgIcon component={InventoryActive} /> {"    "}Retail Use
                             </Typography>
                             <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
                                 <CardContent>
@@ -488,10 +492,9 @@ const ScannerDetail = () => {
                     </Modal>
                 )}
                 {retailInventory.length === 0 && (
-                    <div>
-                        <Typography variant="h3">
-                            {" "}
-                            <SvgIcon component={InventoryActive} /> Retail
+                    <div>                        
+                        <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <SvgIcon component={InventoryActive} /> {"    "}Retail Use
                         </Typography>
                         <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
                             <CardContent>
@@ -526,8 +529,8 @@ const ScannerDetail = () => {
                     {snackbarMessage}
                 </Alert>
 
-            </Snackbar>
-        </Container>
+            </Snackbar>        
+        </Box>
     );
     // return (
     //   <div>

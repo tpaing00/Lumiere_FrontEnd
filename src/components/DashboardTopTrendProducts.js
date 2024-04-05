@@ -81,11 +81,16 @@ const TopTrendProducts = () => {
                   onClick={() =>
                     handleViewDetail(inventoryId, productDetails.barcodeNumber)
                   }
-                  style={{
+                  sx={{
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow
                     cursor: "pointer",
                     margin: "8px",
-                    height: "100%"
+                    height: "100%",
+                    transition: "transform 0.3s ease",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                        cursor: "pointer",
+                      },
                   }}>
                   <CardContent sx={{ display: "flex" }}>
                     <Avatar

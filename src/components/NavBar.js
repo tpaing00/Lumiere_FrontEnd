@@ -93,7 +93,7 @@ const NavBar = () => {
     <>
       {isMobile ? (
         <Box>
-          <Box position="absolute" top={20} left={20}>
+          <Box position="absolute" top={16} left={20}>
             <IconButton
               color="inherit"
               aria-label="open drawer"

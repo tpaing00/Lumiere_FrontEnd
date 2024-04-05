@@ -151,7 +151,7 @@ const theme = createTheme({
             backgroundColor: '#fdcb2a',
             color: '#003c5c',
             '&:hover': {
-              backgroundColor: '#fdcb2a',
+              backgroundColor: '#f5b02c',
               boxShadow: 'none'
             },
             '&:active': {
@@ -171,7 +171,7 @@ const theme = createTheme({
             border: '1.5px solid #003c5c',
             color: '#003c5c',
             '&:hover': {
-              backgroundColor: '#fcfcfc',
+              backgroundColor: '#d3e5ed',
               border: '1.5px solid #003c5c',
               boxShadow: 'none'
             },
@@ -194,7 +194,7 @@ const theme = createTheme({
             boxShadow: '0 4px 4px rgb(0, 53, 82, 0.2)',
             color: '#fcfcfc',
             '&:hover': {
-              backgroundColor: '#003c5c',
+              backgroundColor: '#132f3e',
               border: 'none',
               boxShadow: '0 4px 4px rgb(0, 53, 82, 0.2)',
             },

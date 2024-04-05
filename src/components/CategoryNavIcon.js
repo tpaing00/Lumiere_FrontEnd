@@ -19,7 +19,7 @@ export default function CategoryNavIcon({ backgroundRule, fonWeightRule, iconCol
                 color={iconColor}
                 style={{
                     background:
-                    backgroundRule,
+                        backgroundRule,
                     boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
                     display: "flex", justifyContent: "center", alignItems: "center",
                     flexBasis: "auto",
@@ -38,7 +38,7 @@ export default function CategoryNavIcon({ backgroundRule, fonWeightRule, iconCol
                     fontWeight: fonWeightRule,
                     fontSize: { xs: "10px", lg: "14px" },
                     marginTop: "8px",
-width: "100%"
+                    width: "100%"
                 }}
             >
                 {bottomText}

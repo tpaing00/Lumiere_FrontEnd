@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import StaffCheckOutModal from "./StaffCheckOutModal";
 import RetailCheckOutModal from "./RetailCheckOutModal";
-import { SvgIcon } from "@mui/material";
+import { SvgIcon, useTheme } from "@mui/material";
 
-import InventoryActive from "../assets/icons/InventoryActive.svg";
+import Inventory from "../assets/icons/Inventory.svg";
 import EditIcon from "../assets/icons/Edit.svg";
 
 
@@ -24,6 +24,7 @@ import {
 const ScannerDetail = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const theme = useTheme();
 
     const [productResults, setProductResults] = useState([]);
     const [retailInventory, setretailInventoryResults] = useState([]);
@@ -127,7 +128,7 @@ const ScannerDetail = () => {
     };
 
     return (
-        <Container component="main" maxWidth="lg" sx={{p: 2}}>
+        <Container component="main" maxWidth="lg" sx={{ p: 2 }}>
             <Box sx={{ mt: 3 }}>
                 <Typography component="body1" align="left" variant="body1">
                     Lumiere &gt; Quick Scan &gt; <strong>Scan Result</strong>
@@ -142,161 +143,216 @@ const ScannerDetail = () => {
                 {internalInventory.length > 0 && (
                     <div>
                         <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                            <SvgIcon component={InventoryActive} />{"  "}
+                            <SvgIcon component={Inventory} sx={{ mr: "12px" }} />
                             {internalInventory[0].addToInventory}
                         </Typography>
-                        <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
-                            <CardContent>
+                        <Card sx={{
+                            borderRadius: 5,
+                            mt: "20px",
+                            mb: "40px",
+                            p: 0
+                        }}>
+                            <CardContent sx={{ padding: { xs: "16px 12px 20px 12px", lg: "24px 32px 24px 24px" } }}>
                                 <Grid container spacing={0} xs={12}>
-                                    {/* Column 1 - Product Image */}
-                                    <Grid item xs={4} sm={2} textAlign={"left"}>
-                                        <img
-                                            src={productResults[0].photo[0]}
-                                            className="smallPhoto"
-                                            alt="Product Photo"
-                                            style={{
-                                                maxWidth: "100%",
-                                                height: "auto",
-                                                maxWidth: "100px",
-                                            }}
-                                        />
-                                    </Grid>
-                                    {/* Column 2 - Product Details */}
-                                    <Grid item xs={8} sm={6} textAlign={"left"}>
-                                        <Grid container direction="column" spacing={2}>
-                                            {/* Row 1 - Barcode Number & Category */}
-                                            <Grid item container spacing={2}>
-                                                <Grid
-                                                    item
-                                                    xs={6}
-                                                    sm={6}
-                                                    marginTop={"auto"}
-                                                    marginBottom={"auto"}
-                                                >
-                                                    <Typography>
-                                                        {productResults[0].barcodeNumber}
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={6} sm={6} textAlign={'right'}>
-                                                    <Typography
-                                                        sx={{
-                                                            backgroundColor: "#DAEDF5",
-                                                            display: "inline-block",
-                                                            padding: "10px",
-                                                            borderRadius: "100px"
-                                                        }}>
-                                                        {productResults[0].category}
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                            {/* Row 2 - Product Name */}
-                                            <Grid item>
-                                                <Typography>
-                                                    <strong>{productResults[0].productName}</strong>
-                                                </Typography>
-                                            </Grid>
+                                    <Grid container item xs={12} lg={10} spacing={1} className="internal-use image-product-details" >
+                                        <Grid container item className="internal-use product-image" xs={4} lg={2}>
+                                            <img
+                                                src={productResults[0].photo[0]}
+                                                className="smallPhoto"
+                                                alt="Product Photo"
+                                                style={{ maxWidth: "100%", height: "auto", maxWidth: "100px", }}
+                                            />
                                         </Grid>
-                                    </Grid>
-                                    <Box
-                                        width="100%"
-                                        display="flex"
-                                        justifyContent="center"
-                                        marginLeft="auto"
-                                        marginRight="auto"
-                                        marginTop={'20px'}>
-                                        <Grid
-                                            item
-                                            container
-                                            spacing={0}
-                                            xs={8}
-                                            display="flex"
-                                            justifyContent="center">
-                                            {/* Row 1 - Labels */}
-                                            <Grid item xs={4} sm={4}>
-                                                <Typography>
-                                                    <strong>Stock:</strong>
-                                                </Typography>
+
+                                        <Grid container item className="internal-use product-info" xs={8} lg={10} >
+                                            <Grid item xs={12} className="internal-use top-row product-title" sx={{ display: "flex", alignItems: "center" }}>
+                                                <Box sx={{
+                                                    width: "100%",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "space-between",
+                                                    alignItems: "flex-start"
+                                                }}
+                                                >
+                                                    <Box sx={{
+                                                        width: { xs: "100%", lg: "80%" },
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center",
+                                                        flexShrink: 0,
+                                                        mb: 1
+                                                    }}>
+                                                        <Typography sx={{
+                                                            fontSize: { xs: "12px", lg: "16px" }
+                                                        }}>
+                                                            {productResults[0].barcodeNumber}
+                                                        </Typography>
+                                                        <Typography
+                                                            sx={{
+                                                                backgroundColor: "#DAEDF5",
+                                                                display: "inline-block",
+                                                                padding: { xs: "4px 12px", lg: "4px 16px" },
+                                                                borderRadius: "100px",
+                                                                fontSize: "14px"
+                                                            }}>
+                                                            {productResults[0].category}
+                                                        </Typography>
+                                                    </Box>
+                                                    <Box sx={{
+                                                        width: "100%",
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center",
+                                                        flexShrink: 0
+                                                    }}>
+                                                        <Typography component="h3" sx={{
+                                                            fontSize: { xs: "16px", lg: "24px" },
+                                                            fontWeight: "bold",
+                                                            color: theme.palette.secondary.dark,
+                                                        }}>
+                                                            {productResults[0].productName}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
                                             </Grid>
-                                            <Grid item xs={4} sm={4}>
-                                                <Typography>
-                                                    <strong>Unit Price:</strong>
-                                                </Typography>
+                                            <Grid item xs={10} className="internal-use bottom-row stock-info-desktop" sx={{
+                                                display: { xs: "none", lg: "flex" },
+                                                justifyContent: "space-between",
+                                                mt: "24px",
+                                            }}>
+
+                                                <Box className="internal-stock-quantity" width="30%">
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: { xs: "14px", lg: "16px" }
+                                                    }}>
+                                                        Stock Quantity
+                                                    </Typography>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "bold",
+                                                        mt: { xs: "8px", lg: "5px" }
+                                                    }}>
+                                                        {internalInventory[0].stockQuantity}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className="internal-unit-price" width="30%" sx={{
+                                                    borderLeft: "1px solid #919191",
+                                                    borderRight: "1px solid #919191",
+                                                }}>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: { xs: "14px", lg: "16px" }
+                                                    }}>
+                                                        Unit Price
+                                                    </Typography>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "bold",
+                                                        mt: { xs: "8px", lg: "5px" }
+                                                    }}>
+                                                        {productResults[0].unitPrice}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className="internal-expiry-date" width="30%">
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: { xs: "14px", lg: "16px" }
+                                                    }}>
+                                                        Expiry Date
+                                                    </Typography>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "bold",
+                                                        mt: { xs: "8px", lg: "5px" }
+                                                    }}>
+                                                        {formatDate(internalInventory[0].expiryDate)}
+                                                    </Typography>
+                                                </Box>
+
                                             </Grid>
-                                            <Grid item xs={4} sm={4}>
-                                                <Typography>
-                                                    <strong>Expiry Date:</strong>
+
+                                        </Grid>
+
+                                        <Grid item className="internal-use stock-info-mobile" xs={12} lg={0}
+                                            sx={{
+                                                display: { xs: "flex", lg: "none" },
+                                                justifyContent: "space-between",
+                                                mt: "24px",
+                                                mb: "25px"
+                                            }}
+                                        >
+                                            <Box className="internal-stock-quantity" width="30%">
+                                                <Typography textAlign="center" sx={{
+                                                    fontSize: { xs: "14px", lg: "16px" }
+                                                }}>
+                                                    Stock Quantity
                                                 </Typography>
-                                            </Grid>
-                                            {/* Row 2 - Values */}
-                                            <Grid item xs={4} sm={4}>
-                                                <Typography>
+                                                <Typography textAlign="center" sx={{
+                                                    fontSize: "16px",
+                                                    fontWeight: "bold",
+                                                    mt: { xs: "8px", lg: "5px" }
+                                                }}>
                                                     {internalInventory[0].stockQuantity}
                                                 </Typography>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4}>
-                                                <Typography>{productResults[0].unitPrice}</Typography>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4}>
-                                                <Typography>
+                                            </Box>
+                                            <Box className="internal-unit-price" width="30%" sx={{
+                                                borderLeft: "1px solid #919191",
+                                                borderRight: "1px solid #919191",
+                                            }}>
+                                                <Typography textAlign="center" sx={{
+                                                    fontSize: { xs: "14px", lg: "16px" }
+                                                }}>
+                                                    Unit Price
+                                                </Typography>
+                                                <Typography textAlign="center" sx={{
+                                                    fontSize: "16px",
+                                                    fontWeight: "bold",
+                                                    mt: { xs: "8px", lg: "5px" }
+                                                }}>
+                                                    {productResults[0].unitPrice}
+                                                </Typography>
+                                            </Box>
+                                            <Box className="internal-expiry-date" width="30%">
+                                                <Typography textAlign="center" sx={{
+                                                    fontSize: { xs: "14px", lg: "16px" }
+                                                }}>
+                                                    Expiry Date
+                                                </Typography>
+                                                <Typography textAlign="center" sx={{
+                                                    fontSize: "16px",
+                                                    fontWeight: "bold",
+                                                    mt: { xs: "8px", lg: "5px" }
+                                                }}>
                                                     {formatDate(internalInventory[0].expiryDate)}
                                                 </Typography>
-                                            </Grid>
+                                            </Box>
                                         </Grid>
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={2} spacing={0} marginTop={'20px'}>
-                                    <Grid container direction="column" spacing={0}>
-                                        <Grid item textAlign={"center"}>
-                                            <Button
-                                                variant="outlined"
-                                                onClick={handleEdit} fullWidth>
-                                                <SvgIcon component={EditIcon} style={{ fill: "none" }} />Edit
-                                            </Button>
-                                        </Grid>
-                                        <Grid item textAlign={"center"} marginTop={'-10px'}>
-                                            <Button
-                                                variant="contained"
-                                                onClick={handleStaffCheckOut}
-                                                disabled={internalInventory[0].stockQuantity === 0}
-                                                fullWidth
-                                            >
-                                                Staff Checkout
-                                            </Button>
-                                        </Grid>
+
                                     </Grid>
+
+                                    <Grid container item xs={12} lg={2} className="internal-use buttons"
+                                        sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}
+                                    >
+                                        <Button variant="outlined" onClick={handleEdit} fullWidth sx={{
+                                            width: "100%",
+                                            m: 0,
+                                            mb: { xs: "8px", lg: "16px" },
+                                            maxWidth: "180px"
+                                        }}>
+                                            <SvgIcon component={EditIcon} sx={{ fill: "none" }} />Edit
+                                        </Button>
+                                        <Button variant="contained" onClick={handleStaffCheckOut} disabled={internalInventory[0].stockQuantity === 0} fullWidth sx={{
+                                            width: "100%",
+                                            m: 0,
+                                            maxWidth: "180px"
+                                        }}>
+                                            Staff Checkout
+                                        </Button>
+                                    </Grid>
+
                                 </Grid>
+
                             </CardContent>
                         </Card>
-                        {/* <Card sx={{ borderRadius: 5, border: "1px solid #ccc" }}>
-              <CardContent>
-                <img
-                  src={productResults[0].photo}
-                  className="smallPhoto"
-                  alt="Product Photo"
-                />
-                <br />
-                <Typography>{productResults[0].barcodeNumber}</Typography>
-                <Typography>{productResults[0].productName}</Typography>
-                <Typography>{productResults[0].category}</Typography>
-                <strong>Stock </strong>
-                <Typography>{internalInventory[0].stockQuantity}</Typography>
-                <strong>unitPrice </strong>
-                <Typography>{productResults[0].unitPrice}</Typography>
-                <strong>Expiry Date </strong>
-                <Typography>
-                  {formatDate(internalInventory[0].expiryDate)}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button onClick={handleEdit}>Edit</Button>
-                <Button
-                  onClick={handleStaffCheckOut}
-                  disabled={internalInventory[0].stockQuantity === 0}
-                >
-                  Staff Checkout
-                </Button>
-              </CardActions>
-            </Card> */}
+
                     </div>
                 )}
 
@@ -321,11 +377,16 @@ const ScannerDetail = () => {
                     <div>
                         <Typography variant="h3">
                             {" "}
-                            <SvgIcon component={InventoryActive} /> Internal Use
+                            <SvgIcon component={Inventory} sx={{ mr: "12px" }} /> Internal Use
                         </Typography>
-                        <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
+                        <Card sx={{
+                            borderRadius: 5,
+                            mt: "20px",
+                            mb: "40px",
+                            p: 0
+                        }}>
                             <CardContent>
-                                <Typography variant="h5">
+                                <Typography component="p" sx={{ fontWeight: '16px' }} align="center">
                                     No Products Match Your Search
                                 </Typography>
                                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: '15px', mt: 3 }} fullWidth >
@@ -341,127 +402,212 @@ const ScannerDetail = () => {
                     {retailInventory.length > 0 && (
                         <div>
                             <Typography component="h3" variant="h3" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <SvgIcon component={InventoryActive} /> {" "}{retailInventory[0].addToInventory}
+                                <SvgIcon component={Inventory} sx={{ mr: "12px" }} /> {retailInventory[0].addToInventory}
                             </Typography>
-                            <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
-                                <CardContent>
+                            <Card sx={{
+                                borderRadius: 5,
+                                mt: "20px",
+                                mb: "40px",
+                                p: 0
+                            }}>
+                                <CardContent sx={{ padding: { xs: "16px 12px 20px 12px", lg: "24px 32px 24px 24px" } }}>
                                     <Grid container spacing={0} xs={12}>
-                                        {/* Column 1 - Product Image */}
-                                        <Grid item xs={4} sm={2} textAlign={"left"}>
-                                            <img
-                                                src={productResults[0].photo[0]}
-                                                className="smallPhoto"
-                                                alt="Product Photo"
-                                                style={{
-                                                    maxWidth: "100%",
-                                                    height: "auto",
-                                                    maxWidth: "100px",
-                                                }}
-                                            />
-                                        </Grid>
-                                        {/* Column 2 - Product Details */}
-                                        <Grid item xs={8} sm={6} textAlign={"left"}>
-                                            <Grid container direction="column" spacing={2}>
-                                                {/* Row 1 - Barcode Number & Category */}
-                                                <Grid item container spacing={2}>
-                                                    <Grid
-                                                        item
-                                                        xs={6}
-                                                        sm={6}
-                                                        marginTop={"auto"}
-                                                        marginBottom={"auto"}>
-                                                        <Typography>
-                                                            {productResults[0].barcodeNumber}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={6} sm={6} textAlign={'right'}>
-                                                        <Typography
-                                                            sx={{
-                                                                backgroundColor: "#DAEDF5",
-                                                                display: "inline-block",
-                                                                padding: "10px",
-                                                                borderRadius: "100px"
-                                                            }}>
-                                                            {productResults[0].category}
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                {/* Row 2 - Product Name */}
-                                                <Grid item>
-                                                    <Typography>
-                                                        <strong>{productResults[0].productName}</strong>
-                                                    </Typography>
-                                                </Grid>
+                                        <Grid container item xs={12} lg={10} spacing={1} className="retail image-product-details" >
+                                            <Grid container item className="retail product-image" xs={4} lg={2}>
+                                                <img
+                                                    src={productResults[0].photo[0]}
+                                                    className="smallPhoto"
+                                                    alt="Product Photo"
+                                                    style={{ maxWidth: "100%", height: "auto", maxWidth: "100px", }}
+                                                />
                                             </Grid>
-                                        </Grid>
-                                        <Box
-                                            width="100%"
-                                            display="flex"
-                                            justifyContent="center"
-                                            marginLeft="auto"
-                                            marginRight="auto"
-                                            marginTop={'20px'}>
-                                            <Grid
-                                                item
-                                                container
-                                                spacing={0}
-                                                xs={8}
-                                                display="flex"
-                                                justifyContent="center">
-                                                {/* Row 1 - Labels */}
-                                                <Grid item xs={4} sm={4}>
-                                                    <Typography>
-                                                        <strong>Stock:</strong>
-                                                    </Typography>
+
+                                            <Grid container item className="retail product-info" xs={8} lg={10} >
+                                                <Grid item xs={12} className="retail top-row product-title" sx={{ display: "flex", alignItems: "center" }}>
+                                                    <Box sx={{
+                                                        width: "100%",
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "flex-start"
+                                                    }}
+                                                    >
+                                                        <Box sx={{
+                                                            width: { xs: "100%", lg: "80%" },
+                                                            display: "flex",
+                                                            justifyContent: "space-between",
+                                                            alignItems: "center",
+                                                            flexShrink: 0,
+                                                            mb: 1
+                                                        }}>
+                                                            <Typography sx={{
+                                                                fontSize: { xs: "12px", lg: "16px" }
+                                                            }}>
+                                                                {productResults[0].barcodeNumber}
+                                                            </Typography>
+                                                            <Typography
+                                                                sx={{
+                                                                    backgroundColor: "#DAEDF5",
+                                                                    display: "inline-block",
+                                                                    padding: { xs: "4px 12px", lg: "4px 16px" },
+                                                                    borderRadius: "100px",
+                                                                    fontSize: "14px"
+                                                                }}>
+                                                                {productResults[0].category}
+                                                            </Typography>
+                                                        </Box>
+                                                        <Box sx={{
+                                                            width: "100%",
+                                                            display: "flex",
+                                                            justifyContent: "space-between",
+                                                            alignItems: "center",
+                                                            flexShrink: 0
+                                                        }}>
+                                                            <Typography component="h3" sx={{
+                                                                fontSize: { xs: "16px", lg: "24px" },
+                                                                fontWeight: "bold",
+                                                                color: theme.palette.secondary.dark,
+                                                            }}>
+                                                                {productResults[0].productName}
+                                                            </Typography>
+                                                        </Box>
+                                                    </Box>
                                                 </Grid>
-                                                <Grid item xs={4} sm={4}>
-                                                    <Typography>
-                                                        <strong>Unit Price:</strong>
-                                                    </Typography>
+                                                <Grid item xs={10} className="retail bottom-row stock-info-desktop" sx={{
+                                                    display: { xs: "none", lg: "flex" },
+                                                    justifyContent: "space-between",
+                                                    mt: "24px",
+                                                }}>
+
+                                                    <Box className="internal-stock-quantity" width="30%">
+                                                        <Typography textAlign="center" sx={{
+                                                            fontSize: { xs: "14px", lg: "16px" }
+                                                        }}>
+                                                            Stock Quantity
+                                                        </Typography>
+                                                        <Typography textAlign="center" sx={{
+                                                            fontSize: "16px",
+                                                            fontWeight: "bold",
+                                                            mt: { xs: "8px", lg: "5px" }
+                                                        }}>
+                                                            {retailInventory[0].stockQuantity}
+                                                        </Typography>
+                                                    </Box>
+                                                    <Box className="internal-unit-price" width="30%" sx={{
+                                                        borderLeft: "1px solid #919191",
+                                                        borderRight: "1px solid #919191",
+                                                    }}>
+                                                        <Typography textAlign="center" sx={{
+                                                            fontSize: { xs: "14px", lg: "16px" }
+                                                        }}>
+                                                            Unit Price
+                                                        </Typography>
+                                                        <Typography textAlign="center" sx={{
+                                                            fontSize: "16px",
+                                                            fontWeight: "bold",
+                                                            mt: { xs: "8px", lg: "5px" }
+                                                        }}>
+                                                            {productResults[0].unitPrice}
+                                                        </Typography>
+                                                    </Box>
+                                                    <Box className="internal-expiry-date" width="30%">
+                                                        <Typography textAlign="center" sx={{
+                                                            fontSize: { xs: "14px", lg: "16px" }
+                                                        }}>
+                                                            Expiry Date
+                                                        </Typography>
+                                                        <Typography textAlign="center" sx={{
+                                                            fontSize: "16px",
+                                                            fontWeight: "bold",
+                                                            mt: { xs: "8px", lg: "5px" }
+                                                        }}>
+                                                            {formatDate(retailInventory[0].expiryDate)}
+                                                        </Typography>
+                                                    </Box>
+
                                                 </Grid>
-                                                <Grid item xs={4} sm={4}>
-                                                    <Typography>
-                                                        <strong>Expiry Date:</strong>
+
+                                            </Grid>
+
+                                            <Grid item className="retail stock-info-mobile" xs={12} lg={0}
+                                                sx={{
+                                                    display: { xs: "flex", lg: "none" },
+                                                    justifyContent: "space-between",
+                                                    mt: "24px",
+                                                    mb: "25px"
+                                                }}
+                                            >
+                                                <Box className="internal-stock-quantity" width="30%">
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: { xs: "14px", lg: "16px" }
+                                                    }}>
+                                                        Stock Quantity
                                                     </Typography>
-                                                </Grid>
-                                                {/* Row 2 - Values */}
-                                                <Grid item xs={4} sm={4}>
-                                                    <Typography>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "bold",
+                                                        mt: { xs: "8px", lg: "5px" }
+                                                    }}>
                                                         {retailInventory[0].stockQuantity}
                                                     </Typography>
-                                                </Grid>
-                                                <Grid item xs={4} sm={4}>
-                                                    <Typography>{productResults[0].unitPrice}</Typography>
-                                                </Grid>
-                                                <Grid item xs={4} sm={4}>
-                                                    <Typography>
+                                                </Box>
+                                                <Box className="internal-unit-price" width="30%" sx={{
+                                                    borderLeft: "1px solid #919191",
+                                                    borderRight: "1px solid #919191",
+                                                }}>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: { xs: "14px", lg: "16px" }
+                                                    }}>
+                                                        Unit Price
+                                                    </Typography>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "bold",
+                                                        mt: { xs: "8px", lg: "5px" }
+                                                    }}>
+                                                        {productResults[0].unitPrice}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className="internal-expiry-date" width="30%">
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: { xs: "14px", lg: "16px" }
+                                                    }}>
+                                                        Expiry Date
+                                                    </Typography>
+                                                    <Typography textAlign="center" sx={{
+                                                        fontSize: "16px",
+                                                        fontWeight: "bold",
+                                                        mt: { xs: "8px", lg: "5px" }
+                                                    }}>
                                                         {formatDate(retailInventory[0].expiryDate)}
                                                     </Typography>
-                                                </Grid>
+                                                </Box>
                                             </Grid>
-                                        </Box>
-                                    </Grid>
-                                    <Grid item xs={2} spacing={0} marginTop={'20px'}>
-                                        <Grid container direction="column" spacing={0}>
-                                            <Grid item textAlign={"center"}>
-                                                <Button
-                                                    variant="outlined"
-                                                    onClick={handleEdit} fullWidth>
-                                                    <SvgIcon component={EditIcon} style={{ fill: "none" }} />Edit
-                                                </Button>
-                                            </Grid>
-                                            <Grid item textAlign={"center"} marginTop={'-10px'}>
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={handleRetailCheckOut}
-                                                    disabled={retailInventory[0].stockQuantity === 0}
-                                                    fullWidth
-                                                >
-                                                    Retail Checkout
-                                                </Button>
-                                            </Grid>
+
                                         </Grid>
+
+                                        <Grid container item xs={12} lg={2} className="retail buttons"
+                                            sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}
+                                        >
+                                            <Button variant="outlined" onClick={handleEdit} fullWidth sx={{
+                                                width: "100%",
+                                                m: 0,
+                                                mb: { xs: "8px", lg: "16px" },
+                                                maxWidth: "180px"
+                                            }}>
+                                                <SvgIcon component={EditIcon} sx={{ fill: "none" }} />Edit
+                                            </Button>
+                                            <Button variant="contained" onClick={handleRetailCheckOut} disabled={retailInventory[0].stockQuantity === 0} fullWidth sx={{
+                                                width: "100%",
+                                                m: 0,
+                                                maxWidth: "180px"
+                                            }}>
+                                                Retail Checkout
+                                            </Button>
+                                        </Grid>
+
                                     </Grid>
+
                                 </CardContent>
                             </Card>
                         </div>
@@ -490,12 +636,16 @@ const ScannerDetail = () => {
                 {retailInventory.length === 0 && (
                     <div>
                         <Typography variant="h3">
-                            {" "}
-                            <SvgIcon component={InventoryActive} /> Retail
+                            <SvgIcon component={Inventory} sx={{ mr: "12px" }} /> Retail
                         </Typography>
-                        <Card sx={{ borderRadius: 5, border: "1px solid #ccc", mt: 3 }}>
+                        <Card sx={{
+                            borderRadius: 5,
+                            mt: "20px",
+                            mb: "40px",
+                            p: 0
+                        }}>
                             <CardContent>
-                                <Typography component="p" sx={{fontWeight: '16px'}} align="center">
+                                <Typography component="p" sx={{ fontWeight: '16px' }} align="center">
                                     No Products Match Your Search
                                 </Typography>
                                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: '15px' }} fullWidth >
@@ -529,105 +679,6 @@ const ScannerDetail = () => {
             </Snackbar>
         </Container>
     );
-    // return (
-    //   <div>
-    //     <h2>Hello Lumiere</h2>
-    //     {internalInventory.length > 0 && (
-    //       <div>
-    //         <h3>{internalInventory[0].addToInventory}</h3>
-    //         <img src={productResults[0].photo} className="smallPhoto"></img>
-    //         <br />
-    //         <span>{productResults[0].barcodeNumber}</span>
-    //         <br />
-    //         <span>{productResults[0].productName}</span>
-    //         <br />
-    //         <span>{productResults[0].barcodeId}</span>
-    //         <br />
-    //         <strong>Stock </strong>
-    //         <span>{internalInventory[0].stockQuantity}</span>
-    //         <br />
-    //         <strong>unitPrice </strong> {productResults[0].unitPrice}
-    //         <br />
-    //         <strong>Expiry Date </strong>{" "}
-    //         {formatDate(internalInventory[0].expiryDate)}
-    //         <br />
-    //         <button onClick={handleEdit}>Edit</button>
-    //         <button
-    //           onClick={handleStaffCheckOut}
-    //           disabled={internalInventory[0].stockQuantity === 0}
-    //         >
-    //           Staff Checkout
-    //         </button>
-    //       </div>
-    //     )}
-    //     {showInternalModal && (
-    //       <StaffCheckOutModal
-    //         handleClose={handleCloseModal}
-    //         productData={productResults[0]}
-    //         inventoryId={internalInventory[0]._id}
-    //         stockQuantity={internalInventory[0].stockQuantity}
-    //         handleReloadInternalData={handleReloadInternalData}
-    //       />
-    //     )}
-    //     {internalInventory.length === 0 && (
-    //       <div>
-    //         <h3>Internal Use</h3>
-    //         <h5>No Products Match Your Search</h5>
-    //         <button onClick={handleAddInternalInventory}>
-    //           Register New Product
-    //         </button>
-    //       </div>
-    //     )}
-    //     {retailInventory.length > 0 && (
-    //       <div>
-    //         <h3>{retailInventory[0].addToInventory}</h3>
-    //         <img src={productResults[0].photo} className="smallPhoto"></img>
-    //         <br />
-    //         <span>{productResults[0].barcodeNumber}</span>
-    //         <br />
-    //         <span>{productResults[0].productName}</span>
-    //         <br />
-    //         <span>{productResults[0].barcodeId}</span>
-    //         <br />
-    //         <strong>Stock </strong>
-    //         <span>{retailInventory[0].stockQuantity}</span>
-    //         <br />
-    //         <strong>unitPrice </strong> {productResults[0].unitPrice}
-    //         <br />
-    //         <strong>unitCost </strong> {productResults[0].unitCost}
-    //         <br />
-    //         <strong>Expiry Date </strong>{" "}
-    //         {formatDate(retailInventory[0].expiryDate)}
-    //         <br />
-    //         <button onClick={handleEdit}>Edit</button>
-    //         <button
-    //           onClick={handleRetailCheckOut}
-    //           disabled={retailInventory[0].stockQuantity === 0}
-    //         >
-    //           Retail Checkout
-    //         </button>
-    //       </div>
-    //     )}
-    //     {showRetailModal && (
-    //       <RetailCheckOutModal
-    //         handleClose={handleRetailCloseModal}
-    //         productData={productResults[0]}
-    //         inventoryId={retailInventory[0]._id}
-    //         stockQuantity={retailInventory[0].stockQuantity}
-    //         handleReloadRetailData={handleReloadRetailData}
-    //       />
-    //     )}
-    //     {retailInventory.length === 0 && (
-    //       <div>
-    //         <h3>Retail</h3>
-    //         <h5>No Products Match Your Search</h5>
-    //         <button onClick={handleAddRetailInventory}>
-    //           Register New Product
-    //         </button>
-    //       </div>
-    //     )}
-    //   </div>
-    // );
 };
 
 export default ScannerDetail;

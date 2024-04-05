@@ -75,7 +75,7 @@ const ActivityHistory = ({
   }
 
   return (
-    <Card>
+    <Card sx={{ mt: 3 }}>
       <CardContent sx={{ pt: 0.5 }}>
         <Grid container>
           <Grid item xs={12} sx={{ padding: "10px 0 0 10px" }}>

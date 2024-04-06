@@ -343,72 +343,81 @@ const ProductWastage = () => {
                 )}
               {selectedCategory !== "All" && (
                 <>
-                  <Typography variant="h5" gutterBottom>
-                    Most 5 Wastage Products
-                  </Typography>
-                  <Grid container spacing={1} sx={{ justifyContent: "left" }}>
-                    {filteredWasteProducts.slice(0, 5).map((product, index) => {
-                      // Limit to first 5 products
-                      if (product) {
-                        const inventoryId = inventory[product.barcodeNumber];
-                        return (
-                          <Grid key={index} item xs={12} lg={6}>
-                            <Card
-                              onClick={() =>
-                                handleViewDetail(
-                                  inventoryId,
-                                  product.barcodeNumber,
-                                  product._id
-                                )
-                              }
-                              sx={{
-                                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow
-                                cursor: "pointer",
-                                margin: "8px",
-                                height: "100%",
-                                transition: "transform 0.3s ease",
-                                "&:hover": {
-                                  transform: "scale(1.05)",
-                                  cursor: "pointer",
-                                },
-                              }}
-                            >
-                              <CardContent sx={{ display: "flex" }}>
-                                <Avatar
-                                  sx={{ width: 50, height: 50, marginRight: 2 }}
-                                  alt={product.productName}
-                                  src={product.photo[0]}
-                                />
-                                <div>
-                                  <Typography
-                                    gutterBottom
-                                    variant="body1"
-                                    component="div"
-                                  >
-                                    {product.productName}
-                                  </Typography>
-                                  <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                  >
-                                    Category: {product.category}
-                                  </Typography>
-                                  <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                  >
-                                    Barcode Number: {product.barcodeNumber}
-                                  </Typography>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </Grid>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })}
-                  </Grid>
+                  <Box sx={{ width: "70%", margin: "auto"}}>
+                    <Typography variant="h5" gutterBottom>
+                      Most 5 Wastage Products
+                    </Typography>
+                    <Grid container spacing={1} sx={{ justifyContent: "left" }}>
+                      {filteredWasteProducts
+                        .slice(0, 5)
+                        .map((product, index) => {
+                          // Limit to first 5 products
+                          if (product) {
+                            const inventoryId =
+                              inventory[product.barcodeNumber];
+                            return (
+                              <Grid key={index} item xs={12} lg={6}>
+                                <Card
+                                  onClick={() =>
+                                    handleViewDetail(
+                                      inventoryId,
+                                      product.barcodeNumber,
+                                      product._id
+                                    )
+                                  }
+                                  sx={{
+                                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow
+                                    cursor: "pointer",
+                                    margin: "8px",
+                                    height: "100%",
+                                    transition: "transform 0.3s ease",
+                                    "&:hover": {
+                                      transform: "scale(1.05)",
+                                      cursor: "pointer",
+                                    },
+                                  }}
+                                >
+                                  <CardContent sx={{ display: "flex" }}>
+                                    <Avatar
+                                      sx={{
+                                        width: 50,
+                                        height: 50,
+                                        marginRight: 2,
+                                      }}
+                                      alt={product.productName}
+                                      src={product.photo[0]}
+                                    />
+                                    <div>
+                                      <Typography
+                                        gutterBottom
+                                        variant="body1"
+                                        component="div"
+                                      >
+                                        {product.productName}
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                      >
+                                        Category: {product.category}
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                      >
+                                        Barcode Number: {product.barcodeNumber}
+                                      </Typography>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              </Grid>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
+                    </Grid>
+                  </Box>
                 </>
               )}
             </CardContent>
@@ -420,3 +429,4 @@ const ProductWastage = () => {
 };
 
 export default ProductWastage;
+

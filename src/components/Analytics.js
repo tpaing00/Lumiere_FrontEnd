@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Box, List, ListItem, Typography, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  List,
+  ListItem,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import ProductWastage from "./ProductWastage";
 import TopTrendProduct from "./TopTrendProduct";
 import TotalInventory from "./TotalInventory";
-
 
 const Analytics = () => {
   const [activeComponent, setActiveComponent] = useState("TotalInventory");
@@ -15,22 +22,45 @@ const Analytics = () => {
     setActiveComponent(component);
   };
 
+  const navigate = useNavigate();
+  const handleDashBoard = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <>
-      <Box sx={{ p: 4, paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined }}>
-        <Box sx={{
-          display: "flex",
-          justifyContent: "left",
-          width: "100%",
-          overflowY: "auto",
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
-          '&::-webkit-scrollbar': {
-            display: "none"
-          }
-        }}>
+      <Box sx={{ pl: 4, pt: 4 }}>
+        <Typography component="body1" align="left" variant="body1">
+          <span onClick={handleDashBoard} style={{ cursor: "pointer" }}>
+            Lumiere
+          </span>{" "}
+          &gt; <strong>Analytics</strong>
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          p: 4,
+          paddingRight: isMobile ? "20px" : undefined,
+          paddingLeft: isMobile ? "20px" : undefined,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "left",
+            width: "100%",
+            overflowY: "auto",
+            msOverflowStyle: "none",
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           <List sx={{ display: "flex", listStyleType: "none" }}>
-            <ListItem sx={{ mb: 1, padding: "0", paddingRight: "20px", margin: "0" }}>
+            <ListItem
+              sx={{ mb: 1, padding: "0", paddingRight: "20px", margin: "0" }}
+            >
               <Link
                 to="#"
                 onClick={() => handleClick("TotalInventory")}
@@ -49,11 +79,15 @@ const Analytics = () => {
                   borderRadius: isMobile ? "15px" : "5px",
                 }}
               >
-                <Typography sx={{ fontSize: "14px" }} noWrap>Total Inventory</Typography>
+                <Typography sx={{ fontSize: "14px" }} noWrap>
+                  Total Inventory
+                </Typography>
               </Link>
             </ListItem>
 
-            <ListItem sx={{ mb: 1, padding: "0", paddingRight: "20px", margin: "0" }}>
+            <ListItem
+              sx={{ mb: 1, padding: "0", paddingRight: "20px", margin: "0" }}
+            >
               <Link
                 to="#"
                 onClick={() => handleClick("TopTrendProduct")}
@@ -71,7 +105,9 @@ const Analytics = () => {
                   borderRadius: isMobile ? "15px" : "5px",
                 }}
               >
-                <Typography sx={{ fontSize: "14px" }} noWrap>Top Trend Products</Typography>
+                <Typography sx={{ fontSize: "14px" }} noWrap>
+                  Top Trend Products
+                </Typography>
               </Link>
             </ListItem>
 
@@ -93,7 +129,9 @@ const Analytics = () => {
                   borderRadius: isMobile ? "15px" : "5px",
                 }}
               >
-                <Typography sx={{ fontSize: "14px" }} noWrap>Product Wastage</Typography>
+                <Typography sx={{ fontSize: "14px" }} noWrap>
+                  Product Wastage
+                </Typography>
               </Link>
             </ListItem>
           </List>

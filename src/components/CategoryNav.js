@@ -71,13 +71,13 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
       name: "Body Care",
       label: "Body Care",
       icon: BodyCare,
-      viewBox: "0 0 19 18",
+      viewBox: "0 0 19 19",
       mobile: {
         height: "16px",
         width: "16px",
       },
       desktop: {
-        height: "25px",
+        height: "26px",
         width: "26px",
       },
     },

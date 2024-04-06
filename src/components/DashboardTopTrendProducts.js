@@ -65,7 +65,7 @@ const TopTrendProducts = () => {
 
   return (
     <div>
-      <Grid container spacing={1} sx={{ justifyContent: "left" }}>
+      <Grid item container spacing={1} sx={{ justifyContent: "space-between", p: 2, m: 0 }}>
         {trendyProducts.slice(0, 5).map((product, index) => {
           // Limit to first 5 products
           const productDetails = productData.find(
@@ -76,7 +76,7 @@ const TopTrendProducts = () => {
             const inventoryId = inventory[productDetails.barcodeNumber];
 
             return (
-              <Grid key={index} item xs={12} lg={6}>
+              <Grid key={index} item xs={12} lg={6} >
                 <Card
                   onClick={() =>
                     handleViewDetail(inventoryId, productDetails.barcodeNumber)
@@ -91,8 +91,9 @@ const TopTrendProducts = () => {
                         transform: "scale(1.05)",
                         cursor: "pointer",
                       },
+                      p: 1
                   }}>
-                  <CardContent sx={{ display: "flex" }}>
+                  <CardContent sx={{ display: "flex", p: 1 }}>
                     <Avatar
                       sx={{ width: 50, height: 50, marginRight: 2 }}
                       alt={productDetails.productName}

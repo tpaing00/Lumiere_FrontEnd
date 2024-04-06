@@ -11,13 +11,12 @@ import {
   Tab,
   Box,
   Button,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CategoryNav from "./CategoryNav";
 import * as XLSX from "xlsx";
 import { styled } from "@mui/system";
-
 
 const TopTrendProducts = () => {
   const navigate = useNavigate();
@@ -28,10 +27,9 @@ const TopTrendProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
-
   const StyledImage = styled("img")({
-    width: isMobile ? "150px" : "200px", 
-    height: isMobile ? "150px" : "200px", 
+    width: isMobile ? "150px" : "200px",
+    height: isMobile ? "150px" : "200px",
     background: "white",
     borderRadius: "30px",
     objectFit: "cover",
@@ -133,8 +131,8 @@ const TopTrendProducts = () => {
   };
 
   return (
-    <div>
-      <Box sx={{ width: "100%", marginBottom: "50px" }}>
+    <Box>
+      <Box sx={{ marginBottom: "50px" }}>
         <Typography variant="h1">Top Trend Products</Typography>
         <Tabs variant="scrollable" scrollButtons="auto" value={0}>
           {trendyProducts.map((trendyProduct, index) => {
@@ -181,76 +179,85 @@ const TopTrendProducts = () => {
           />
         </Box>
 
-        <Typography variant="h5" gutterBottom>
-          Most 5 Latest Trendy Products
-        </Typography>
-        <Grid container spacing={1} sx={{ justifyContent: "left" }}>
-          {trendyProducts.slice(0, 5).map((product, index) => {
-            // Limit to first 5 products
-            const productDetails = productData.find(
-              (item) => item.productName === product._id
-            );
+          <Box sx={{ width: "70%", margin: "auto"}}>
+            <Typography variant="h5" gutterBottom>
+              Most 5 Latest Trendy Products
+            </Typography>
+            <Grid container spacing={1} sx={{ justifyContent: "left" }}>
+              {trendyProducts.slice(0, 5).map((product, index) => {
+                // Limit to first 5 products
+                const productDetails = productData.find(
+                  (item) => item.productName === product._id
+                );
 
-            if (productDetails && filterProductsByCategory(productDetails)) {
-              const inventoryId = inventory[productDetails.barcodeNumber];
+                if (
+                  productDetails &&
+                  filterProductsByCategory(productDetails)
+                ) {
+                  const inventoryId = inventory[productDetails.barcodeNumber];
 
-              return (
-                <Grid key={index} item xs={12} sm={6} md={5} lg={5}>
-                  <Card
-                    onClick={() =>
-                      handleViewDetail(
-                        inventoryId,
-                        productDetails.barcodeNumber
-                      )
-                    }
-                    sx={{
-                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow
-                      cursor: "pointer",
-                      margin: "8px",
-                      transition: "transform 0.3s ease",
-                      "&:hover": {
-                        transform: "scale(1.05)",
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <CardContent sx={{ display: "flex" }}>
-                      <Avatar
-                        sx={{ width: 80, height: 80, marginRight: 2 }}
-                        alt={productDetails.productName}
-                        src={productDetails.photo[0]}
-                      />
-                      <div>
-                        <Typography
-                          gutterBottom
-                          variant="body1"
-                          component="div"
-                        >
-                          {productDetails.productName}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Category: {productDetails.category}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Barcode Number: {productDetails.barcodeNumber}
-                        </Typography>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </Grid>
-        <Box mt={2} textAlign={"center"}>
-          <Button onClick={handleExport} variant="contained" color="primary">
-            Export Report
-          </Button>
-        </Box>
+                  return (
+                    <Grid key={index} item xs={12} lg={6}>
+                      <Card
+                        onClick={() =>
+                          handleViewDetail(
+                            inventoryId,
+                            productDetails.barcodeNumber
+                          )
+                        }
+                        sx={{
+                          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow
+                          cursor: "pointer",
+                          margin: "8px",
+                          transition: "transform 0.3s ease",
+                          "&:hover": {
+                            transform: "scale(1.05)",
+                            cursor: "pointer",
+                          },
+                        }}
+                      >
+                        <CardContent sx={{ display: "flex"}}>
+                          <Avatar
+                            sx={{ width: 80, height: 80, marginRight: 2 }}
+                            alt={productDetails.productName}
+                            src={productDetails.photo[0]}
+                          />
+                          <div>
+                            <Typography
+                              gutterBottom
+                              variant="body1"
+                              component="div"
+                            >
+                              {productDetails.productName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              Category: {productDetails.category}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              Barcode Number: {productDetails.barcodeNumber}
+                            </Typography>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  );
+                } else {
+                  return null;
+                }
+              })}
+            </Grid>
+            <Box mt={2} textAlign={"center"}>
+              <Button
+                onClick={handleExport}
+                variant="contained"
+                color="primary"
+              >
+                Export Report
+              </Button>
+            </Box>
+          </Box>
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, List, ListItem, Typography , useTheme, useMediaQuery} from "@mui/material";
+import { Box, List, ListItem, Typography, useTheme, useMediaQuery } from "@mui/material";
 import ProductWastage from "./ProductWastage";
 import TopTrendProduct from "./TopTrendProduct";
 import TotalInventory from "./TotalInventory";
@@ -17,10 +17,20 @@ const Analytics = () => {
 
   return (
     <>
-      <Box sx={{ p: 4, paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined}}>
-        <Box sx={{ display: "flex", justifyContent: "left"}}>
+      <Box sx={{ p: 4, paddingRight: isMobile ? "20px" : undefined, paddingLeft: isMobile ? "20px" : undefined }}>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "left",
+          width: "100%",
+          overflowY: "auto",
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+          '&::-webkit-scrollbar': {
+            display: "none"
+          }
+        }}>
           <List sx={{ display: "flex", listStyleType: "none" }}>
-            <ListItem sx={{ mb: 1 , padding:"0", paddingRight: "20px", margin:"0"}}>
+            <ListItem sx={{ mb: 1, padding: "0", paddingRight: "20px", margin: "0" }}>
               <Link
                 to="#"
                 onClick={() => handleClick("TotalInventory")}
@@ -43,7 +53,7 @@ const Analytics = () => {
               </Link>
             </ListItem>
 
-            <ListItem sx={{ mb: 1 , padding:"0", paddingRight: "20px", margin:"0"}}>
+            <ListItem sx={{ mb: 1, padding: "0", paddingRight: "20px", margin: "0" }}>
               <Link
                 to="#"
                 onClick={() => handleClick("TopTrendProduct")}
@@ -65,7 +75,7 @@ const Analytics = () => {
               </Link>
             </ListItem>
 
-            <ListItem sx={{ mb: 1 , padding:"0", margin:"0" }}>
+            <ListItem sx={{ mb: 1, padding: "0", margin: "0" }}>
               <Link
                 to="#"
                 onClick={() => handleClick("ProductWastage")}

@@ -35,8 +35,8 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
         width: "16px",
       },
       desktop: {
-        heighh: "24px",
-        width: "24px",
+        heighh: "30px",
+        width: "30px",
       },
     },
     {
@@ -77,8 +77,8 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
         width: "16px",
       },
       desktop: {
-        height: "18px",
-        width: "19px",
+        height: "25px",
+        width: "26px",
       },
     },
   ];
@@ -94,6 +94,11 @@ const CategoryNav = ({ handleCategoryChange, selectedCategory }) => {
           marginLeft: "auto",
           marginRight: "auto",
           overflowY: "auto",
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+          '&::-webkit-scrollbar': {
+            display: "none"
+          }
         }}
       >
         {categories.map((category) => (
